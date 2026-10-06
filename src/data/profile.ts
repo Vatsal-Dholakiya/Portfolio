@@ -269,5 +269,4 @@ export const profile = {
 }
 
 /** Prefixes a public/ path with the deploy base (needed for GitHub Pages sub-paths). */
-export const asset = (path: string) =>
-  path.startsWith('/') ? `${import.meta.env.BASE_URL}${path.slice(1)}` : path
+export const asset = (path: string) => (path.startsWith('/') ? `${__BASE__}${path.slice(1)}` : path)

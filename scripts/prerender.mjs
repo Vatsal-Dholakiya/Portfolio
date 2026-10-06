@@ -16,7 +16,13 @@ html = html.replace('<!--app-html-->', render())
 // Inline the stylesheet
 html = html.replace(/<link rel="stylesheet" crossorigin href="([^"]+)">/, (_, href) => {
   const base = process.env.BASE_PATH ?? '/'
-  const css = readFileSync(resolve(dist, href.slice(base.length)), 'utf8')
+  const cssPath = href.slice(base.length) // e.g. "assets/index-abc.css"
+  const cssDir = cssPath.slice(0, cssPath.lastIndexOf('/') + 1)
+  // Relative url() values are relative to the CSS file; make them relative to index.html once inlined
+  const css = readFileSync(resolve(dist, cssPath), 'utf8').replace(
+    /url\((?!['"]?(?:\/|data:|https?:))['"]?(?:\.\/)?([^'")]+)['"]?\)/g,
+    (_, p) => `url(${base}${cssDir}${p})`,
+  )
   const fonts = [...css.matchAll(/url\(([^)]+(?:bricolage-grotesque|source-serif-4)-latin-wght-normal[^)]+\.woff2)\)/g)].map((m) => m[1])
   const preloads = [...new Set(fonts)]
     .map((f) => `<link rel="preload" href="${f}" as="font" type="font/woff2" crossorigin>`)
