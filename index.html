@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Vatsal Dholakiya | Software Developer and Applied AI</title>
+    <meta
+      name="description"
+      content="Vatsal Dholakiya is a Software Developer in London building Android, desktop and Python applications, with a Master of Science in Cloud Computing. Open to roles in the United Kingdom and internationally."
+    />
+    <meta name="author" content="Vatsal Dholakiya" />
+    <meta name="theme-color" content="#121826" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#EEF1F5" media="(prefers-color-scheme: light)" />
+    <link rel="canonical" href="%VITE_SITE_URL%/" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Vatsal Dholakiya" />
+    <meta property="og:title" content="Vatsal Dholakiya | Software Developer and Applied AI" />
+    <meta
+      property="og:description"
+      content="Software Developer in London. I build Android, desktop and Python applications, and I have a Master of Science in Cloud Computing."
+    />
+    <meta property="og:url" content="%VITE_SITE_URL%/" />
+    <meta property="og:image" content="%VITE_SITE_URL%/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Vatsal Dholakiya, Software Developer and Applied AI" />
+    <meta property="og:locale" content="en_GB" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Vatsal Dholakiya | Software Developer and Applied AI" />
+    <meta
+      name="twitter:description"
+      content="Software Developer in London. I build Android, desktop and Python applications, and I have a Master of Science in Cloud Computing."
+    />
+    <meta name="twitter:image" content="%VITE_SITE_URL%/og-image.png" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Vatsal Dholakiya",
+        "jobTitle": "Software Developer",
+        "url": "%VITE_SITE_URL%/",
+        "email": "mailto:vatsal.dholakiya2000@gmail.com",
+        "address": { "@type": "PostalAddress", "addressLocality": "London", "addressCountry": "GB" },
+        "alumniOf": [
+          { "@type": "CollegeOrUniversity", "name": "University of East London" },
+          { "@type": "CollegeOrUniversity", "name": "Ganpat University" }
+        ],
+        "sameAs": [
+          "https://github.com/Vatsal-Dholakiya",
+          "https://stackoverflow.com/users/12660050/vatsal-dholakiya"
+        ]
+      }
+    </script>
+
+    <!-- Runs before first paint: theme, animation flags, and a safety net if the app fails to start -->
+    <script>
+      ;(function () {
+        var d = document.documentElement
+        try {
+          var t = localStorage.getItem('theme')
+          d.dataset.theme =
+            t === 'light' || t === 'dark' ? t : matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'
+        } catch (e) {}
+        if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          d.classList.add('js-anim')
+          try {
+            if (!sessionStorage.getItem('vd-preloaded')) d.classList.add('show-preloader')
+          } catch (e) {}
+        }
+        setTimeout(function () {
+          if (!window.__vdReady) d.classList.remove('js-anim', 'show-preloader')
+        }, 4000)
+      })()
+    </script>
+  </head>
+  <body>
+    <div id="root"><!--app-html--></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
