@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { prefersReducedMotion } from '../lib/env'
+import { useReducedMotion } from '../hooks/useReducedMotion'
 
 const TYPE_MS = 65
 const DELETE_MS = 35
@@ -8,9 +8,10 @@ const HOLD_MS = 1900
 /** Types and deletes each role in turn. Starts after `start`; static list with reduced motion. */
 export function RoleTyper({ roles, start }: { roles: string[]; start: boolean }) {
   const [text, setText] = useState(roles[0] ?? '')
+  const reduced = useReducedMotion()
 
   useEffect(() => {
-    if (!start || prefersReducedMotion() || roles.length < 2) return
+    if (!start || reduced || roles.length < 2) return
     let index = 0
     let current = roles[0] ?? ''
     let deleting = true
@@ -38,7 +39,7 @@ export function RoleTyper({ roles, start }: { roles: string[]; start: boolean })
     }
     timer = window.setTimeout(tick, HOLD_MS)
     return () => window.clearTimeout(timer)
-  }, [roles, start])
+  }, [roles, start, reduced])
 
   return (
     <>

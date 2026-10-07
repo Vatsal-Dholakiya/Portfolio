@@ -1,11 +1,6 @@
 import type { ReactNode } from 'react'
-import { m, type Variants } from 'framer-motion'
-import { EASE } from '../../lib/env'
-
-const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 24 },
-  show: (delay: number = 0) => ({ opacity: 1, y: 0, transition: { duration: 0.7, ease: EASE, delay } }),
-}
+import { m } from 'framer-motion'
+import { fadeUp, stagger as staggerVariants } from '../../lib/animations'
 
 type As = 'div' | 'li' | 'ul' | 'ol' | 'p' | 'article' | 'section'
 
@@ -53,13 +48,7 @@ export function Stagger({
 }) {
   const Tag = m[as]
   return (
-    <Tag
-      className={className}
-      initial="hidden"
-      whileInView="show"
-      viewport={{ once: true, amount }}
-      variants={{ hidden: {}, show: { transition: { staggerChildren: stagger } } }}
-    >
+    <Tag className={className} initial="hidden" whileInView="show" viewport={{ once: true, amount }} variants={staggerVariants(stagger)}>
       {children}
     </Tag>
   )

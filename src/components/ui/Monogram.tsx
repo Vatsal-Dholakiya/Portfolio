@@ -2,7 +2,7 @@ import { useId } from 'react'
 
 /** "VD" monogram with the signature gradient. */
 export function Monogram({ className = 'h-9 w-9' }: { className?: string }) {
-  const id = `vd${useId().replace(/[^a-zA-Z0-9]/g, "")}`
+  const id = `vd${useId().replace(/[^a-zA-Z0-9]/g, '')}`
   return (
     <svg viewBox="0 0 40 40" fill="none" aria-hidden="true" focusable="false" className={className}>
       <defs>

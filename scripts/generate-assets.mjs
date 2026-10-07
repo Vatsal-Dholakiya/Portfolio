@@ -40,6 +40,11 @@ await shot(
   630,
   'og-image.png',
 )
-await shot(`<div style="width:180px;height:180px;background:#0A0B10;display:grid;place-items:center">${favicon.replace('<svg ', '<svg width="150" height="150" ')}</div>`, 180, 180, 'apple-touch-icon.png')
+await shot(
+  `<div style="width:180px;height:180px;background:#0A0B10;display:grid;place-items:center">${favicon.replace('<svg ', '<svg width="150" height="150" ')}</div>`,
+  180,
+  180,
+  'apple-touch-icon.png',
+)
 await browser.close()
 console.log('Generated public/og-image.png and public/apple-touch-icon.png')

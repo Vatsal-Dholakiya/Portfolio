@@ -1,13 +1,13 @@
 import { m } from 'framer-motion'
-import { EASE } from '../../lib/env'
-import { Reveal } from './Reveal'
+import { EASE } from '../lib/animations'
+import { Reveal } from './ui/Reveal'
 
-/** "01." mono label, title, and a gradient underline that grows from the left when visible. */
-export function SectionHeading({ index, title, id }: { index: string; title: string; id: string }) {
+/** "01." mono label, h2 title, and a gradient underline that grows from the left when visible. */
+export function SectionTitle({ index, title, id }: { index: number; title: string; id: string }) {
   return (
     <Reveal className="mb-12 md:mb-16">
-      <p className="mono-label mb-3">{index}.</p>
-      <h2 id={id} className="text-[clamp(2rem,4.5vw,3rem)] font-bold leading-[1.1] text-text">
+      <p className="mono-label mb-3">{String(index).padStart(2, '0')}.</p>
+      <h2 id={id} className="text-[clamp(2rem,4.5vw,3rem)] leading-[1.1] font-bold text-text">
         {title}
       </h2>
       <m.span

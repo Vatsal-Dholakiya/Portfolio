@@ -2,93 +2,99 @@
 
 A production-ready, single-page portfolio: dark, fast, accessible and animated.
 
-**Stack:** Vite · React 18 · TypeScript (strict) · Tailwind CSS · Framer Motion · Lenis · lucide-react
+**Stack:** Vite · React 18 · TypeScript (strict) · Tailwind CSS · Framer Motion · Lenis · lucide-react · ESLint + Prettier · Playwright
 
-| Check (local test) | Result |
-|---|---|
-| `npm run build` | 0 TypeScript errors, 0 ESLint problems |
-| Browser console | 0 errors, 0 warnings (production and dev, desktop, mobile, reduced motion) |
-| Lighthouse mobile | Performance 98–99 · Accessibility 100 · Best Practices 100 · SEO 100 |
-| Lighthouse desktop | Performance 99 · Accessibility 100 · Best Practices 100 · SEO 100 |
-| Horizontal scroll | none at 320, 375, 768, 1024, 1440 and 1920 px |
-
-## Run it
+## Quick start
 
 Requires Node.js 20 or newer.
 
-```bash
-npm install
-npm run dev        # development server at http://localhost:5173
-npm run build      # type-check + lint + production build + pre-render into dist/
-npm run preview    # serve the production build at http://localhost:4173
-npm run lint       # ESLint only
-```
+| Task                                                   | Command                                                       |
+| ------------------------------------------------------ | ------------------------------------------------------------- |
+| Install                                                | `npm install`                                                 |
+| Run (development server, http://localhost:5173)        | `npm run dev`                                                 |
+| Build (type-check, lint, production build, pre-render) | `npm run build`                                               |
+| Preview the production build (http://localhost:4173)   | `npm run preview`                                             |
+| End-to-end tests (Chromium desktop + mobile)           | `npx playwright install chromium` once, then `npm test`       |
+| Tests in Chromium, Firefox and Safari (WebKit)         | `npx playwright install` once, then `ALL_BROWSERS=1 npm test` |
+| Lint / format                                          | `npm run lint` · `npm run format`                             |
 
-## Edit the content
+`npm test` builds the site and starts the preview server automatically. External APIs and fonts are mocked in tests, so they run offline.
 
-**Everything you read on the site lives in [`src/data/content.ts`](src/data/content.ts).** Components never need to change.
+## How to update my content
 
-| To change | Edit in `content.ts` |
-|---|---|
-| Name, hero greeting, rotating roles, intro line, button labels | `name`, `hero` |
-| Email, GitHub, Stack Overflow, LinkedIn, CV path | `links` (an empty string `''` hides that link everywhere) |
-| About text, stat counters, profile photo | `about` |
-| Skill groups | `skills` |
-| Jobs | `experience` (`current: true` adds the "Current" badge and pink dot) |
-| Projects | `projects` (`featured: true` makes the large card; `impact` adds the big count-up figure; `github` / `live` add links) |
-| "Latest on GitHub" | `github` (repos to hide, descriptions for repos that have none, and the offline fallback list) |
-| Certifications | `certificates` (add an object to add a card; the grid adapts) |
-| Education | `education` (`years` is hidden while empty) |
-| Contact heading and button | `contact` |
-| Footer text | `footer` |
+**Everything on the site comes from one file: [`src/data/content.ts`](src/data/content.ts).** Components never need editing.
+Leave any optional field as `''` to hide it everywhere (no empty or dead links are ever rendered).
 
-The page title, description and social-preview tags are in [`index.html`](index.html). The site address used by those tags is in `.env` (`VITE_SITE_URL`).
+| To change                                               | Edit in `content.ts`                                                                      |
+| ------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| Domain for canonical URL, social previews, sitemap      | `site.url`                                                                                |
+| Page title, description, social image                   | `site`                                                                                    |
+| Email, GitHub, Stack Overflow, LinkedIn, CV path        | `person.links` (`linkedin: ''` hides every LinkedIn link)                                 |
+| Navbar links and labels                                 | `nav`                                                                                     |
+| Hero greeting, rotating roles, intro, buttons, badge    | `hero`                                                                                    |
+| About paragraphs, photo, stats, interests               | `about`                                                                                   |
+| Skills, categories, tooltips ("used at")                | `skills.categories`                                                                       |
+| Jobs (timeline)                                         | `experience.roles` (`period: ''` hides dates; `current: true` adds the badge)             |
+| Featured project, key features, other projects          | `projects`                                                                                |
+| GitHub grid (hidden repos, fallback list, descriptions) | `github`                                                                                  |
+| Stack Overflow fallback figures                         | `stackoverflow.fallback`                                                                  |
+| Certificates                                            | `certifications.items` — **add one = add one object** (`credential: ''` hides the button) |
+| Education                                               | `education.degrees` (`award` shows the gradient badge)                                    |
+| Contact heading, line, work preferences                 | `contact`                                                                                 |
+| Footer and 404 text                                     | `footer`, `notFound`                                                                      |
 
-### Add your files to `public/`
+### Files in `public/`
 
-| File | What to do |
-|---|---|
-| `public/Vatsal_Dholakiya_CV.pdf` | Your CV (added). Both "Download CV" buttons point here via `links.cv`. |
-| `public/profile.webp` | Your photo (added; square crop of `originals/PImage.jpeg`). Set by `about.photo`. Replace the file to change the photo. |
-| `public/certificates/*.webp` | Certificate images (added, rendered from the PDFs in `originals/certificates/`). Each certificate's `image` in `content.ts` points to one. To add another: put a 1600 × 1131 WebP here and add an entry to `certificates`. |
-| `public/og-image.png` | Social preview (1200 × 630). Regenerate with `node scripts/generate-assets.mjs` (needs Playwright) or replace with your own. |
+| File                                                      | Purpose                                                                                     |
+| --------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| `cv.pdf`                                                  | Your CV. "Resume" and "Download CV" use it. Replace the file to update it.                  |
+| `profile.webp` (+ `profile-360.webp`, `profile-480.webp`) | Profile photo (square). Smaller copies are served to phones; see `about.photoSizes`.        |
+| `certificates/*.webp`                                     | One image per certificate (about 1600 × 1131 px), referenced by each certificate's `image`. |
+| `favicon.svg`, `apple-touch-icon.png`                     | "VD" icon.                                                                                  |
+| `og-image.png`                                            | Social preview (1200 × 630).                                                                |
 
-Convert a JPG to WebP with any image tool, e.g. `npx @squoosh/cli --webp auto photo.jpg` or an online converter.
+`robots.txt`, `sitemap.xml` (once `site.url` is set) and `404.html` are generated at build time from `content.ts`.
+Original uploads (photo JPEG, certificate PDFs) are kept in `originals/` and are not deployed.
 
 ## Deploy
 
-### GitHub Pages (workflow included)
-1. Push to the `main` branch.
-2. On GitHub: **Settings → Pages → Source: GitHub Actions**.
-3. `.github/workflows/deploy.yml` builds and publishes on every push to `main`. The site appears at `https://<username>.github.io/<repository>/`; the sub-path is set automatically.
+### Vercel (default)
 
-### Vercel
-Import the repository at [vercel.com/new](https://vercel.com/new). Vite is detected automatically (build `npm run build`, output `dist`). Set `VITE_SITE_URL` in `.env` to your Vercel address.
+Import the repository at [vercel.com/new](https://vercel.com/new). `vercel.json` sets the build command, output folder, an SPA fallback (unknown paths show the custom 404 view) and long cache headers for hashed assets. Then set `site.url` in `content.ts` to your domain and redeploy.
 
 ### Netlify
-New site from Git → build command `npm run build`, publish directory `dist`. Set `VITE_SITE_URL` to your Netlify address.
 
-After changing the address, also update `public/robots.txt` and `public/sitemap.xml`.
+New site from Git → build command `npm run build`, publish directory `dist`. Netlify serves `dist/404.html` for unknown paths automatically. Set `site.url`.
+
+### GitHub Pages
+
+1. Repository **Settings → Pages → Source: GitHub Actions**.
+2. Push to `main`; `.github/workflows/deploy.yml` builds and publishes.
+3. A project site lives under `/<repository>/`, so Vite needs that `base`. The workflow sets `BASE_PATH=/<repository>/`, which `vite.config.ts` uses as `base`. For a manual build: `BASE_PATH=/Portfolio/ npm run build`. (A user site at `<username>.github.io` uses the default `/`.)
+4. Set `site.url` to `https://<username>.github.io/<repository>`.
 
 ## How it works
 
-- **Pre-rendering:** after the build, `scripts/prerender.mjs` renders the page to static HTML and inlines the CSS, so the first paint does not wait for JavaScript. React then hydrates it.
-- **Fonts:** Space Grotesk, Inter and JetBrains Mono from Google Fonts with `preconnect`, `display=swap` and a non-blocking stylesheet. Fallback faces in `src/styles/index.css` have metrics matched to each web font, so text does not shift when the fonts arrive.
-- **Motion rules:** only `transform` and `opacity` are animated. With `prefers-reduced-motion` the intro, aurora movement, tilt, cursor glow, typing effect and smooth scroll are off, and all content is shown immediately. Cursor glow, magnetic buttons and tilt are desktop-only (`pointer: fine`).
-- **GitHub grid:** fetches `api.github.com/users/Vatsal-Dholakiya/repos?sort=updated&per_page=6`, caches it in `sessionStorage` for 1 hour, shows skeletons while loading, and falls back to the list in `content.ts` (with a "Try again" button) on errors, time-outs or rate limits.
+- **Pre-rendering:** `scripts/prerender.mjs` renders the full page (all code-split sections) to static HTML and inlines the CSS, so the first paint does not wait for JavaScript. React then hydrates it.
+- **SEO:** a small Vite plugin in `vite.config.ts` writes the title, description, canonical URL, Open Graph, Twitter and JSON-LD `Person` tags from `content.ts`.
+- **Motion:** only `transform` and `opacity` are animated. With `prefers-reduced-motion`, the intro, aurora movement, tilt, cursor glow, rotating text and smooth scrolling are off and all content shows immediately. Tilt, magnetic buttons and cursor glow run only with a mouse or trackpad.
+- **Live data:** GitHub repositories and Stack Overflow reputation are fetched in the browser, cached in `sessionStorage` for one hour, and fall back to values in `content.ts` if a request fails or is rate-limited.
+- **Fonts:** Space Grotesk, Inter and JetBrains Mono from Google Fonts (preconnect, `display=swap`, non-blocking). Fallback fonts in `src/styles/globals.css` have metrics matched to each web font, so text does not shift when fonts load.
 
 ## Project structure
 
 ```
 src/
-  data/content.ts        all site content
-  sections/              Hero, About, Skills, Experience, Projects, Certifications, Education, Contact
-  components/            Navbar, Intro, Aurora, GradientName, RoleTyper, CursorGlow, ScrollProgress, Footer
-  components/ui/         Reveal, SectionHeading, TiltCard, Magnetic, Modal, Counter, Monogram, BrandIcons
-  hooks/                 useActiveSection, useCountUp, useFocusTrap, useGitHubRepos
-  lib/                   scroll (Lenis + anchors), env (reduced motion, pointer), intro
-  styles/index.css       colour tokens, fallback fonts, aurora, reduced-motion rules
-scripts/                 prerender.mjs, generate-assets.mjs
+  data/content.ts          all content + TypeScript types
+  components/              Navbar, Hero, About, Skills, Experience, Projects, GitHubRepos, StackOverflowCard,
+                           Certifications, CertificateModal, Education, Contact, Footer, Loader, Toast,
+                           SectionTitle, NotFound (+ ui/: TiltCard, Magnetic, Modal, Tooltip, Reveal, Counter …)
+  hooks/                   useActiveSection, useReducedMotion, useIsTouch, useCountUp, useFetchWithCache, useFocusTrap
+  lib/                     animations (variants), lenis (smooth scroll + anchors), helpers, overlay, events
+  styles/globals.css       colour tokens, fallback fonts, aurora, reduced-motion rules
+public/                    cv.pdf, profile*.webp, certificates/, favicon.svg, og-image.png, apple-touch-icon.png
+tests/                     Playwright end-to-end tests
+scripts/                   prerender.mjs, generate-assets.mjs (regenerates og-image.png / apple-touch-icon.png)
 ```
 
 Brand icons (GitHub, Stack Overflow, LinkedIn) are inline SVG from Bootstrap Icons (MIT licence).

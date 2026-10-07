@@ -1,41 +1,37 @@
 import { ArrowUp, Mail } from 'lucide-react'
-import { content } from '../data/content'
+import { footer, person } from '../data/content'
+import { linkProps, mailto, present } from '../lib/helpers'
 import { GitHubIcon, LinkedInIcon, StackOverflowIcon } from './ui/BrandIcons'
 
 export function Footer() {
-  const { links } = content
-  const socials = [
+  const { links } = person
+  const socials = present([
     { href: links.github, label: 'GitHub', icon: <GitHubIcon className="h-[18px] w-[18px]" /> },
     { href: links.stackoverflow, label: 'Stack Overflow', icon: <StackOverflowIcon className="h-[18px] w-[18px]" /> },
     { href: links.linkedin, label: 'LinkedIn', icon: <LinkedInIcon className="h-[18px] w-[18px]" /> },
-    { href: links.email && `mailto:${links.email}`, label: 'Email', icon: <Mail className="h-[18px] w-[18px]" aria-hidden="true" /> },
-  ].filter((s) => s.href)
+    { href: links.email && mailto(links.email), label: 'Email', icon: <Mail className="h-[18px] w-[18px]" aria-hidden="true" /> },
+  ])
 
   return (
     <footer className="border-t border-border">
       <div className="container-x flex flex-col items-center gap-6 py-10 md:flex-row md:justify-between">
         <p className="text-center text-sm text-muted md:text-left">
-          {content.footer} · <span suppressHydrationWarning>{new Date().getFullYear()}</span>
+          {footer.credit} · <span suppressHydrationWarning>{new Date().getFullYear()}</span>
         </p>
         <div className="flex items-center gap-3">
           <ul className="flex items-center gap-2" aria-label="Profiles">
             {socials.map((s) => (
               <li key={s.label}>
-                <a
-                  href={s.href}
-                  aria-label={s.label}
-                  className="icon-btn h-10 w-10"
-                  {...(s.href.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-                >
+                <a href={s.href} aria-label={s.label} className="icon-btn h-10 w-10" {...linkProps(s.href)}>
                   {s.icon}
                 </a>
               </li>
             ))}
           </ul>
           <span aria-hidden="true" className="h-6 w-px bg-border-strong" />
-          <a href="#top" className="icon-btn inline-flex h-10 w-auto items-center gap-2 px-3.5 text-sm font-medium">
+          <a href="#home" className="icon-btn inline-flex h-10 w-auto items-center gap-2 px-3.5 text-sm font-medium">
             <ArrowUp className="h-4 w-4" aria-hidden="true" />
-            Back to top
+            {footer.backToTop}
           </a>
         </div>
       </div>

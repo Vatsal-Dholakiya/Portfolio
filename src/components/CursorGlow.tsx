@@ -1,17 +1,20 @@
 import { useEffect, useState } from 'react'
 import { m, useMotionValue, useSpring } from 'framer-motion'
-import { hasFinePointer, prefersReducedMotion } from '../lib/env'
+import { useIsTouch } from '../hooks/useIsTouch'
+import { useReducedMotion } from '../hooks/useReducedMotion'
 
 /** Soft radial glow that follows the mouse. Desktop (fine pointer) only, off with reduced motion. */
 export function CursorGlow() {
   const [enabled, setEnabled] = useState(false)
+  const reduced = useReducedMotion()
+  const touch = useIsTouch()
   const x = useMotionValue(-1000)
   const y = useMotionValue(-1000)
   const sx = useSpring(x, { stiffness: 140, damping: 24, mass: 0.6 })
   const sy = useSpring(y, { stiffness: 140, damping: 24, mass: 0.6 })
 
   useEffect(() => {
-    if (!hasFinePointer() || prefersReducedMotion()) return
+    if (touch || reduced) return
     let shown = false
     const move = (e: PointerEvent) => {
       if (e.pointerType !== 'mouse') return
@@ -26,11 +29,22 @@ export function CursorGlow() {
       x.set(e.clientX)
       y.set(e.clientY)
     }
+    // Pause (hide) while the tab is hidden; it reappears on the next mouse move
+    const onVisibility = () => {
+      if (document.hidden) {
+        shown = false
+        setEnabled(false)
+      }
+    }
     window.addEventListener('pointermove', move, { passive: true })
-    return () => window.removeEventListener('pointermove', move)
-  }, [x, y, sx, sy])
+    document.addEventListener('visibilitychange', onVisibility)
+    return () => {
+      window.removeEventListener('pointermove', move)
+      document.removeEventListener('visibilitychange', onVisibility)
+    }
+  }, [x, y, sx, sy, touch, reduced])
 
-  if (!enabled) return null
+  if (!enabled || touch || reduced) return null
   return (
     <m.div
       aria-hidden="true"

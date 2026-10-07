@@ -1,3 +1,4 @@
+# Optional: GitHub Pages deployment (Vercel is the default host; see README).
 name: Deploy to GitHub Pages
 
 on:
@@ -26,7 +27,7 @@ jobs:
       - run: npm ci
       - run: npm run build
         env:
-          # Served from https://<user>.github.io/<repository>/
+          # Project sites are served from https://<user>.github.io/<repository>/
           BASE_PATH: /${{ github.event.repository.name }}/
       - uses: actions/upload-pages-artifact@v4
         with:

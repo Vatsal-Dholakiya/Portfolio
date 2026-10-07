@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { m, type Variants } from 'framer-motion'
-import { EASE } from '../lib/env'
+import { EASE } from '../lib/animations'
 
 const letter: Variants = {
   hidden: { opacity: 0, y: '0.55em' },

@@ -18,6 +18,7 @@
   --primary-soft: #a996ff;
   --accent: #22d3ee;
   --highlight: #f472b6;
+  --success: #34d399;
   --on-gradient: #0a0b10;
   --gradient: linear-gradient(135deg, #7c5cff 0%, #22d3ee 100%);
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
@@ -37,6 +38,7 @@
   --color-primary-soft: var(--primary-soft);
   --color-accent: var(--accent);
   --color-highlight: var(--highlight);
+  --color-success: var(--success);
   --color-on-gradient: var(--on-gradient);
 
   --font-display: 'Space Grotesk', 'Space Grotesk Fallback', ui-sans-serif, system-ui, sans-serif;
@@ -44,6 +46,13 @@
   --font-mono: 'JetBrains Mono', 'JetBrains Mono Fallback', ui-monospace, 'SFMono-Regular', Menlo, monospace;
 
   --ease-out-expo: cubic-bezier(0.22, 1, 0.36, 1);
+  --radius-card: 1rem;
+}
+
+/* Layout tokens */
+:root {
+  --nav-h: 4.5rem;
+  --section-py: clamp(4rem, 10vh, 7rem);
 }
 
 /* Fallback faces with the web fonts' measured metrics, so text does not shift when fonts swap in */
@@ -109,7 +118,7 @@ html body {
     letter-spacing: -0.02em;
   }
   ::selection {
-    background: rgba(124, 92, 255, 0.45);
+    background: rgba(124, 92, 255, 0.35);
     color: var(--text);
   }
   :focus-visible {
@@ -119,12 +128,33 @@ html body {
   }
   /* Single source of the sticky-navbar offset: used by native anchors and by Lenis */
   section[id] {
-    scroll-margin-top: 4.5rem;
+    scroll-margin-top: var(--nav-h);
   }
   img {
     max-width: 100%;
     height: auto;
   }
+}
+
+/* Thin custom scrollbar */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: var(--surface-2) var(--bg);
+}
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--surface-2);
+  border: 2px solid var(--bg);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #262a3a;
 }
 
 /* Lenis */
@@ -145,14 +175,19 @@ html.lenis body {
 @layer components {
   .container-x {
     width: 100%;
-    max-width: 72rem;
+    max-width: calc(75rem + 2.5rem); /* 1200px content + gutters */
     margin-inline: auto;
     padding-inline: 1.25rem;
   }
   @media (min-width: 768px) {
     .container-x {
+      max-width: calc(75rem + 4rem);
       padding-inline: 2rem;
     }
+  }
+
+  .section-y {
+    padding-block: var(--section-py);
   }
 
   .text-gradient {
@@ -170,7 +205,7 @@ html.lenis body {
   .card {
     background: var(--surface);
     border: 1px solid var(--border);
-    border-radius: 1.25rem;
+    border-radius: var(--radius-card);
   }
 
   .chip {
@@ -353,6 +388,21 @@ html.lenis body {
   }
 }
 
+/* "Open to opportunities" pulsing dot */
+.pulse-dot {
+  animation: pulse-dot 2s var(--ease) infinite;
+}
+@keyframes pulse-dot {
+  0% {
+    transform: scale(1);
+    opacity: 0.75;
+  }
+  100% {
+    transform: scale(2.6);
+    opacity: 0;
+  }
+}
+
 /* Skeleton shimmer */
 .skeleton {
   animation: pulse-soft 1.6s ease-in-out infinite;
@@ -376,6 +426,11 @@ html.show-intro body {
   overflow: hidden;
 }
 
+/* Unknown path: hide the pre-rendered home page until the 404 view renders */
+html.nf #root {
+  visibility: hidden;
+}
+
 /* ============================================================
    Reduced motion and no-JavaScript: content shown instantly
    ============================================================ */
@@ -388,6 +443,7 @@ html.show-intro body {
   .spin-slow,
   .caret,
   .scroll-dot,
+  .pulse-dot,
   .skeleton {
     animation: none !important;
   }

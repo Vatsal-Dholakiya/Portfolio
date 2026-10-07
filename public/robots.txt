@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://vatsal-dholakiya.github.io/Portfolio/sitemap.xml

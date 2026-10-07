@@ -3,11 +3,13 @@ import globals from 'globals'
 import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
 import tseslint from 'typescript-eslint'
+import prettier from 'eslint-config-prettier'
 
 export default tseslint.config(
-  { ignores: ['dist', 'dist-ssr', 'node_modules'] },
+  { ignores: ['dist', 'dist-ssr', 'node_modules', 'test-results', 'playwright-report'] },
   {
-    files: ['**/*.{ts,tsx}'],
+    // App source (React)
+    files: ['src/**/*.{ts,tsx}'],
     extends: [js.configs.recommended, ...tseslint.configs.recommended],
     languageOptions: { ecmaVersion: 2022, globals: globals.browser },
     plugins: { 'react-hooks': reactHooks, 'react-refresh': reactRefresh },
@@ -17,8 +19,16 @@ export default tseslint.config(
     },
   },
   {
+    // Tests and tooling config (Node)
+    files: ['tests/**/*.ts', '*.config.ts'],
+    extends: [js.configs.recommended, ...tseslint.configs.recommended],
+    languageOptions: { globals: { ...globals.node, ...globals.browser } },
+  },
+  {
     files: ['scripts/**/*.mjs'],
     extends: [js.configs.recommended],
     languageOptions: { globals: globals.node },
   },
+  // Turns off stylistic rules that conflict with Prettier
+  prettier,
 )
