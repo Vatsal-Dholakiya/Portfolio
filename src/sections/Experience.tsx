@@ -60,7 +60,7 @@ export function Experience() {
                 </p>
                 <ul className="mt-5 space-y-2.5">
                   {role.points.map((point) => (
-                    <li key={point} className="flex gap-3 text-[0.9875rem] leading-relaxed text-muted">
+                    <li key={point} className="flex gap-3 text-[0.9875rem] leading-relaxed text-body">
                       <span aria-hidden="true" className="bg-gradient mt-[0.7em] h-1.5 w-1.5 shrink-0 rounded-full" />
                       {point}
                     </li>

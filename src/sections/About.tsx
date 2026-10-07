@@ -55,7 +55,7 @@ export function About() {
         <div className="grid items-start gap-12 lg:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)] lg:gap-16">
           <div className="min-w-0">
             <Reveal>
-              <p className="max-w-[65ch] text-[1.0625rem] leading-[1.8] text-muted md:text-lg">{content.about.text}</p>
+              <p className="max-w-[65ch] text-[1.0625rem] leading-[1.8] text-body md:text-lg">{content.about.text}</p>
             </Reveal>
             <Stagger as="ul" className="mt-10 grid grid-cols-3 gap-3 sm:gap-4" stagger={0.08}>
               {content.about.stats.map((s) => (

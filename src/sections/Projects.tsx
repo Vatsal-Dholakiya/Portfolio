@@ -72,7 +72,7 @@ function FeaturedProject({ project }: { project: Project }) {
       <div className="flex min-w-0 flex-col justify-center">
         <p className="mono-label">Featured project</p>
         <h3 className="mt-3 text-[clamp(1.625rem,3vw,2.25rem)] font-bold leading-tight text-text">{project.title}</h3>
-        <p className="mt-4 text-[1.0625rem] leading-relaxed text-muted">{project.description}</p>
+        <p className="mt-4 text-[1.0625rem] leading-relaxed text-body">{project.description}</p>
         <div className="mt-6">
           <Tags tags={project.tags} />
         </div>
@@ -119,7 +119,7 @@ function ProjectCard({ project, wide = false }: { project: Project; wide?: boole
           </span>
           <div className="min-w-0">
             <h3 className="text-xl font-semibold text-text">{project.title}</h3>
-            <p className="mt-2 text-[0.9875rem] leading-relaxed text-muted">{project.description}</p>
+            <p className="mt-2 text-[0.9875rem] leading-relaxed text-body">{project.description}</p>
           </div>
         </div>
         <div className="flex min-w-0 flex-col gap-5 md:items-end">
@@ -135,7 +135,7 @@ function ProjectCard({ project, wide = false }: { project: Project; wide?: boole
         <FolderGit2 className="h-5 w-5" aria-hidden="true" />
       </span>
       <h3 className="mt-5 text-xl font-semibold text-text">{project.title}</h3>
-      <p className="mt-3 flex-1 text-[0.9875rem] leading-relaxed text-muted">{project.description}</p>
+      <p className="mt-3 flex-1 text-[0.9875rem] leading-relaxed text-body">{project.description}</p>
       <div className="mt-6">
         <Tags tags={project.tags} />
       </div>
@@ -159,7 +159,7 @@ function RepoCard({ repo }: { repo: Repo }) {
         </h4>
         <ArrowUpRight className="h-5 w-5 shrink-0 text-muted transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden="true" />
       </div>
-      <p className="mt-2 flex-1 text-[0.9375rem] leading-relaxed text-muted">{repo.description || 'No description provided.'}</p>
+      <p className="mt-2 flex-1 text-[0.9375rem] leading-relaxed text-body">{repo.description || 'No description provided.'}</p>
       <p className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-1 font-mono text-xs text-muted">
         {repo.language && (
           <span className="inline-flex items-center gap-1.5">

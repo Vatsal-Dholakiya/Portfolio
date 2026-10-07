@@ -11,6 +11,8 @@
   --border-strong: rgba(255, 255, 255, 0.14);
   --text: #e6e8f0;
   --text-muted: #9aa3b2;
+  /* Long-form reading text: brighter than muted for crisp paragraphs (11.9:1 on --bg) */
+  --text-body: #c5cbd8;
   --primary: #7c5cff;
   /* Lighter violet for text and icons: #7C5CFF itself is only 4.2:1 on the background */
   --primary-soft: #a996ff;
@@ -30,6 +32,7 @@
   --color-border-strong: var(--border-strong);
   --color-text: var(--text);
   --color-muted: var(--text-muted);
+  --color-body: var(--text-body);
   --color-primary: var(--primary);
   --color-primary-soft: var(--primary-soft);
   --color-accent: var(--accent);
@@ -72,26 +75,32 @@
 /* ============================================================
    Base
    ============================================================ */
+/* Page ground, text colour and fonts are deliberately NOT inside a cascade layer:
+   unlayered rules always beat layered ones, so a host page, embed or browser default
+   stylesheet can never turn the background light or swap the fonts. */
+html {
+  -webkit-text-size-adjust: 100%;
+  background: var(--bg);
+  color: var(--text);
+  color-scheme: dark;
+}
+html,
+html body {
+  overflow-x: clip;
+}
+html body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
 @layer base {
-  html {
-    -webkit-text-size-adjust: 100%;
-    background: var(--bg);
-    color: var(--text);
-  }
-  html,
-  body {
-    overflow-x: clip;
-  }
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: var(--font-sans);
-    font-size: 1rem;
-    line-height: 1.7;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-rendering: optimizeLegibility;
-  }
   h1,
   h2,
   h3 {

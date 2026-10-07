@@ -44,7 +44,7 @@ export function Navbar() {
       {/* Frosted layer fades in after 40px of scrolling (opacity only) */}
       <div
         aria-hidden="true"
-        className={`absolute inset-0 border-b border-border bg-surface/70 backdrop-blur-xl transition-opacity duration-500 ${
+        className={`absolute inset-0 border-b border-border bg-surface/85 backdrop-blur-xl transition-opacity duration-500 ${
           scrolled || open ? 'opacity-100' : 'opacity-0'
         }`}
       />

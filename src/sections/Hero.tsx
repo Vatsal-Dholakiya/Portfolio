@@ -61,7 +61,7 @@ export function Hero() {
         </m.p>
 
         {/* Static on purpose: visible from the first paint (it is the page's largest text block) */}
-        <p className="mt-6 max-w-[38rem] text-[1.0625rem] leading-relaxed text-muted md:text-lg">{content.hero.intro}</p>
+        <p className="mt-6 max-w-[38rem] text-[1.0625rem] leading-relaxed text-body md:text-lg">{content.hero.intro}</p>
 
         <m.div
           data-reveal
