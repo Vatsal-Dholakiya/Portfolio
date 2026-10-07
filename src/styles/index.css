@@ -1,65 +1,82 @@
 @import 'tailwindcss';
 
-/* ---------- Design tokens ---------- */
+/* ============================================================
+   Colour system
+   ============================================================ */
 :root {
-  /* Dark is the default theme */
-  --bg: #121826;
-  --surface: #1a2234;
-  --ink: #e6eaf2;
-  --muted: #a0a9bc;
-  --line: #2c3650;
-  --accent: #8fa3ff;
-  --highlight: #f0b44c;
-  --accent-ink: #121826; /* text on accent fills */
+  --bg: #0a0b10;
+  --surface: #12141c;
+  --surface-2: #1a1d29;
+  --border: rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(255, 255, 255, 0.14);
+  --text: #e6e8f0;
+  --text-muted: #9aa3b2;
+  --primary: #7c5cff;
+  /* Lighter violet for text and icons: #7C5CFF itself is only 4.2:1 on the background */
+  --primary-soft: #a996ff;
+  --accent: #22d3ee;
+  --highlight: #f472b6;
+  --on-gradient: #0a0b10;
+  --gradient: linear-gradient(135deg, #7c5cff 0%, #22d3ee 100%);
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
   color-scheme: dark;
-}
-
-/* No JavaScript and no saved choice: follow the system setting */
-@media (prefers-color-scheme: light) {
-  :root:not([data-theme]) {
-    --bg: #eef1f5;
-    --surface: #ffffff;
-    --ink: #18233a;
-    --muted: #556079;
-    --line: #c9d0dc;
-    --accent: #2e4bd8;
-    --highlight: #c98a16;
-    --accent-ink: #ffffff;
-    color-scheme: light;
-  }
-}
-
-:root[data-theme='light'] {
-  --bg: #eef1f5;
-  --surface: #ffffff;
-  --ink: #18233a;
-  --muted: #556079;
-  --line: #c9d0dc;
-  --accent: #2e4bd8;
-  --highlight: #c98a16;
-  --accent-ink: #ffffff;
-  color-scheme: light;
 }
 
 @theme {
   --color-bg: var(--bg);
   --color-surface: var(--surface);
-  --color-ink: var(--ink);
-  --color-muted: var(--muted);
-  --color-line: var(--line);
+  --color-surface-2: var(--surface-2);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-text: var(--text);
+  --color-muted: var(--text-muted);
+  --color-primary: var(--primary);
+  --color-primary-soft: var(--primary-soft);
   --color-accent: var(--accent);
   --color-highlight: var(--highlight);
-  --color-accent-ink: var(--accent-ink);
-  --font-display: 'Bricolage Grotesque Variable', 'Bricolage Grotesque', ui-sans-serif, system-ui, sans-serif;
-  --font-serif: 'Source Serif 4 Variable', 'Source Serif 4', ui-serif, Georgia, serif;
-  --container-site: 1080px;
+  --color-on-gradient: var(--on-gradient);
+
+  --font-display: 'Space Grotesk', 'Space Grotesk Fallback', ui-sans-serif, system-ui, sans-serif;
+  --font-sans: 'Inter', 'Inter Fallback', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'JetBrains Mono Fallback', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+
+  --ease-out-expo: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-/* ---------- Base ---------- */
+/* Fallback faces with the web fonts' measured metrics, so text does not shift when fonts swap in */
+@font-face {
+  font-family: 'Inter Fallback';
+  src: local('Arial'), local('ArialMT'), local('Liberation Sans'), local('Helvetica');
+  size-adjust: 106.74%;
+  ascent-override: 90.88%;
+  descent-override: 22.49%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: 'Space Grotesk Fallback';
+  src: local('Arial'), local('ArialMT'), local('Liberation Sans'), local('Helvetica');
+  size-adjust: 101.46%;
+  ascent-override: 96.59%;
+  descent-override: 28.58%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: 'JetBrains Mono Fallback';
+  src: local('Courier New'), local('CourierNewPSMT'), local('Liberation Mono');
+  size-adjust: 99.98%;
+  ascent-override: 102.02%;
+  descent-override: 30%;
+  line-gap-override: 0%;
+}
+
+/* ============================================================
+   Base
+   ============================================================ */
 @layer base {
   html {
     -webkit-text-size-adjust: 100%;
-    scroll-padding-top: 5rem;
+    background: var(--bg);
+    color: var(--text);
   }
   html,
   body {
@@ -67,29 +84,33 @@
   }
   body {
     background: var(--bg);
-    color: var(--ink);
-    font-family: var(--font-serif);
-    font-size: 1.0625rem;
+    color: var(--text);
+    font-family: var(--font-sans);
+    font-size: 1rem;
     line-height: 1.7;
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
   }
   h1,
   h2,
-  h3,
-  h4,
-  button,
-  label {
+  h3 {
     font-family: var(--font-display);
+    text-wrap: balance;
+    letter-spacing: -0.02em;
   }
   ::selection {
-    background: var(--accent);
-    color: var(--accent-ink);
+    background: rgba(124, 92, 255, 0.45);
+    color: var(--text);
   }
   :focus-visible {
     outline: 2px solid var(--accent);
     outline-offset: 3px;
-    border-radius: 4px;
+    border-radius: 6px;
+  }
+  /* Single source of the sticky-navbar offset: used by native anchors and by Lenis */
+  section[id] {
+    scroll-margin-top: 4.5rem;
   }
   img {
     max-width: 100%;
@@ -97,7 +118,7 @@
   }
 }
 
-/* Lenis smooth scroll */
+/* Lenis */
 html.lenis,
 html.lenis body {
   height: auto;
@@ -109,199 +130,265 @@ html.lenis body {
   overflow: clip;
 }
 
-/* ---------- Components ---------- */
+/* ============================================================
+   Components
+   ============================================================ */
 @layer components {
-  .container-site {
+  .container-x {
     width: 100%;
-    max-width: calc(var(--container-site) + 2rem);
+    max-width: 72rem;
     margin-inline: auto;
-    padding-inline: 1rem;
+    padding-inline: 1.25rem;
   }
   @media (min-width: 768px) {
-    .container-site {
-      max-width: calc(var(--container-site) + 4rem);
+    .container-x {
       padding-inline: 2rem;
     }
   }
 
-  .label {
-    font-family: var(--font-display);
-    font-size: 0.8125rem;
-    font-weight: 600;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--muted);
+  .text-gradient {
+    background-image: var(--gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
   }
 
-  .btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    min-height: 3rem;
-    padding: 0.75rem 1.4rem;
-    border-radius: 999px;
-    font-family: var(--font-display);
-    font-weight: 600;
-    font-size: 0.975rem;
-    line-height: 1;
-    border: 1px solid var(--line);
-    color: var(--ink);
-    background: transparent;
-    transition:
-      background-color 0.25s,
-      border-color 0.25s,
-      color 0.25s;
-    will-change: transform;
-  }
-  .btn:hover {
-    border-color: var(--accent);
-  }
-  .btn-primary {
-    background: var(--accent);
-    border-color: var(--accent);
-    color: var(--accent-ink);
-  }
-  .btn-primary:hover {
-    background: var(--ink);
-    border-color: var(--ink);
-    color: var(--bg);
-  }
-
-  .tag {
-    display: inline-block;
-    padding: 0.3rem 0.7rem;
-    border-radius: 999px;
-    border: 1px solid var(--line);
-    font-family: var(--font-display);
-    font-size: 0.8125rem;
-    font-weight: 600;
-    line-height: 1.3;
-    color: var(--muted);
+  .bg-gradient {
+    background-image: var(--gradient);
   }
 
   .card {
     background: var(--surface);
-    border: 1px solid var(--line);
+    border: 1px solid var(--border);
     border-radius: 1.25rem;
   }
 
-  .link-underline {
-    background-image: linear-gradient(currentColor, currentColor);
-    background-size: 0% 1px;
-    background-position: 0 100%;
-    background-repeat: no-repeat;
-    transition: background-size 0.3s;
-  }
-  .link-underline:hover {
-    background-size: 100% 1px;
-  }
-
-  /* Hero surname outline */
-  /* Stroke is painted under the fill, so overlapping contours in the variable font stay hidden.
-     Half of the 3px stroke shows, giving a clean 1.5px outline. */
-  .text-outline {
-    color: var(--bg);
-    -webkit-text-stroke: 3px var(--ink);
-    paint-order: stroke fill;
-  }
-  @supports not (-webkit-text-stroke: 1px black) {
-    .text-outline {
-      color: var(--ink);
-    }
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.375rem 0.75rem;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: var(--surface-2);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    line-height: 1.35;
+    color: var(--text);
   }
 
-  /* SplitText masks: leave room for descenders */
-  .split-line-mask,
-  .split-word-mask {
-    padding-bottom: 0.12em;
-    margin-bottom: -0.12em;
+  .mono-label {
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    letter-spacing: 0.02em;
+    color: var(--accent);
+  }
+
+  .btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 3rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.875rem;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.1875rem; /* large text: AA needs 3:1, met by the dark label on the whole gradient */
+    line-height: 1;
+    white-space: nowrap;
+    transition:
+      border-color 0.3s var(--ease),
+      background-color 0.3s var(--ease),
+      color 0.3s var(--ease);
+  }
+  .btn-primary {
+    background-image: var(--gradient);
+    color: var(--on-gradient);
+  }
+  .btn-outline {
+    border: 1px solid var(--border-strong);
+    background: rgba(18, 20, 28, 0.6);
+    color: var(--text);
+  }
+  .btn-outline:hover {
+    border-color: var(--primary-soft);
+    background: var(--surface-2);
+  }
+
+  .icon-btn {
+    display: inline-grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 0.875rem;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text-muted);
+    transition:
+      color 0.3s var(--ease),
+      border-color 0.3s var(--ease);
+  }
+  .icon-btn:hover {
+    color: var(--text);
+    border-color: var(--primary-soft);
+  }
+
+  .link {
+    color: var(--primary-soft);
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    text-underline-offset: 4px;
+    transition: text-decoration-color 0.3s var(--ease);
+  }
+  .link:hover {
+    text-decoration-color: currentColor;
   }
 }
 
-/* ---------- Preloader (visible only when the inline head script asks for it) ---------- */
-.preloader {
+/* ============================================================
+   Aurora background (pure CSS, transform only)
+   ============================================================ */
+.aurora-blob {
+  position: absolute;
+  border-radius: 50%;
+  will-change: transform;
+  animation: drift 26s var(--ease) infinite alternate;
+}
+.aurora-blob.b1 {
+  width: 62vmax;
+  height: 62vmax;
+  left: -18vmax;
+  top: -24vmax;
+  background: radial-gradient(circle at center, rgba(124, 92, 255, 0.42), rgba(124, 92, 255, 0) 65%);
+}
+.aurora-blob.b2 {
+  width: 54vmax;
+  height: 54vmax;
+  right: -20vmax;
+  top: -6vmax;
+  background: radial-gradient(circle at center, rgba(34, 211, 238, 0.26), rgba(34, 211, 238, 0) 65%);
+  animation-duration: 32s;
+  animation-delay: -8s;
+}
+.aurora-blob.b3 {
+  width: 46vmax;
+  height: 46vmax;
+  left: 22vmax;
+  bottom: -28vmax;
+  background: radial-gradient(circle at center, rgba(244, 114, 182, 0.13), rgba(244, 114, 182, 0) 65%);
+  animation-duration: 38s;
+  animation-delay: -16s;
+}
+@keyframes drift {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(6vmax, 4vmax, 0) scale(1.08);
+  }
+  100% {
+    transform: translate3d(-4vmax, 7vmax, 0) scale(0.95);
+  }
+}
+.aurora-paused .aurora-blob {
+  animation-play-state: paused;
+}
+
+.dot-grid {
+  background-image: radial-gradient(rgba(230, 232, 240, 0.13) 1px, transparent 1.2px);
+  background-size: 26px 26px;
+  -webkit-mask-image: radial-gradient(ellipse 75% 65% at 50% 45%, var(--bg) 20%, transparent 80%);
+  mask-image: radial-gradient(ellipse 75% 65% at 50% 45%, var(--bg) 20%, transparent 80%);
+}
+
+/* Rotating gradient frame (photo) */
+.spin-slow {
+  animation: spin 9s linear infinite;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Typing caret */
+.caret {
+  animation: blink 1s steps(1) infinite;
+}
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+/* Scroll indicator dot */
+.scroll-dot {
+  animation: scroll-dot 1.8s var(--ease) infinite;
+}
+@keyframes scroll-dot {
+  0% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  30% {
+    opacity: 1;
+  }
+  80% {
+    transform: translateY(12px);
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Skeleton shimmer */
+.skeleton {
+  animation: pulse-soft 1.6s ease-in-out infinite;
+}
+@keyframes pulse-soft {
+  50% {
+    opacity: 0.45;
+  }
+}
+
+/* ============================================================
+   Intro overlay: only visible when index.html marks the first visit
+   ============================================================ */
+.intro {
   display: none;
 }
-html.show-preloader .preloader {
-  display: flex;
+html.show-intro .intro {
+  display: grid;
 }
-html.show-preloader body {
+html.show-intro body {
   overflow: hidden;
 }
 
-/* Hero items start hidden only while JavaScript is running animations.
-   A safety timer in index.html removes .js-anim if the app never starts. */
-html.js-anim [data-hero-fade],
-html.js-anim [data-hero-name] {
-  opacity: 0;
-}
-
-/* ---------- Custom cursor ---------- */
-.cursor {
-  display: none;
-}
-@media (hover: hover) and (pointer: fine) {
-  html.has-cursor .cursor {
-    display: block;
-  }
-  html.has-cursor,
-  html.has-cursor a,
-  html.has-cursor button {
-    cursor: none;
-  }
-}
-
-/* ---------- Marquee ---------- */
-.marquee-track {
-  animation: marquee 70s linear infinite;
-}
-.marquee:hover .marquee-track {
-  animation-play-state: paused;
-}
-@keyframes marquee {
-  to {
-    transform: translate3d(-50%, 0, 0);
-  }
-}
-
-/* ---------- Timeline dot pulse ---------- */
-.pulse-ring {
-  animation: pulse 2.2s ease-out infinite;
-}
-@keyframes pulse {
-  0% {
-    transform: scale(1);
-    opacity: 0.7;
-  }
-  100% {
-    transform: scale(2.6);
-    opacity: 0;
-  }
-}
-
-/* ---------- Reduced motion: everything still, everything visible ---------- */
+/* ============================================================
+   Reduced motion and no-JavaScript: content shown instantly
+   ============================================================ */
 @media (prefers-reduced-motion: reduce) {
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .aurora-blob,
+  .spin-slow,
+  .caret,
+  .scroll-dot,
+  .skeleton {
+    animation: none !important;
+  }
+  html.show-intro .intro {
+    display: none;
+  }
   *,
   *::before,
   *::after {
-    animation-duration: 0.001ms !important;
-    animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
     scroll-behavior: auto !important;
-  }
-  .marquee-track {
-    animation: none;
-    flex-wrap: wrap;
-    width: auto !important;
-  }
-  .marquee-copy {
-    display: none;
-  }
-  .pulse-ring {
-    animation: none;
-    opacity: 0;
-  }
-  html.show-preloader .preloader {
-    display: none;
   }
 }

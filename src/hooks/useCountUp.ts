@@ -1,28 +1,29 @@
-import type { RefObject } from 'react'
-import { gsap, useGSAP } from '../lib/gsap'
-import { prefersReducedMotion } from '../lib/motion'
+import { useEffect, type RefObject } from 'react'
+import { animate, useInView } from 'framer-motion'
+import { EASE, prefersReducedMotion } from '../lib/env'
 
 /**
- * Counts a number up from 0 when the element scrolls into view.
- * The final value is already in the HTML, so it is correct without JavaScript.
+ * Counts a number up from 0 once, when it scrolls into view.
+ * The final value is in the HTML, so it is correct without JavaScript or with reduced motion.
  */
-export function useCountUp(ref: RefObject<HTMLElement | null>, value: number, duration = 1.6) {
-  useGSAP(
-    () => {
-      const el = ref.current
-      if (!el || prefersReducedMotion()) return
-      const counter = { v: 0 }
-      el.textContent = '0'
-      gsap.to(counter, {
-        v: value,
-        duration,
-        ease: 'power2.out',
-        scrollTrigger: { trigger: el, start: 'top 90%', once: true },
-        onUpdate: () => {
-          el.textContent = Math.round(counter.v).toLocaleString('en-GB')
-        },
-      })
-    },
-    { dependencies: [value] },
-  )
+export function useCountUp(ref: RefObject<HTMLElement | null>, value: number) {
+  const inView = useInView(ref, { once: true, amount: 0.8 })
+
+  // Start from zero (the element is normally below the fold at this point)
+  useEffect(() => {
+    if (ref.current && !prefersReducedMotion()) ref.current.textContent = '0'
+  }, [ref])
+
+  useEffect(() => {
+    const el = ref.current
+    if (!inView || !el || prefersReducedMotion()) return
+    const controls = animate(0, value, {
+      duration: 1.4,
+      ease: EASE,
+      onUpdate: (v) => {
+        el.textContent = String(Math.round(v))
+      },
+    })
+    return () => controls.stop()
+  }, [inView, value, ref])
 }

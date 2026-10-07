@@ -1,33 +1,28 @@
-// Renders the app to static HTML so every word is readable without JavaScript and by search engines.
-// Also inlines the (small) stylesheet and preloads the Latin fonts so the first paint is not blocked.
+// Renders the app to static HTML (fast first paint, readable by search engines)
+// and inlines the stylesheet so it does not block rendering.
 import { readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { dirname, resolve } from 'node:path'
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const dist = resolve(root, 'dist')
+const base = process.env.BASE_PATH ?? '/'
 const { render } = await import(resolve(root, 'dist-ssr/entry-server.js'))
+
 const file = resolve(dist, 'index.html')
 let html = readFileSync(file, 'utf8')
 if (!html.includes('<!--app-html-->')) throw new Error('Placeholder <!--app-html--> not found in dist/index.html')
-
 html = html.replace('<!--app-html-->', render())
 
-// Inline the stylesheet
 html = html.replace(/<link rel="stylesheet" crossorigin href="([^"]+)">/, (_, href) => {
-  const base = process.env.BASE_PATH ?? '/'
   const cssPath = href.slice(base.length) // e.g. "assets/index-abc.css"
   const cssDir = cssPath.slice(0, cssPath.lastIndexOf('/') + 1)
-  // Relative url() values are relative to the CSS file; make them relative to index.html once inlined
+  // Relative url() values are relative to the CSS file; rewrite them for index.html
   const css = readFileSync(resolve(dist, cssPath), 'utf8').replace(
-    /url\((?!['"]?(?:\/|data:|https?:))['"]?(?:\.\/)?([^'")]+)['"]?\)/g,
-    (_, p) => `url(${base}${cssDir}${p})`,
+    /url\((?!['"]?(?:\/|data:|https?:|#))['"]?(?:\.\/)?([^'")]+)['"]?\)/g,
+    (_m, p) => `url(${base}${cssDir}${p})`,
   )
-  const fonts = [...css.matchAll(/url\(([^)]+(?:bricolage-grotesque|source-serif-4)-latin-wght-normal[^)]+\.woff2)\)/g)].map((m) => m[1])
-  const preloads = [...new Set(fonts)]
-    .map((f) => `<link rel="preload" href="${f}" as="font" type="font/woff2" crossorigin>`)
-    .join('')
-  return `${preloads}<style>${css}</style>`
+  return `<style>${css}</style>`
 })
 
 writeFileSync(file, html)

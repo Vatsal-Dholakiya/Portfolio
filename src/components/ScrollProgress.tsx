@@ -1,15 +1,15 @@
-import { useRef } from 'react'
-import { gsap, useGSAP } from '../lib/gsap'
+import { m, useScroll, useSpring } from 'framer-motion'
 
-/** Thin accent bar at the very top that fills as the page scrolls. */
+/** Thin gradient bar at the very top that fills as the page scrolls. */
 export function ScrollProgress() {
-  const bar = useRef<HTMLDivElement>(null)
-  useGSAP(() => {
-    gsap.fromTo(
-      bar.current,
-      { scaleX: 0 },
-      { scaleX: 1, ease: 'none', scrollTrigger: { start: 0, end: 'max', scrub: 0.3 } },
-    )
-  })
-  return <div ref={bar} aria-hidden="true" className="fixed inset-x-0 top-0 z-[60] h-[3px] origin-left scale-x-0 bg-accent" />
+  const { scrollYProgress } = useScroll()
+  const scaleX = useSpring(scrollYProgress, { stiffness: 220, damping: 40, restDelta: 0.001 })
+  return (
+    <m.div
+      aria-hidden="true"
+      className="bg-gradient fixed inset-x-0 top-0 z-[70] h-[3px] origin-left"
+      style={{ scaleX }}
+      initial={{ scaleX: 0 }}
+    />
+  )
 }

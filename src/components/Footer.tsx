@@ -1,34 +1,43 @@
-import { profile } from '../data/profile'
-import { Icon, type IconName } from './Icon'
+import { ArrowUp, Mail } from 'lucide-react'
+import { content } from '../data/content'
+import { GitHubIcon, LinkedInIcon, StackOverflowIcon } from './ui/BrandIcons'
 
 export function Footer() {
-  const c = profile.contact
-  const links: { icon: IconName; label: string; href: string }[] = [
-    { icon: 'linkedin', label: 'LinkedIn', href: c.linkedin },
-    { icon: 'github', label: 'GitHub', href: c.github },
-    { icon: 'stackoverflow', label: 'Stack Overflow', href: c.stackoverflow },
-    { icon: 'mail', label: 'Email', href: c.email && `mailto:${c.email}` },
-  ].filter((l) => l.href) as { icon: IconName; label: string; href: string }[]
+  const { links } = content
+  const socials = [
+    { href: links.github, label: 'GitHub', icon: <GitHubIcon className="h-[18px] w-[18px]" /> },
+    { href: links.stackoverflow, label: 'Stack Overflow', icon: <StackOverflowIcon className="h-[18px] w-[18px]" /> },
+    { href: links.linkedin, label: 'LinkedIn', icon: <LinkedInIcon className="h-[18px] w-[18px]" /> },
+    { href: links.email && `mailto:${links.email}`, label: 'Email', icon: <Mail className="h-[18px] w-[18px]" aria-hidden="true" /> },
+  ].filter((s) => s.href)
 
   return (
-    <footer className="border-t border-line">
-      <div className="container-site flex flex-col items-center justify-between gap-4 py-8 sm:flex-row">
-        <p className="font-display text-sm font-semibold text-muted">{profile.footer}</p>
-        <ul className="flex items-center gap-2">
-          {links.map((l) => (
-            <li key={l.label}>
-              <a
-                href={l.href}
-                aria-label={l.label}
-                target={l.href.startsWith('http') ? '_blank' : undefined}
-                rel={l.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-                className="grid h-11 w-11 place-items-center rounded-full border border-line text-muted transition-colors hover:border-accent hover:text-accent"
-              >
-                <Icon name={l.icon} />
-              </a>
-            </li>
-          ))}
-        </ul>
+    <footer className="border-t border-border">
+      <div className="container-x flex flex-col items-center gap-6 py-10 md:flex-row md:justify-between">
+        <p className="text-center text-sm text-muted md:text-left">
+          {content.footer} · <span suppressHydrationWarning>{new Date().getFullYear()}</span>
+        </p>
+        <div className="flex items-center gap-3">
+          <ul className="flex items-center gap-2" aria-label="Profiles">
+            {socials.map((s) => (
+              <li key={s.label}>
+                <a
+                  href={s.href}
+                  aria-label={s.label}
+                  className="icon-btn h-10 w-10"
+                  {...(s.href.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                >
+                  {s.icon}
+                </a>
+              </li>
+            ))}
+          </ul>
+          <span aria-hidden="true" className="h-6 w-px bg-border-strong" />
+          <a href="#top" className="icon-btn inline-flex h-10 w-auto items-center gap-2 px-3.5 text-sm font-medium">
+            <ArrowUp className="h-4 w-4" aria-hidden="true" />
+            Back to top
+          </a>
+        </div>
       </div>
     </footer>
   )

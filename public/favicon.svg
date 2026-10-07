@@ -1,5 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <rect width="64" height="64" rx="14" fill="#121826"/>
-  <text x="32" y="43" text-anchor="middle" font-family="Bricolage Grotesque, Arial Black, Arial, sans-serif" font-weight="800" font-size="30" fill="#E6EAF2" letter-spacing="-1">VD</text>
-  <circle cx="51" cy="41" r="3.5" fill="#8FA3FF"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" fill="none">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#7C5CFF"/>
+      <stop offset="1" stop-color="#22D3EE"/>
+    </linearGradient>
+  </defs>
+  <rect x="0.75" y="0.75" width="38.5" height="38.5" rx="11" fill="#12141C" stroke="url(#g)" stroke-width="1.5"/>
+  <path d="M9 12.5 13.6 27.5 18.2 12.5M21.8 12.5V27.5H25.4C29.4 27.5 31.6 24.6 31.6 20S29.4 12.5 25.4 12.5Z" fill="none" stroke="url(#g)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>

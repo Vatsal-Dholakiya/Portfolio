@@ -1,4 +1,4 @@
-/** Resolves when the preloader has finished (or immediately if it is not shown). The hero waits for it. */
+/** Resolves when the intro overlay has finished (or immediately when it is skipped). */
 let resolveIntro: () => void = () => {}
 export const introDone = new Promise<void>((resolve) => {
   resolveIntro = resolve

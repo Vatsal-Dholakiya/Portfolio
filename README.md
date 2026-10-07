@@ -1,97 +1,94 @@
 # Vatsal Dholakiya — Portfolio
 
-A fast, fully animated, static portfolio built with Vite, React, TypeScript, Tailwind CSS, GSAP (GreenSock Animation Platform), Lenis and Framer Motion.
+A production-ready, single-page portfolio: dark, fast, accessible and animated.
 
-- Pre-rendered HTML (HyperText Markup Language): every word is readable without JavaScript and by search engines.
-- Light and dark themes (dark by default; follows the system setting first; the choice is saved).
-- Respects `prefers-reduced-motion`: no preloader, cursor, canvas motion, pinning or reveals.
-- Lighthouse (local test): Performance 94–95 mobile / 100 desktop; Accessibility, Best Practices and SEO (Search Engine Optimisation) 100.
+**Stack:** Vite · React 18 · TypeScript (strict) · Tailwind CSS · Framer Motion · Lenis · lucide-react
 
-## Run it locally
+| Check (local test) | Result |
+|---|---|
+| `npm run build` | 0 TypeScript errors, 0 ESLint problems |
+| Browser console | 0 errors, 0 warnings (production and dev, desktop, mobile, reduced motion) |
+| Lighthouse mobile | Performance 98–99 · Accessibility 100 · Best Practices 100 · SEO 100 |
+| Lighthouse desktop | Performance 99 · Accessibility 100 · Best Practices 100 · SEO 100 |
+| Horizontal scroll | none at 320, 375, 768, 1024, 1440 and 1920 px |
+
+## Run it
 
 Requires Node.js 20 or newer.
 
 ```bash
 npm install
-npm run dev       # http://localhost:5173
-npm run build     # type-check, build, pre-render into dist/
-npm run preview   # serve dist/ at http://localhost:4173
+npm run dev        # development server at http://localhost:5173
+npm run build      # type-check + lint + production build + pre-render into dist/
+npm run preview    # serve the production build at http://localhost:4173
+npm run lint       # ESLint only
 ```
 
 ## Edit the content
 
-**All text lives in [`src/data/profile.ts`](src/data/profile.ts).** You never need to touch a component to change wording.
+**Everything you read on the site lives in [`src/data/content.ts`](src/data/content.ts).** Components never need to change.
 
-| What | Where in `profile.ts` |
+| To change | Edit in `content.ts` |
 |---|---|
-| Hero intro and location line | `hero` |
-| Email, phone, LinkedIn, GitHub, Stack Overflow | `contact` (an empty string `''` hides that row and its footer icon) |
-| Professional summary | `summary` (one string per paragraph) |
-| Projects | `projects` (`impact` adds the big count-up figure; `featured: true` highlights the card) |
-| Stack Overflow numbers | `stackoverflow.stats` |
-| Jobs | `experience` (`current: true` gives the pulsing dot) |
-| Skills | `skills` (grouped lists) and `marquee` (scrolling names) |
-| Certificates | `certificates` |
-| Education | `education` |
-| Footer line | `footer` |
+| Name, hero greeting, rotating roles, intro line, button labels | `name`, `hero` |
+| Email, GitHub, Stack Overflow, LinkedIn, CV path | `links` (an empty string `''` hides that link everywhere) |
+| About text, stat counters, profile photo | `about` |
+| Skill groups | `skills` |
+| Jobs | `experience` (`current: true` adds the "Current" badge and pink dot) |
+| Projects | `projects` (`featured: true` makes the large card; `impact` adds the big count-up figure; `github` / `live` add links) |
+| "Latest on GitHub" | `github` (repos to hide, descriptions for repos that have none, and the offline fallback list) |
+| Certifications | `certificates` (add an object to add a card; the grid adapts) |
+| Education | `education` (`years` is hidden while empty) |
+| Contact heading and button | `contact` |
+| Footer text | `footer` |
 
-The page title, description and social-sharing tags are in [`index.html`](index.html).
+The page title, description and social-preview tags are in [`index.html`](index.html). The site address used by those tags is in `.env` (`VITE_SITE_URL`).
 
-### Add your files
+### Add your files to `public/`
 
-1. **CV:** put your PDF at `public/Vatsal_Dholakiya_CV.pdf` (same name). All "Download CV" buttons use it.
-2. **Certificates:** replace the five placeholder images in `public/certificates/` with your real ones, keeping the file names:
-   `ethical-hacking.jpg`, `oop-java.jpg`, `github.jpg`, `ui-ux.jpg`, `cloud-foundations.jpg`.
-   A landscape image about 1600 × 1131 pixels works best.
-3. **Phone and LinkedIn:** fill in `contact.phone` and `contact.linkedin` in `profile.ts`.
+| File | What to do |
+|---|---|
+| `public/cv.pdf` | **Required.** Your CV; both "Download CV" buttons point here. |
+| `public/profile.webp` | Your photo (square, at least 640 × 640 px, WebP). Then set `about.photo: '/profile.webp'`. Until then a "VD" monogram is shown. |
+| `public/certificates/*.webp` | Certificate images (about 1600 × 1131 px, WebP). Then set each certificate's `image`, e.g. `'/certificates/ethical-hacking.webp'`. The dialog shows the image when one is set. |
+| `public/og-image.png` | Social preview (1200 × 630). Regenerate with `node scripts/generate-assets.mjs` (needs Playwright) or replace with your own. |
 
-### Site address
+Convert a JPG to WebP with any image tool, e.g. `npx @squoosh/cli --webp auto photo.jpg` or an online converter.
 
-`.env` holds `VITE_SITE_URL`, which is used for the canonical link and the Open Graph (social preview) image. It is set to `https://vatsal-dholakiya.github.io/Portfolio`. If you use a custom domain or Vercel, change it there and in `public/robots.txt` and `public/sitemap.xml`.
+## Deploy
 
-To regenerate `og-image.png` and `apple-touch-icon.png` after design changes: `node scripts/generate-assets.mjs` (needs Playwright installed).
+### GitHub Pages (workflow included)
+1. Push to the `main` branch.
+2. On GitHub: **Settings → Pages → Source: GitHub Actions**.
+3. `.github/workflows/deploy.yml` builds and publishes on every push to `main`. The site appears at `https://<username>.github.io/<repository>/`; the sub-path is set automatically.
 
-## Deploy to GitHub Pages
+### Vercel
+Import the repository at [vercel.com/new](https://vercel.com/new). Vite is detected automatically (build `npm run build`, output `dist`). Set `VITE_SITE_URL` in `.env` to your Vercel address.
 
-1. Push this project to the `main` branch of your GitHub repository.
-2. On GitHub, open **Settings → Pages** and set **Source** to **GitHub Actions**.
-3. The workflow in `.github/workflows/deploy.yml` builds and publishes the site on every push to `main` (or run it by hand from the **Actions** tab).
-4. Your site will be at `https://<your-username>.github.io/<repository-name>/`. The workflow sets the sub-path automatically from the repository name.
+### Netlify
+New site from Git → build command `npm run build`, publish directory `dist`. Set `VITE_SITE_URL` to your Netlify address.
 
-## Deploy to Vercel (alternative)
+After changing the address, also update `public/robots.txt` and `public/sitemap.xml`.
 
-Import the repository at [vercel.com/new](https://vercel.com/new). Vercel detects Vite automatically: build command `npm run build`, output directory `dist`. No other settings are needed. Update `VITE_SITE_URL` in `.env` to your Vercel address.
+## How it works
+
+- **Pre-rendering:** after the build, `scripts/prerender.mjs` renders the page to static HTML and inlines the CSS, so the first paint does not wait for JavaScript. React then hydrates it.
+- **Fonts:** Space Grotesk, Inter and JetBrains Mono from Google Fonts with `preconnect`, `display=swap` and a non-blocking stylesheet. Fallback faces in `src/styles/index.css` have metrics matched to each web font, so text does not shift when the fonts arrive.
+- **Motion rules:** only `transform` and `opacity` are animated. With `prefers-reduced-motion` the intro, aurora movement, tilt, cursor glow, typing effect and smooth scroll are off, and all content is shown immediately. Cursor glow, magnetic buttons and tilt are desktop-only (`pointer: fine`).
+- **GitHub grid:** fetches `api.github.com/users/Vatsal-Dholakiya/repos?sort=updated&per_page=6`, caches it in `sessionStorage` for 1 hour, shows skeletons while loading, and falls back to the list in `content.ts` (with a "Try again" button) on errors, time-outs or rate limits.
 
 ## Project structure
 
 ```
 src/
-  data/profile.ts        all content
-  data/nav.ts            navbar links
-  sections/              Hero, About, Work, StackOverflow, Experience, Skills, Certificates, Education, Contact
-  components/            Preloader, Cursor, Navbar, NeuralCanvas, Marquee, TiltCard, Lightbox, RevealHeading, ...
-  hooks/                 useCountUp, useMagnetic, useActiveSection
-  lib/                   gsap setup, Lenis smooth scroll, theme store, motion helpers
-  styles/index.css       colour tokens (light and dark), base styles
-scripts/prerender.mjs    renders the app to static HTML and inlines the CSS after the build
+  data/content.ts        all site content
+  sections/              Hero, About, Skills, Experience, Projects, Certifications, Education, Contact
+  components/            Navbar, Intro, Aurora, GradientName, RoleTyper, CursorGlow, ScrollProgress, Footer
+  components/ui/         Reveal, SectionHeading, TiltCard, Magnetic, Modal, Counter, Monogram, BrandIcons
+  hooks/                 useActiveSection, useCountUp, useFocusTrap, useGitHubRepos
+  lib/                   scroll (Lenis + anchors), env (reduced motion, pointer), intro
+  styles/index.css       colour tokens, fallback fonts, aurora, reduced-motion rules
+scripts/                 prerender.mjs, generate-assets.mjs
 ```
 
-## Animation map
-
-| Animation | File |
-|---|---|
-| Preloader counter 0 → 100 with "VD", once per session | `components/Preloader.tsx` |
-| Hero name letter-by-letter reveal (SplitText), intro fade | `sections/Hero.tsx` |
-| Neural-network canvas that connects to the cursor | `components/NeuralCanvas.tsx` |
-| Custom cursor (dot + ring, desktop only) | `components/Cursor.tsx` |
-| Magnetic buttons | `hooks/useMagnetic.ts`, `components/Magnetic.tsx` |
-| Navbar hide/show, sliding underline, scroll progress bar | `components/Navbar.tsx`, `components/ScrollProgress.tsx` |
-| Section heading word reveal | `components/RevealHeading.tsx` |
-| Pinned horizontal project scroll, count-up, tag pop-in | `sections/Work.tsx` |
-| Stack Overflow count-ups | `sections/StackOverflow.tsx`, `hooks/useCountUp.ts` |
-| Timeline line draw, dot fill, pulsing current role | `sections/Experience.tsx` |
-| Skills marquee | `components/Marquee.tsx` |
-| Certificate 3D tilt and lightbox | `components/TiltCard.tsx`, `components/Lightbox.tsx` |
-| "Let's talk" reveal and copy email | `sections/Contact.tsx` |
-
-Icons are from [Bootstrap Icons](https://icons.getbootstrap.com) (MIT licence).
+Brand icons (GitHub, Stack Overflow, LinkedIn) are inline SVG from Bootstrap Icons (MIT licence).

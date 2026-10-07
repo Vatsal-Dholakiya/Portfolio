@@ -1,120 +1,130 @@
-import { useRef } from 'react'
-import { SplitText, gsap, useGSAP } from '../lib/gsap'
+import { useEffect, useState } from 'react'
+import { m, type Variants } from 'framer-motion'
+import { ArrowRight, Download, Mail, MapPin } from 'lucide-react'
+import { asset, content } from '../data/content'
+import { EASE } from '../lib/env'
 import { introDone } from '../lib/intro'
-import { fontsReady, prefersReducedMotion } from '../lib/motion'
-import { scrollToId } from '../lib/smoothScroll'
-import { useTheme } from '../lib/theme'
-import { asset, profile } from '../data/profile'
-import { Icon } from '../components/Icon'
-import { Magnetic } from '../components/Magnetic'
-import { NeuralCanvas } from '../components/NeuralCanvas'
+import { Aurora } from '../components/Aurora'
+import { GradientName } from '../components/GradientName'
+import { RoleTyper } from '../components/RoleTyper'
+import { GitHubIcon, LinkedInIcon, StackOverflowIcon } from '../components/ui/BrandIcons'
+import { Magnetic } from '../components/ui/Magnetic'
+
+const NAME_TIME = 0.55 // seconds after the name starts before the role line follows
+
+const fade = (delay: number): Variants => ({
+  hidden: { opacity: 0, y: 24 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: EASE, delay } },
+})
 
 export function Hero() {
-  const root = useRef<HTMLElement>(null)
-  const theme = useTheme()
+  const [play, setPlay] = useState(false)
+  useEffect(() => {
+    let alive = true
+    introDone.then(() => alive && setPlay(true))
+    return () => {
+      alive = false
+    }
+  }, [])
 
-  useGSAP(
-    () => {
-      const html = document.documentElement
-      if (prefersReducedMotion()) {
-        html.classList.remove('js-anim')
-        return
-      }
-      let split: SplitText | undefined
-      let cancelled = false
-      Promise.all([introDone, fontsReady()]).then(() => {
-        if (cancelled) return
-        split = SplitText.create('[data-hero-line]', { type: 'chars', mask: 'lines', linesClass: 'split-line' })
-        gsap
-          .timeline({ onComplete: () => html.classList.remove('js-anim') })
-          .set('[data-hero-name]', { opacity: 1 })
-          .from(split.chars, { yPercent: 115, duration: 1, ease: 'power4.out', stagger: 0.035 })
-          .fromTo(
-            '[data-hero-fade]',
-            { y: 24, opacity: 0 },
-            { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out', stagger: 0.09 },
-            '-=0.55',
-          )
-      })
-      return () => {
-        cancelled = true
-        split?.revert()
-      }
-    },
-    { scope: root },
-  )
+  const { links } = content
+  const socials = [
+    { href: links.github, label: 'GitHub', icon: <GitHubIcon /> },
+    { href: links.stackoverflow, label: 'Stack Overflow', icon: <StackOverflowIcon /> },
+    { href: links.email && `mailto:${links.email}`, label: 'Email', icon: <Mail className="h-5 w-5" aria-hidden="true" /> },
+    { href: links.linkedin, label: 'LinkedIn', icon: <LinkedInIcon /> },
+  ].filter((s) => s.href)
 
-  const { first, last } = profile.name
+  const state = play ? 'show' : 'hidden'
 
   return (
-    <section ref={root} id="top" tabIndex={-1} aria-label="Introduction" className="relative flex min-h-[100svh] items-center overflow-hidden pb-16 pt-28 outline-none">
-      <NeuralCanvas theme={theme} />
-      {/* Soft fade so the canvas never competes with the text */}
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_30%_55%,var(--bg)_10%,transparent_70%)] opacity-80" />
-      <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-bg to-transparent" />
+    <section id="top" aria-label="Introduction" className="relative flex min-h-[100svh] items-center overflow-hidden">
+      <Aurora />
 
-      <div className="container-site relative">
-        <p data-hero-fade className="label mb-6 flex items-center gap-3">
-          <span className="h-px w-10 bg-accent" aria-hidden="true" />
-          {profile.role}
-        </p>
+      <div className="container-x relative pb-28 pt-32">
+        <m.p data-reveal className="mono-label text-[0.9375rem]" initial="hidden" animate={state} variants={fade(0)}>
+          {content.hero.greeting}
+        </m.p>
 
-        <h1 className="font-display font-extrabold leading-[0.9] tracking-[-0.035em] text-[clamp(3.6rem,18vw,10.5rem)]">
-          <span className="sr-only">{`${first} ${last}`}</span>
-          <span data-hero-name aria-hidden="true" className="block">
-            <span data-hero-line className="block">{first}</span>
-            <span data-hero-line className="text-outline block">{last}</span>
-          </span>
+        <h1 className="mt-4 text-[clamp(2.5rem,7vw,5.5rem)] font-bold leading-[1.05] tracking-[-0.03em]">
+          <GradientName text={`${content.name.first} ${content.name.last}`} play={play} />
         </h1>
 
-        <div className="mt-10 grid gap-8 md:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)] md:items-end md:gap-12">
-          <p data-hero-fade className="max-w-xl text-lg leading-relaxed md:text-xl">
-            {profile.hero.intro}
-          </p>
-          <p data-hero-fade className="flex max-w-sm gap-2 text-base text-muted">
-            <Icon name="location" className="mt-1.5 h-4 w-4 shrink-0 text-accent" />
-            {profile.hero.location}
-          </p>
-        </div>
+        <m.p
+          data-reveal
+          className="mt-4 min-h-[1.3em] font-display text-[clamp(1.375rem,3.6vw,2.25rem)] font-semibold leading-tight text-muted"
+          initial="hidden"
+          animate={state}
+          variants={fade(NAME_TIME)}
+        >
+          <RoleTyper roles={content.hero.roles} start={play} />
+        </m.p>
 
-        <ul data-hero-fade className="mt-10 flex flex-wrap gap-3" aria-label="Quick links">
-          <li>
-            <Magnetic>
-              <a
-                href="#work"
-                className="btn btn-primary"
-                onClick={(e) => {
-                  e.preventDefault()
-                  scrollToId('work')
-                }}
-              >
-                See my work <Icon name="down" />
-              </a>
-            </Magnetic>
-          </li>
-          <li>
-            <Magnetic>
-              <a href={profile.contact.github} target="_blank" rel="noopener noreferrer" className="btn">
-                <Icon name="github" /> GitHub
-              </a>
-            </Magnetic>
-          </li>
-          <li>
-            <Magnetic>
-              <a href={profile.contact.stackoverflow} target="_blank" rel="noopener noreferrer" className="btn">
-                <Icon name="stackoverflow" /> Stack Overflow
-              </a>
-            </Magnetic>
-          </li>
-          <li>
-            <Magnetic>
-              <a href={asset(profile.cv)} download className="btn">
-                <Icon name="download" /> Download CV
-              </a>
-            </Magnetic>
-          </li>
-        </ul>
+        {/* Static on purpose: visible from the first paint (it is the page's largest text block) */}
+        <p className="mt-6 max-w-[38rem] text-[1.0625rem] leading-relaxed text-muted md:text-lg">{content.hero.intro}</p>
+
+        <m.div
+          data-reveal
+          className="mt-10 flex flex-wrap gap-4"
+          initial="hidden"
+          animate={state}
+          variants={fade(NAME_TIME + 0.2)}
+        >
+          <Magnetic>
+            <a href="#projects" className="btn btn-primary">
+              {content.hero.primaryCta}
+              <ArrowRight className="h-5 w-5" aria-hidden="true" />
+            </a>
+          </Magnetic>
+          <Magnetic>
+            <a href={asset(links.cv)} download className="btn btn-outline">
+              <Download className="h-5 w-5" aria-hidden="true" />
+              {content.hero.secondaryCta}
+            </a>
+          </Magnetic>
+        </m.div>
+
+        <m.div
+          data-reveal
+          className="mt-10 flex flex-wrap items-center gap-3"
+          initial="hidden"
+          animate={state}
+          variants={fade(NAME_TIME + 0.3)}
+        >
+          <ul className="flex items-center gap-3" aria-label="Profiles">
+            {socials.map((s) => (
+              <li key={s.label}>
+                <a
+                  href={s.href}
+                  aria-label={s.label}
+                  className="icon-btn"
+                  {...(s.href.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                >
+                  {s.icon}
+                </a>
+              </li>
+            ))}
+          </ul>
+          <span aria-hidden="true" className="mx-1 hidden h-6 w-px bg-border-strong sm:block" />
+          <p className="inline-flex items-center gap-2 rounded-full border border-border bg-surface/60 px-4 py-2 text-sm text-muted">
+            <MapPin className="h-4 w-4 text-accent" aria-hidden="true" />
+            {content.location}
+          </p>
+        </m.div>
       </div>
+
+      <m.a
+        href="#about"
+        aria-label="Scroll to About"
+        className="absolute bottom-7 left-1/2 hidden -translate-x-1/2 sm:block"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: play ? 1 : 0 }}
+        transition={{ duration: 0.8, delay: NAME_TIME + 0.6 }}
+      >
+        <span className="flex h-11 w-7 justify-center rounded-full border border-border-strong pt-2">
+          <span className="scroll-dot block h-2 w-1 rounded-full bg-accent" />
+        </span>
+      </m.a>
     </section>
   )
 }

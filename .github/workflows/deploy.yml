@@ -26,7 +26,7 @@ jobs:
       - run: npm ci
       - run: npm run build
         env:
-          # Site is served from https://<user>.github.io/<repository>/
+          # Served from https://<user>.github.io/<repository>/
           BASE_PATH: /${{ github.event.repository.name }}/
       - uses: actions/upload-pages-artifact@v4
         with:
