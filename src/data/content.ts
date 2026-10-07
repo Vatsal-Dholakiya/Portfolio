@@ -140,7 +140,7 @@ export const content = {
       title: 'Freelance Android Developer',
       company: 'Self-employed',
       location: 'India',
-      period: 'Mar 2019 – Jun 2021',
+      period: '', // leave empty to hide the dates
       points: [
         'Built a WhatsApp automation desktop product (Java, Selenium, SQLite) for a company serving local small businesses, automating around 90% of manual messaging work',
       ],

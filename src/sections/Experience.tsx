@@ -43,15 +43,17 @@ export function Experience() {
               </span>
 
               <Reveal as="article" className="card p-6 transition-colors duration-300 hover:border-border-strong md:p-8">
-                <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
-                  <p className="font-mono text-[0.8125rem] text-accent">{role.period}</p>
-                  {role.current && (
-                    <span className="rounded-full border border-highlight/40 bg-highlight/10 px-2.5 py-0.5 font-mono text-xs text-highlight">
-                      Current
-                    </span>
-                  )}
-                </div>
-                <h3 className="mt-3 text-[1.375rem] font-semibold leading-snug text-text md:text-2xl">{role.title}</h3>
+                {(role.period || role.current) && (
+                  <div className="mb-3 flex flex-wrap items-center gap-x-4 gap-y-2">
+                    {role.period && <p className="font-mono text-[0.8125rem] text-accent">{role.period}</p>}
+                    {role.current && (
+                      <span className="rounded-full border border-highlight/40 bg-highlight/10 px-2.5 py-0.5 font-mono text-xs text-highlight">
+                        Current
+                      </span>
+                    )}
+                  </div>
+                )}
+                <h3 className="text-[1.375rem] font-semibold leading-snug text-text md:text-2xl">{role.title}</h3>
                 <p className="mt-1 flex flex-wrap items-center gap-x-2 text-[0.9375rem] text-muted">
                   <Briefcase className="h-4 w-4 text-primary-soft" aria-hidden="true" />
                   <span className="font-medium text-text">{role.company}</span>
