@@ -1,12 +1,29 @@
 import { useCallback, useState, type ComponentType } from 'react'
-import { Award, BadgeCheck, Cloud, CodeXml, ExternalLink, ShieldCheck, type LucideProps } from 'lucide-react'
+import { Award, BadgeCheck, Cloud, CodeXml, ExternalLink, GitBranch, Palette, ShieldCheck, type LucideProps } from 'lucide-react'
 import { asset, content, type CertIcon, type Certificate } from '../data/content'
 import { Modal } from '../components/ui/Modal'
 import { RevealItem, Stagger } from '../components/ui/Reveal'
 import { SectionHeading } from '../components/ui/SectionHeading'
 import { TiltCard } from '../components/ui/TiltCard'
 
-const icons: Record<CertIcon, ComponentType<LucideProps>> = { shield: ShieldCheck, cloud: Cloud, code: CodeXml, award: Award }
+/** Keeps hyphenated words such as "UI-UX" on one line instead of breaking at the hyphen. */
+function NoBreakHyphens({ text }: { text: string }) {
+  return text.split(' ').map((word, i) => (
+    <span key={i}>
+      {i > 0 && ' '}
+      {word.includes('-') ? <span className="whitespace-nowrap">{word}</span> : word}
+    </span>
+  ))
+}
+
+const icons: Record<CertIcon, ComponentType<LucideProps>> = {
+  shield: ShieldCheck,
+  cloud: Cloud,
+  code: CodeXml,
+  git: GitBranch,
+  palette: Palette,
+  award: Award,
+}
 
 export function Certifications() {
   // The selected certificate stays set while the dialog animates out
@@ -33,7 +50,9 @@ export function Certifications() {
                   <span className="grid h-12 w-12 place-items-center rounded-xl border border-border bg-surface-2 text-primary-soft">
                     <Icon className="h-6 w-6" aria-hidden="true" />
                   </span>
-                  <h3 className="mt-5 text-lg font-semibold leading-snug text-text">{cert.title}</h3>
+                  <h3 className="mt-5 text-lg font-semibold leading-snug text-text">
+                    <NoBreakHyphens text={cert.title} />
+                  </h3>
                   <p className="mt-2 text-[0.9375rem] text-muted">{cert.issuer}</p>
                   <p className="mt-1 font-mono text-xs text-accent">{cert.date}</p>
                   <button
@@ -73,7 +92,7 @@ export function Certifications() {
             <div className="p-6 sm:p-8">
               <p className="mono-label">Certification</p>
               <h2 id="cert-modal-title" className="mt-2 pr-12 text-2xl font-bold leading-tight text-text">
-                {open.title}
+                <NoBreakHyphens text={open.title} />
               </h2>
               <p className="mt-2 text-muted">
                 {open.issuer} · {open.date}

@@ -6,7 +6,7 @@
  */
 
 export type SkillIcon = 'code' | 'mobile' | 'cloud' | 'database' | 'server' | 'shield' | 'palette'
-export type CertIcon = 'shield' | 'cloud' | 'code' | 'award'
+export type CertIcon = 'shield' | 'cloud' | 'code' | 'git' | 'palette' | 'award'
 
 export interface Project {
   title: string
@@ -86,10 +86,10 @@ export const content = {
   about: {
     text: "I'm a Software Developer based in London with a Master of Science in Cloud Computing from the University of East London and a Bachelor of Science in Information Technology from Ganpat University. I started out building native Android applications, integrating REST (Representational State Transfer) Application Programming Interfaces and managing Google Play Store releases. As a freelancer I built a WhatsApp automation desktop product that removed around 90% of manual messaging work for small businesses. Today I work as a Software Developer at Made Tech IT and I'm expanding into Artificial Intelligence and Machine Learning.",
     /** Profile photo, e.g. '/profile.webp'. Leave '' to show the monogram placeholder. */
-    photo: '',
+    photo: '/profile.webp',
     stats: [
       { value: 4, suffix: '+', label: 'Years Experience' },
-      { value: 3, suffix: '', label: 'Certifications' },
+      { value: 5, suffix: '', label: 'Certifications' },
       { value: 2, suffix: '', label: 'Degrees' },
     ],
   },
@@ -191,7 +191,7 @@ export const content = {
       date: 'February 2022',
       url: 'https://www.mygreatlearning.com/certificate/PEBXWXBY',
       icon: 'shield',
-      image: '',
+      image: '/certificates/ethical-hacking.webp',
     },
     {
       title: 'Cloud Foundations',
@@ -199,7 +199,7 @@ export const content = {
       date: 'July 2020',
       url: 'https://www.mygreatlearning.com/certificate/HFFENWXA',
       icon: 'cloud',
-      image: '',
+      image: '/certificates/cloud-foundations.webp',
     },
     {
       title: 'Object-Oriented Programming in Java',
@@ -207,7 +207,23 @@ export const content = {
       date: 'July 2021',
       url: 'https://www.mygreatlearning.com/certificate/HKOQRUKS',
       icon: 'code',
-      image: '',
+      image: '/certificates/oop-java.webp',
+    },
+    {
+      title: 'GitHub Tutorial for Beginners',
+      issuer: 'Great Learning Academy',
+      date: 'July 2021',
+      url: 'https://www.mygreatlearning.com/certificate/YNTHADPU',
+      icon: 'git',
+      image: '/certificates/github.webp',
+    },
+    {
+      title: 'Introduction to UI-UX (User Interface and User Experience) Design',
+      issuer: 'Great Learning Academy',
+      date: 'July 2021',
+      url: 'https://www.mygreatlearning.com/certificate/XUMTKXBL',
+      icon: 'palette',
+      image: '/certificates/ui-ux.webp',
     },
   ] satisfies Certificate[] as Certificate[],
 

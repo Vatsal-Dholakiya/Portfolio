@@ -49,8 +49,8 @@ The page title, description and social-preview tags are in [`index.html`](index.
 | File | What to do |
 |---|---|
 | `public/Vatsal_Dholakiya_CV.pdf` | Your CV (added). Both "Download CV" buttons point here via `links.cv`. |
-| `public/profile.webp` | Your photo (square, at least 640 × 640 px, WebP). Then set `about.photo: '/profile.webp'`. Until then a "VD" monogram is shown. |
-| `public/certificates/*.webp` | Certificate images (about 1600 × 1131 px, WebP). Then set each certificate's `image`, e.g. `'/certificates/ethical-hacking.webp'`. The dialog shows the image when one is set. |
+| `public/profile.webp` | Your photo (added; square crop of `originals/PImage.jpeg`). Set by `about.photo`. Replace the file to change the photo. |
+| `public/certificates/*.webp` | Certificate images (added, rendered from the PDFs in `originals/certificates/`). Each certificate's `image` in `content.ts` points to one. To add another: put a 1600 × 1131 WebP here and add an entry to `certificates`. |
 | `public/og-image.png` | Social preview (1200 × 630). Regenerate with `node scripts/generate-assets.mjs` (needs Playwright) or replace with your own. |
 
 Convert a JPG to WebP with any image tool, e.g. `npx @squoosh/cli --webp auto photo.jpg` or an online converter.
