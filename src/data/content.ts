@@ -70,7 +70,7 @@ export const content = {
     github: 'https://github.com/Vatsal-Dholakiya',
     stackoverflow: 'https://stackoverflow.com/users/12660050/vatsal-dholakiya',
     linkedin: '', // FILL IN, e.g. 'https://www.linkedin.com/in/your-name' — hidden while empty
-    cv: '/cv.pdf',
+    cv: '/Vatsal_Dholakiya_CV.pdf',
   },
 
   location: 'London, United Kingdom',
@@ -215,13 +215,13 @@ export const content = {
     {
       degree: 'Master of Science in Cloud Computing',
       school: 'University of East London',
-      years: '', // FILL IN, e.g. '2023 – 2024'
-      modules: ['Cloud platforms (Amazon Web Services and Google Cloud Platform)', 'Virtualisation and infrastructure'],
+      years: '2023 – 2024',
+      modules: ['Cloud architecture and services', 'Distributed systems and virtualisation', 'Network security', 'Database systems'],
     },
     {
       degree: 'Bachelor of Science in Information Technology',
       school: 'Ganpat University',
-      years: '', // FILL IN
+      years: 'Completed 2020',
       modules: ['Android Development', 'Web Design', 'System Analysis and Design', 'Databases', 'Computer Networks'],
     },
   ] satisfies Degree[] as Degree[],
