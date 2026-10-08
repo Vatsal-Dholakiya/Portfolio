@@ -38,7 +38,6 @@ export function Footer() {
           </p>
           <p className="label">
             {footer.localTime} <span className="tabular-nums text-mist">{time || '--:--'}</span>
-            <span className="hidden md:inline"> · {footer.terminalHint}</span>
           </p>
         </div>
         <div className="flex items-center gap-3">

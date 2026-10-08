@@ -45,15 +45,15 @@ export function Story() {
             { scaleX: 1, ease: 'none', scrollTrigger: { trigger: pin, start: 'top top', end: () => `+=${distance()}`, scrub: 0.8 } },
           )
 
-          // Years parallax inside the moving track
+          // Years drift in and settle at the card's padding (never past it)
           gsap.utils.toArray<HTMLElement>('[data-year]', root.current).forEach((year) => {
             gsap.fromTo(
               year,
-              { x: 80 },
+              { x: 56 },
               {
-                x: -80,
+                x: 0,
                 ease: 'none',
-                scrollTrigger: { trigger: year, containerAnimation: move, start: 'left right', end: 'right left', scrub: true },
+                scrollTrigger: { trigger: year, containerAnimation: move, start: 'left right', end: 'left 45%', scrub: true },
               },
             )
           })

@@ -12,7 +12,7 @@ function DragCursor() {
       data-drag-cursor
       viewBox="0 0 24 24"
       aria-hidden="true"
-      className="absolute -right-3 -bottom-4 h-7 w-7 drop-shadow-[0_4px_8px_rgba(0,0,0,0.6)]"
+      className="absolute -right-3 -bottom-4 h-7 w-7 opacity-0 drop-shadow-[0_4px_8px_rgba(0,0,0,0.6)]"
     >
       <path d="M4 2.5 19.5 12l-7 1.6-3.4 6.9z" fill="#EDEEE9" stroke="#050607" strokeWidth="1.4" strokeLinejoin="round" />
     </svg>
@@ -47,7 +47,7 @@ function MiniPhone({ title, rows, accent }: { title: string; rows: number; accen
   return (
     <div className="flex h-full w-full flex-col overflow-hidden rounded-[0.9rem] border border-line-strong bg-carbon p-[6%] shadow-[0_18px_40px_rgba(0,0,0,0.5)]">
       <div className="mb-[8%] flex items-center justify-between">
-        <span className="font-display text-[0.6rem] font-semibold text-bone md:text-[0.7rem]">{title}</span>
+        <span className="font-display text-[3.84cqw] font-semibold text-bone md:text-[1.25cqw]">{title}</span>
         <span className="h-1.5 w-1.5 rounded-full bg-emerald" />
       </div>
       {Array.from({ length: rows }, (_, i) => (
@@ -56,7 +56,7 @@ function MiniPhone({ title, rows, accent }: { title: string; rows: number; accen
           <span className="h-1.5 flex-1 rounded-full bg-line-strong" />
         </div>
       ))}
-      <div className="mt-auto rounded-md bg-emerald py-[5%] text-center font-display text-[0.55rem] font-semibold text-on-accent md:text-[0.65rem]">
+      <div className="mt-auto rounded-md bg-emerald py-[5%] text-center font-display text-[3.52cqw] font-semibold text-on-accent md:text-[1.16cqw]">
         {build.pieces.button}
       </div>
     </div>
@@ -155,11 +155,14 @@ export function BuildSequence() {
         </div>
 
         {/* Device */}
-        <div aria-hidden="true" className="relative grid min-h-0 flex-1 place-items-center px-5 py-6 [perspective:1600px]">
+        <div
+          aria-hidden="true"
+          className="relative grid min-h-0 flex-1 place-items-center px-5 py-4 [container-type:size] [perspective:1600px]"
+        >
           <div data-device className="relative will-change-transform">
             <div
               data-screen
-              className="relative aspect-[9/19] w-[min(58vw,260px,calc((100svh-16rem)*0.47))] overflow-hidden rounded-[2.2rem] border-[6px] border-graphite bg-void shadow-[0_0_0_1px_rgba(237,238,233,0.08),0_40px_120px_rgba(46,230,166,0.12)] md:aspect-[16/10] md:w-[min(72vw,960px,calc((100svh-17rem)*1.6))] md:rounded-[1.1rem] md:border-[10px]"
+              className="relative aspect-[9/19] w-[min(72cqw,260px,44cqh)] [container-type:inline-size] overflow-hidden rounded-[2.2rem] border-[6px] border-graphite bg-void shadow-[0_0_0_1px_rgba(237,238,233,0.08),0_40px_120px_rgba(46,230,166,0.12)] md:aspect-[16/10] md:w-[min(88cqw,960px,132cqh)] md:rounded-[1.1rem] md:border-[10px]"
             >
               {/* Screen glow + grid */}
               <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_30%,rgba(46,230,166,0.10),transparent_60%)]" />
@@ -167,7 +170,7 @@ export function BuildSequence() {
 
               {/* Pieces: phone layout first, laptop layout from md */}
               <Piece id="code" from="left" className="top-[5%] left-[6%] h-[24%] w-[88%] md:top-[7%] md:left-[4%] md:h-[40%] md:w-[44%]">
-                <div className="h-full w-full overflow-hidden rounded-xl border border-line-strong bg-carbon p-[4%] font-mono text-[0.55rem] leading-[1.7] shadow-[0_18px_40px_rgba(0,0,0,0.5)] md:text-[0.8rem]">
+                <div className="h-full w-full overflow-hidden rounded-xl border border-line-strong bg-carbon p-[4%] font-mono text-[3.52cqw] leading-[1.7] shadow-[0_18px_40px_rgba(0,0,0,0.5)] md:text-[1.42cqw]">
                   <div className="mb-2 flex gap-1.5">
                     <span className="h-2 w-2 rounded-full bg-ember/80" />
                     <span className="h-2 w-2 rounded-full bg-ash/60" />
@@ -202,12 +205,12 @@ export function BuildSequence() {
                 <div className="flex h-full w-full flex-col gap-[6%] rounded-xl border border-ember/30 bg-carbon p-[6%] shadow-[0_18px_40px_rgba(0,0,0,0.5)]">
                   <div className="flex items-center gap-2">
                     <BrainCircuit className="h-3.5 w-3.5 text-ember md:h-4 md:w-4" />
-                    <span className="font-mono text-[0.5rem] tracking-wider text-ember uppercase md:text-[0.65rem]">{p.chat.title}</span>
+                    <span className="font-mono text-[3.2cqw] tracking-wider text-ember uppercase md:text-[1.16cqw]">{p.chat.title}</span>
                   </div>
-                  <div className="ml-auto max-w-[85%] rounded-lg bg-graphite px-2 py-1.5 text-[0.5rem] text-bone md:text-[0.72rem]">
+                  <div className="ml-auto max-w-[85%] rounded-lg bg-graphite px-2 py-1.5 text-[3.2cqw] text-bone md:text-[1.28cqw]">
                     {p.chat.question}
                   </div>
-                  <div className="max-w-[85%] rounded-lg border border-ember/20 bg-ember/10 px-2 py-1.5 text-[0.5rem] text-bone md:text-[0.72rem]">
+                  <div className="max-w-[85%] rounded-lg border border-ember/20 bg-ember/10 px-2 py-1.5 text-[3.2cqw] text-bone md:text-[1.28cqw]">
                     {p.chat.answer}
                   </div>
                 </div>
@@ -218,7 +221,7 @@ export function BuildSequence() {
                 from="bottom"
                 className="top-[75%] left-[6%] h-[8%] w-[42%] md:top-[54%] md:left-[37%] md:h-[11%] md:w-[13%]"
               >
-                <div className="grid h-full w-full place-items-center rounded-full bg-emerald font-display text-[0.65rem] font-semibold text-on-accent shadow-[0_10px_30px_rgba(46,230,166,0.35)] md:text-[0.85rem]">
+                <div className="grid h-full w-full place-items-center rounded-full bg-emerald font-display text-[4.16cqw] font-semibold text-on-accent shadow-[0_10px_30px_rgba(46,230,166,0.35)] md:text-[1.51cqw]">
                   {p.button}
                 </div>
               </Piece>
@@ -229,17 +232,20 @@ export function BuildSequence() {
                 className="top-[75%] left-[52%] h-[18%] w-[42%] md:top-[70%] md:left-[37%] md:h-[20%] md:w-[13%]"
               >
                 <div className="flex h-full w-full flex-col justify-center rounded-xl border border-line-strong bg-carbon p-[8%] shadow-[0_18px_40px_rgba(0,0,0,0.5)]">
-                  <span className="font-display text-[1.1rem] leading-none font-extrabold text-emerald md:text-[1.4rem]">
+                  <span className="font-display text-[7.04cqw] leading-none font-extrabold text-emerald md:text-[2.05cqw]">
                     {p.stat.value}
                   </span>
-                  <span className="mt-1 text-[0.5rem] leading-tight text-mist md:text-[0.62rem]">{p.stat.label}</span>
+                  <span className="mt-1 text-[3.2cqw] leading-tight text-mist md:text-[1.1cqw]">{p.stat.label}</span>
                 </div>
               </Piece>
 
               <Piece id="skills" from="bottom" className="hidden md:block md:top-[74%] md:left-[53%] md:h-[17%] md:w-[41%]">
                 <div className="flex h-full w-full flex-wrap content-center gap-2 rounded-xl border border-line-strong bg-carbon p-[3%] shadow-[0_18px_40px_rgba(0,0,0,0.5)]">
                   {p.skills.map((s) => (
-                    <span key={s} className="rounded-full border border-line bg-graphite px-2.5 py-1 text-[0.7rem] font-medium text-bone">
+                    <span
+                      key={s}
+                      className="rounded-full border border-line bg-graphite px-[0.9cqw] py-[0.35cqw] text-[1.25cqw] font-medium text-bone"
+                    >
                       {s}
                     </span>
                   ))}
@@ -249,7 +255,7 @@ export function BuildSequence() {
               {/* Build status */}
               <div
                 data-build-done
-                className="absolute right-[4%] bottom-[2%] flex items-center gap-1.5 font-mono text-[0.55rem] text-emerald md:bottom-[3%] md:text-[0.75rem]"
+                className="absolute right-[4%] bottom-[2%] flex items-center gap-1.5 font-mono text-[3.52cqw] text-emerald md:bottom-[3%] md:text-[1.33cqw]"
               >
                 <Check className="h-3 w-3 md:h-3.5 md:w-3.5" />
                 {build.buildDone}

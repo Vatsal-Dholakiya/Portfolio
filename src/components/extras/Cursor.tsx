@@ -24,8 +24,12 @@ export function Cursor() {
     let shown = false
     let current = ''
 
+    let lastX = -1
+    let lastY = -1
     const move = (e: PointerEvent) => {
       if (e.pointerType !== 'mouse') return
+      lastX = e.clientX
+      lastY = e.clientY
       if (!shown) {
         shown = true
         html.classList.add('has-cursor')
@@ -33,7 +37,11 @@ export function Cursor() {
       }
       x(e.clientX)
       y(e.clientY)
-      const target = (e.target as Element).closest?.('[data-cursor], a, button, [role="button"], input, textarea')
+      update(e.target as Element)
+    }
+    // Decide the cursor style from the element under the pointer (also re-checked after scrolling)
+    const update = (under: Element | null) => {
+      const target = under?.closest?.('[data-cursor], a, button, [role="button"], input, textarea')
       const next = target?.matches('input, textarea') ? 'text' : target ? (target.getAttribute('data-cursor') ?? 'link') : ''
       if (next === current) return
       current = next
@@ -51,14 +59,19 @@ export function Cursor() {
       })
       gsap.to(text.current, { opacity: labelled ? 1 : 0, duration: 0.25 })
     }
+    const onScroll = () => {
+      if (lastX >= 0) update(document.elementFromPoint(lastX, lastY))
+    }
     const leave = () => gsap.to(el, { opacity: 0, duration: 0.2 })
     const enter = () => gsap.to(el, { opacity: 1, duration: 0.2 })
 
     window.addEventListener('pointermove', move, { passive: true })
+    window.addEventListener('scroll', onScroll, { passive: true })
     html.addEventListener('pointerleave', leave)
     html.addEventListener('pointerenter', enter)
     return () => {
       window.removeEventListener('pointermove', move)
+      window.removeEventListener('scroll', onScroll)
       html.removeEventListener('pointerleave', leave)
       html.removeEventListener('pointerenter', enter)
       html.classList.remove('has-cursor')

@@ -705,7 +705,11 @@ export const nextChapter = {
   log: [
     { topic: 'AI and machine learning fundamentals', note: 'Covered during my MSc.', status: 'Studied' },
     { topic: 'Generative AI', note: 'How generative models work and how to build with them.', status: 'In progress' },
-    { topic: 'Ethics of AI', note: 'Course: Building and Implementing Ethical AI, Certified Institute for Technology and AI.', status: 'In progress' },
+    {
+      topic: 'Ethics of AI',
+      note: 'Course: Building and Implementing Ethical AI, Certified Institute for Technology and AI.',
+      status: 'In progress',
+    },
   ],
   /** Screens in the built-in corridor scene */
   behind: ['Android app', 'Desktop automation', 'Build successful'],
@@ -736,7 +740,6 @@ export const footer = {
   credit: 'Designed & built by Vatsal Dholakiya',
   backToTop: 'Back to top',
   localTime: 'London',
-  terminalHint: 'Press ` for the terminal',
 }
 
 /* -------------------------------------------------------------- Terminal */
