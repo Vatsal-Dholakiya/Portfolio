@@ -175,6 +175,17 @@ test.describe('Projects and data', () => {
     await expect(page.locator('#projects li', { hasText: 'Number filter' })).toHaveCount(1)
   })
 
+  test('project screenshots open full size and close with Escape', async ({ page }) => {
+    await page.goto('/#projects')
+    const shot = page.locator('#whatsapp-automation button[aria-haspopup="dialog"]').first()
+    await shot.scrollIntoViewIfNeeded()
+    await shot.click({ force: true })
+    const dialog = page.locator('[role="dialog"][aria-modal="true"]')
+    await expect(dialog.locator('img')).toHaveAttribute('alt', /WhatsApp Automation main window/)
+    await page.keyboard.press('Escape')
+    await expect(dialog).toHaveCount(0)
+  })
+
   test('GitHub grid shows live repositories without forks, and caches them', async ({ page }) => {
     await page.goto('/#projects')
     const cards = page.locator('#projects h4 a')

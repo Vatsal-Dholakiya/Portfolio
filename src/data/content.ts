@@ -514,6 +514,8 @@ export interface CaseStudy {
   tags: string[]
   /** Which interface the animated illustration shows */
   visual: 'phone' | 'desktop'
+  /** Real screenshots (public/projects/...). When present they replace the drawn illustration. First one leads. */
+  images?: { src: string; alt: string; width: number; height: number }[]
 }
 
 export const projects = {
@@ -522,6 +524,8 @@ export const projects = {
   intro: 'Two products I built for real businesses, followed by other work and my public code.',
   featuresLabel: 'Key features',
   impactLabel: 'Results',
+  enlarge: 'View full size',
+  close: 'Close',
   caseStudies: [
     {
       id: 'postfactory',
@@ -553,6 +557,20 @@ export const projects = {
         'Built and delivered to the client as a complete Android app, cutting the time it takes to design a business card from hours to minutes.',
       tags: ['Java', 'Android', 'Android Studio', 'XML', 'PHP', 'MySQL', 'CSS', 'UI/UX'],
       visual: 'phone',
+      images: [
+        {
+          src: '/projects/postfactory/home.webp',
+          alt: 'PostFactory home screen with business categories such as My Business and Business Ethics, each with ready-made post templates.',
+          width: 620,
+          height: 1217,
+        },
+        {
+          src: '/projects/postfactory/custom.webp',
+          alt: 'PostFactory Custom screen showing a full-size template preview, with more designs below.',
+          width: 620,
+          height: 1217,
+        },
+      ],
     },
     {
       id: 'whatsapp-automation',
@@ -586,6 +604,20 @@ export const projects = {
         'Deployed for small retailers, the system handles more than 10,000 messages a day with a 99.8% delivery rate, and cut manual messaging time by 90%.',
       tags: ['Java', 'NetBeans', 'Selenium', 'SQLite', 'MySQL', 'Firebase', 'REST APIs'],
       visual: 'desktop',
+      images: [
+        {
+          src: '/projects/whatsapp/main-window.webp',
+          alt: 'WhatsApp Automation main window: toolbar with Import, Group, Group Grabber, Number Filter and Report; recipient and attachment lists; message composer and sending log; Send button.',
+          width: 1361,
+          height: 687,
+        },
+        {
+          src: '/projects/whatsapp/number-filter.webp',
+          alt: 'Number Filter window: selected contacts are checked and sorted into WhatsApp and non-WhatsApp number lists.',
+          width: 1128,
+          height: 493,
+        },
+      ],
     },
   ] as CaseStudy[],
   moreTitle: 'More work',

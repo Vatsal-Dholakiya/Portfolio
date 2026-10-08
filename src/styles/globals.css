@@ -363,6 +363,20 @@ html.lenis body {
   }
 }
 
+/* Gentle idle float for project screenshots (transform only) */
+.float-slow,
+.float-slow-delayed {
+  animation: float 6s ease-in-out infinite;
+}
+.float-slow-delayed {
+  animation-delay: -3s;
+}
+@keyframes float {
+  50% {
+    transform: translate3d(0, -10px, 0);
+  }
+}
+
 .blink {
   animation: blink 1s steps(1) infinite;
 }
@@ -470,6 +484,8 @@ html.nf #root {
     transform: none !important;
   }
   .grain,
+  .float-slow,
+  .float-slow-delayed,
   .orbit-light,
   .blink,
   .pulse-dot,

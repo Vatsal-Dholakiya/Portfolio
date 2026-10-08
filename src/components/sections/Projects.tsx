@@ -8,6 +8,7 @@ import { Reveal, RevealItem, Stagger } from '../ui/Reveal'
 import { SectionHead } from '../ui/SectionHead'
 import { TiltCard } from '../ui/TiltCard'
 import { DesktopMock, PhoneMock } from './ProjectMocks'
+import { DesktopShots, PhoneShots } from './ProjectShowcase'
 
 function CaseStudyBlock({ study, index }: { study: CaseStudy; index: number }) {
   const flip = index % 2 === 1
@@ -31,7 +32,17 @@ function CaseStudyBlock({ study, index }: { study: CaseStudy; index: number }) {
           </dl>
         </Reveal>
         <Reveal className={`min-w-0 px-2 ${flip ? 'lg:order-1' : ''}`} delay={0.1}>
-          {study.visual === 'phone' ? <PhoneMock /> : <DesktopMock />}
+          {study.images?.length ? (
+            study.visual === 'phone' ? (
+              <PhoneShots images={study.images} />
+            ) : (
+              <DesktopShots images={study.images} title={study.title} />
+            )
+          ) : study.visual === 'phone' ? (
+            <PhoneMock />
+          ) : (
+            <DesktopMock />
+          )}
         </Reveal>
       </div>
 
