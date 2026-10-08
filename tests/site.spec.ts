@@ -249,39 +249,15 @@ test.describe('Layout and accessibility', () => {
     await expect(tip).toHaveCount(0)
   })
 
-  test('reduced motion: no build sequence, final hero and all content visible', async ({ browser }) => {
+  test('reduced motion: hero and all content visible', async ({ browser }) => {
     const context = await browser.newContext({ reducedMotion: 'reduce' })
     const page = await context.newPage()
     const { mockNetwork } = await import('./fixtures')
     await mockNetwork(page)
     await page.goto('/')
-    expect(await page.evaluate(() => document.documentElement.classList.contains('js-build'))).toBe(false)
-    await expect(page.locator('[data-build-stage]')).toBeHidden()
     await expect(page.locator('h1')).toBeVisible()
     const hidden = await page.$$eval('main [data-reveal]', (els) => els.filter((e) => getComputedStyle(e).opacity !== '1').length)
     expect(hidden).toBe(0)
-    await context.close()
-  })
-
-  test('hero builds on the first visit, "Skip intro" reaches the final hero, and a reload skips the build', async ({
-    browser,
-    isMobile,
-  }) => {
-    const context = await browser.newContext(isMobile ? { viewport: { width: 412, height: 915 }, isMobile: true, hasTouch: true } : {})
-    const page = await context.newPage()
-    const { mockNetwork } = await import('./fixtures')
-    await mockNetwork(page)
-    await page.goto('/')
-    await page.waitForFunction(() => window.__vdReady === true)
-    expect(await page.evaluate(() => document.documentElement.classList.contains('js-build'))).toBe(true)
-    await expect(page.locator('[data-build-stage]')).toBeVisible()
-    await page.locator('[data-build-stage] button', { hasText: 'Skip intro' }).click()
-    await expect
-      .poll(() => page.evaluate(() => Number(getComputedStyle(document.querySelector('[data-final-hero]')!).opacity)), { timeout: 8000 })
-      .toBe(1)
-    await expect.poll(() => page.evaluate(() => sessionStorage.getItem('vd-built')), { timeout: 8000 }).toBe('1')
-    await page.reload()
-    expect(await page.evaluate(() => document.documentElement.classList.contains('js-build'))).toBe(false)
     await context.close()
   })
 })

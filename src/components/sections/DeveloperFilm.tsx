@@ -21,7 +21,7 @@ function Scene() {
       <div className="studio-light absolute inset-0 opacity-70" />
       <div data-dev-scene className="absolute inset-0 [transform-style:preserve-3d]">
         {/* Main monitor */}
-        <div data-dev-main className={`${glass} top-[14%] left-1/2 w-[86vw] -translate-x-1/2 border-emerald/25 md:top-[20%] md:w-[44vw]`}>
+        <div data-dev-main className={`${glass} top-[13%] left-1/2 w-[86vw] -translate-x-1/2 border-emerald/25 md:top-[14%] md:w-[38vw]`}>
           <Bar title={p.editor} />
           <div className="p-3 font-mono text-[0.6rem] leading-[1.8] md:p-5 md:text-[0.8rem]">
             {hero.pieces.code.map((line, i) => (
@@ -37,7 +37,7 @@ function Scene() {
         </div>
 
         {/* Android Studio with a layout preview */}
-        <div data-dev-panel="-1" className={`${glass} top-[12%] left-[4%] hidden w-[26vw] border-line md:block`}>
+        <div data-dev-panel="-1" className={`${glass} top-[12%] left-[3%] hidden w-[22vw] border-line md:block`}>
           <Bar title={p.studio} />
           <div className="flex gap-3 p-3">
             <div className="flex-1 space-y-1.5">
@@ -54,7 +54,7 @@ function Scene() {
         </div>
 
         {/* Terminal */}
-        <div data-dev-panel="-1" className={`${glass} bottom-[16%] left-[6%] hidden w-[28vw] border-line md:block`}>
+        <div data-dev-panel="-1" className={`${glass} top-[42%] left-[3%] hidden w-[22vw] border-line md:block`}>
           <Bar title={p.terminal} />
           <div className="space-y-1 p-3 font-mono text-[0.58rem] text-mist md:text-[0.7rem]">
             <p>$ ./gradlew assembleRelease</p>
@@ -64,7 +64,7 @@ function Scene() {
         </div>
 
         {/* API flow */}
-        <div data-dev-panel="1" className={`${glass} top-[10%] right-[4%] hidden w-[24vw] border-line md:block`}>
+        <div data-dev-panel="1" className={`${glass} top-[12%] right-[3%] hidden w-[22vw] border-line md:block`}>
           <Bar title={p.api} />
           <div className="space-y-1 p-3 font-mono text-[0.68rem] text-mist">
             <p>
@@ -75,10 +75,7 @@ function Scene() {
         </div>
 
         {/* What he is learning (ember) */}
-        <div
-          data-dev-panel="1"
-          className={`${glass} top-[46%] right-[5%] w-[44vw] border-ember/30 md:top-auto md:right-[6%] md:bottom-[20%] md:w-[22vw]`}
-        >
+        <div data-dev-panel="1" className={`${glass} top-[40%] right-[5%] w-[44vw] border-ember/30 md:top-[40%] md:right-[3%] md:w-[22vw]`}>
           <Bar title={p.ai[0] ?? ''} tone="ember" />
           <svg viewBox="0 0 160 70" className="w-full p-3">
             {[15, 35, 55].map((y1) =>
@@ -98,7 +95,7 @@ function Scene() {
             <circle cx="140" cy="35" r="4" fill="#FF8A3D" />
           </svg>
         </div>
-        <div data-dev-panel="1" className={`${glass} right-[30%] bottom-[6%] hidden w-[18vw] border-ember/30 md:block`}>
+        <div data-dev-panel="1" className={`${glass} top-[50%] right-[28%] hidden w-[16vw] border-ember/30 md:block`}>
           <Bar title={p.ai[1] ?? ''} tone="ember" />
           <svg viewBox="0 0 120 50" className="w-full p-3">
             <path d="M4 6 C 20 30, 40 38, 60 41 S 100 45, 116 46" fill="none" stroke="#FF8A3D" strokeWidth="1.5" />
@@ -143,10 +140,10 @@ export function DeveloperFilm() {
           <span className="h-px w-8 bg-line-strong" aria-hidden="true" />
           {developer.label}
         </p>
-        <h2 id="developer-title" className="max-w-[14ch] text-[clamp(2.75rem,8vw,7.5rem)] leading-[0.92] font-extrabold tracking-[-0.05em]">
+        <h2 id="developer-title" className="max-w-[18ch] text-[clamp(2rem,4.5vw,3.75rem)] leading-[1] font-extrabold tracking-[-0.04em]">
           {developer.title}
         </h2>
-        <p className="mt-5 max-w-xl text-lg text-mist">{developer.text}</p>
+        <p className="mt-4 max-w-xl text-base text-mist md:text-lg">{developer.text}</p>
       </div>
     </FilmSection>
   )

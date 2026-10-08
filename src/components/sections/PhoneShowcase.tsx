@@ -102,7 +102,7 @@ export function PhoneShowcase() {
         className="container-x absolute inset-x-0 bottom-0 pb-[clamp(2rem,8vh,5rem)] md:top-0 md:bottom-auto md:pt-[calc(var(--nav-h)+3rem)]"
       >
         <p className="label mb-4 text-emerald">{whatIBuild.label}</p>
-        <h2 id="showcase-title" className="max-w-[10ch] text-[clamp(2.5rem,6.5vw,6rem)] leading-[0.92] font-extrabold tracking-[-0.05em]">
+        <h2 id="showcase-title" className="max-w-[10ch] text-[clamp(2rem,4.5vw,3.75rem)] leading-[1] font-extrabold tracking-[-0.04em]">
           {whatIBuild.showcaseCaption}
         </h2>
       </div>

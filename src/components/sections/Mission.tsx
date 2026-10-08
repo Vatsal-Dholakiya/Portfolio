@@ -52,7 +52,7 @@ export function Mission() {
         </p>
         <p
           ref={text}
-          className="max-w-[22ch] font-display text-[clamp(2rem,5.4vw,4.75rem)] leading-[1.04] font-semibold tracking-[-0.045em] text-bone"
+          className="max-w-[22ch] font-display text-[clamp(1.75rem,4vw,3.5rem)] leading-[1.04] font-semibold tracking-[-0.045em] text-bone"
         >
           <Accented text={mission.statement} words={mission.accentWords} />
         </p>

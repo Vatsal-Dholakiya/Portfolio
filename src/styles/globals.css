@@ -419,20 +419,6 @@ html.lenis body {
   }
 }
 
-/* ============================================================
-   Hero assembly: before JavaScript takes over, the final hero is shown
-   (no-JS, reduced motion). html.js-build switches to the build stage.
-   ============================================================ */
-html:not(.js-build) [data-build-stage] {
-  display: none;
-}
-html.js-build [data-final-hero] {
-  opacity: 0;
-}
-html.js-build [data-piece] {
-  visibility: hidden;
-}
-
 /* Word masks of kinetic headings: room for descenders (g, p, y) and italic overhang */
 .split-word-mask {
   padding: 0 0.08em 0.14em;

@@ -16,7 +16,7 @@ export function FinalHero() {
   ])
 
   return (
-    <div data-final-hero className="absolute inset-0 overflow-hidden">
+    <div data-final-hero className="relative min-h-[100svh] overflow-hidden">
       {/* Background: the Hero Orbit film, or an emerald studio light sweeping in the void */}
       <div aria-hidden="true" className="absolute inset-0">
         {films.orbit.src ? (
@@ -31,12 +31,12 @@ export function FinalHero() {
         <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-b from-transparent to-void" />
       </div>
 
-      <div className="container-x relative flex h-full flex-col justify-end pt-[calc(var(--nav-h)+2rem)] pb-[clamp(2rem,7vh,4.5rem)]">
+      <div className="container-x relative flex min-h-[100svh] flex-col justify-end pt-[calc(var(--nav-h)+2rem)] pb-[clamp(2rem,7vh,4.5rem)]">
         <p data-hero-item className="label mb-5 flex items-center gap-3 text-mist">
           <span className="h-px w-8 bg-emerald" aria-hidden="true" />
           {hero.kicker}
         </p>
-        <h1 className="font-display text-[clamp(3.4rem,15vw,14rem)] leading-[0.82] font-extrabold tracking-[-0.055em] uppercase">
+        <h1 className="font-display text-[clamp(2.75rem,9.5vw,8.5rem)] leading-[0.86] font-extrabold tracking-[-0.055em] uppercase">
           <span className="sr-only">{`${person.firstName} ${person.lastName}`}</span>
           <span aria-hidden="true" data-hero-name className="block">
             <span className="block overflow-hidden pb-[0.06em]">

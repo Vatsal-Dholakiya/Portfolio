@@ -87,7 +87,7 @@ export function Contact() {
         <h2
           ref={heading}
           id="contact-title"
-          className="max-w-[12ch] text-[clamp(3.25rem,11vw,10rem)] leading-[0.88] font-extrabold tracking-[-0.055em]"
+          className="max-w-[14ch] text-[clamp(2.5rem,7vw,6rem)] leading-[0.95] font-extrabold tracking-[-0.05em]"
         >
           <Accented text={contact.heading} words={[contact.accentWord]} />
         </h2>

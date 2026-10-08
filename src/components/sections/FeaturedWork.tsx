@@ -22,7 +22,7 @@ export function FeaturedWork() {
           <Reveal className="min-w-0">
             <p className="text-xl leading-relaxed text-mist md:text-2xl">{featured.summary}</p>
             <div className="mt-10 border-t border-line pt-8">
-              <p className="font-display text-[clamp(5rem,14vw,11rem)] leading-[0.8] font-extrabold tracking-[-0.06em] text-emerald">
+              <p className="font-display text-[clamp(4rem,10vw,8rem)] leading-[0.8] font-extrabold tracking-[-0.06em] text-emerald">
                 <Counter value={featured.impact.value} prefix={featured.impact.prefix} suffix={featured.impact.suffix} />
               </p>
               <p className="mt-4 text-lg text-bone">{featured.impact.label}</p>

@@ -29,7 +29,7 @@ export function StatsStrip() {
                 i % 2 ? 'border-l pl-5 sm:pl-6' : ''
               } ${i >= 2 ? 'border-t lg:border-t-0' : ''}`}
             >
-              <p className="font-display text-[clamp(2.5rem,6vw,4.25rem)] leading-none font-extrabold tracking-[-0.05em] text-bone">
+              <p className="font-display text-[clamp(2.25rem,4.5vw,3.5rem)] leading-none font-extrabold tracking-[-0.05em] text-bone">
                 <Counter key={s.value} value={s.value!} prefix={s.prefix} suffix={s.suffix} />
               </p>
               <p className="mt-3 max-w-[14rem] text-[0.9375rem] leading-snug text-ash">{s.label}</p>

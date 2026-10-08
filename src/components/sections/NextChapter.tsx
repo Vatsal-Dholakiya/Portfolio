@@ -119,7 +119,7 @@ export function NextChapter() {
           <span className="h-px w-8 bg-line-strong" aria-hidden="true" />
           {nextChapter.label}
         </p>
-        <h2 id="next-title" className="max-w-[12ch] text-[clamp(2.75rem,8vw,7.5rem)] leading-[0.92] font-extrabold tracking-[-0.05em]">
+        <h2 id="next-title" className="max-w-[16ch] text-[clamp(2rem,4.5vw,3.75rem)] leading-[1] font-extrabold tracking-[-0.04em]">
           <Accented text={nextChapter.title} words={['AI.']} className="text-ember" />
         </h2>
         <p className="mt-5 max-w-xl text-lg text-mist">{nextChapter.text}</p>

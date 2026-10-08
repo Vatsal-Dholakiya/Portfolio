@@ -41,7 +41,7 @@ export function SectionHead({
         <span className="h-px w-8 bg-line-strong" aria-hidden="true" />
         {label}
       </p>
-      <h2 ref={ref} id={id} className="max-w-[16ch] text-[clamp(2.75rem,8vw,7.5rem)] leading-[0.92] font-extrabold tracking-[-0.05em]">
+      <h2 ref={ref} id={id} className="max-w-[18ch] text-[clamp(2.25rem,5.5vw,4.75rem)] leading-[0.98] font-extrabold tracking-[-0.045em]">
         <Accented text={title} words={accent} className={tone === 'ember' ? 'text-ember' : 'text-emerald'} />
       </h2>
       {children}

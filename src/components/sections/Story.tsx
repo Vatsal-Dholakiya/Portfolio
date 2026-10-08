@@ -113,7 +113,7 @@ export function Story() {
                     <p
                       data-year
                       aria-hidden="true"
-                      className={`pointer-events-none font-display text-[clamp(4rem,9vw,8.5rem)] leading-[0.8] font-extrabold tracking-[-0.06em] ${
+                      className={`pointer-events-none font-display text-[clamp(3.25rem,7vw,6.5rem)] leading-[0.8] font-extrabold tracking-[-0.06em] ${
                         now ? 'text-ember/90' : 'text-outline'
                       }`}
                       data-text={now ? undefined : c.year}

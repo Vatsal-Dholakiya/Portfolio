@@ -61,7 +61,7 @@ export function Footer() {
       {/* Oversized outlined wordmark, cut off by the bottom edge */}
       <p
         aria-hidden="true"
-        className="text-outline pointer-events-none -mb-[0.18em] mt-6 text-center font-display text-[15vw] leading-[0.85] font-extrabold tracking-[-0.06em] uppercase select-none"
+        className="text-outline pointer-events-none -mb-[0.18em] mt-6 text-center font-display text-[12vw] leading-[0.85] font-extrabold tracking-[-0.06em] uppercase select-none"
         data-text={person.lastName}
       />
     </footer>

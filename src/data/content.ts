@@ -192,24 +192,15 @@ export const films: Record<'orbit' | 'developer' | 'nextChapter' | 'showcase', F
 /* ------------------------------------------------------------------ Hero */
 
 export const hero = {
-  buildLabel: '// building the portfolio',
-  scrollHint: 'Scroll to build',
-  skipIntro: 'Skip intro',
-  buildDone: 'build succeeded',
   kicker: 'Software Developer · Android Developer · London',
   line: "I build software and Android apps that do real work — and I'm learning AI to build what comes next.",
   primaryCta: 'See my work',
   secondaryCta: 'Download CV',
   availability: 'Open to opportunities',
   scrollCue: 'Scroll to explore',
-  /** Text shown inside the pieces dragged onto the laptop screen */
+  /** Code shown on the screens of the animated scenes */
   pieces: {
     code: ['public class Developer {', '  String focus = "Android";', '  void build() { ship(); }', '}'],
-    button: 'Ship it',
-    stat: { value: '~90%', label: 'messaging automated' },
-    skills: ['Java', 'Android', 'SQL', 'Git'],
-    chat: { title: 'AI · learning', question: 'What should I learn next?', answer: 'Model basics → small projects.' },
-    appTitle: 'Orders',
   },
 }
 
@@ -414,8 +405,8 @@ export const story = {
 
 export const developer = {
   label: 'The Developer',
-  title: 'Night shift. Real work.',
-  text: 'Code editors, Android Studio, APIs, a terminal compiling — and a couple of screens for what I am learning next.',
+  title: 'How I work.',
+  text: 'Java and Android Studio, APIs and a terminal compiling — with a couple of screens for what I am learning next.',
   /** Labels on the floating screens of the built-in animated scene */
   panels: {
     editor: 'MainActivity.java',

@@ -36,7 +36,7 @@
       </style>
     </noscript>
 
-    <!-- Before first paint: the hero build sequence once per session (not with reduced motion or a #section link); 404 detection -->
+    <!-- Before first paint: 404 detection -->
     <script>
       ;(function () {
         var d = document.documentElement
@@ -46,16 +46,10 @@
         var isHome = base.charAt(0) !== '/' || rest === '' || rest === 'index.html'
         if (!isHome) {
           d.classList.add('nf')
-        } else {
-          try {
-            if (!matchMedia('(prefers-reduced-motion: reduce)').matches && !location.hash && !sessionStorage.getItem('vd-built')) {
-              d.classList.add('js-build')
-            }
-          } catch (e) {}
         }
         // Safety net: if the app has not started after 4 seconds, show the plain page
         setTimeout(function () {
-          if (!window.__vdReady) d.classList.remove('js-build', 'nf')
+          if (!window.__vdReady) d.classList.remove('nf')
         }, 4000)
       })()
     </script>
