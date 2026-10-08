@@ -4,7 +4,6 @@ import { nav } from './data/content'
 import { ScrollTrigger } from './lib/gsap'
 import { initSmoothScroll, onAnchorClick, onPopState, scrollToId } from './lib/lenis'
 import { afterPinsMeasured, markSectionsReady } from './lib/ready'
-import { onCvClick } from './lib/cv'
 import { Cursor } from './components/extras/Cursor'
 import { Grain } from './components/extras/Grain'
 import { Hero } from './components/Hero'
@@ -70,11 +69,9 @@ export default function App({ notFound = false }: { notFound?: boolean }) {
     if (!location.hash) window.scrollTo(0, 0)
     if (notFound) return
     const destroy = initSmoothScroll()
-    document.addEventListener('click', onCvClick, true)
     document.addEventListener('click', onAnchorClick)
     window.addEventListener('popstate', onPopState)
     return () => {
-      document.removeEventListener('click', onCvClick, true)
       document.removeEventListener('click', onAnchorClick)
       window.removeEventListener('popstate', onPopState)
       destroy()

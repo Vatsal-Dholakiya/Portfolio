@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { AnimatePresence, m } from 'framer-motion'
 import { X } from 'lucide-react'
-import { asset, person, terminal } from '../../data/content'
+import { terminal } from '../../data/content'
 import { EASE } from '../../lib/animations'
 import { announceOverlay, onOtherOverlay } from '../../lib/overlay'
 import { useFocusTrap } from '../../hooks/useFocusTrap'
@@ -49,7 +49,6 @@ export function Terminal() {
       setLines([])
       return
     }
-    if (cmd === 'cv') window.open(asset(person.links.cv), '_blank', 'noopener,noreferrer')
     if (cmd === 'exit') {
       close()
       return

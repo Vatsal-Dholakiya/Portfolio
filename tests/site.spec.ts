@@ -117,18 +117,6 @@ test.describe('Links', () => {
     expect(missing).toEqual([])
   })
 
-  test('CV links point to an existing PDF', async ({ page, request }) => {
-    await page.goto('/')
-    const hrefs = await page.$$eval('a[href$="cv.pdf"]', (as) => [...new Set(as.map((a) => a.getAttribute('href')!))])
-    expect(hrefs.length).toBeGreaterThan(0)
-    for (const href of hrefs) {
-      const res = await request.get(href)
-      expect(res.status(), href).toBe(200)
-      expect(res.headers()['content-type']).toContain('pdf')
-      expect((await res.body()).subarray(0, 4).toString()).toBe('%PDF')
-    }
-  })
-
   test('local images and files referenced by the page exist', async ({ page, request }) => {
     await page.goto('/')
     await scrollThrough(page)

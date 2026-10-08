@@ -29,7 +29,7 @@ Leave any optional field as `''` to hide it everywhere (no empty or dead links a
 | -------------------------------------------------- | --------------------------------------------------------------------- |
 | Domain for canonical URL, social previews, sitemap | `site.url`                                                            |
 | Page title, description, social image              | `site`                                                                |
-| Email, GitHub, Stack Overflow, LinkedIn, CV path   | `person.links`                                                        |
+| Email, GitHub, Stack Overflow, LinkedIn             | `person.links`                                                        |
 | Navbar links and labels                            | `nav`                                                                 |
 | Hero text                                          | `hero`                                                                |
 | Build animation text (pieces on the screen)        | `build`                                                               |
@@ -55,7 +55,6 @@ Encode scroll-scrubbed films (`developer`, `nextChapter`) with every frame as a 
 
 | File                                  | Purpose                                                                                     |
 | ------------------------------------- | ------------------------------------------------------------------------------------------- |
-| `cv.pdf`                              | Your CV. "Résumé" and "Download CV" use it. Replace the file to update it.                  |
 | `certificates/*.webp`                 | One image per certificate (about 1600 × 1131 px), referenced by each certificate's `image`. |
 | `favicon.svg`, `apple-touch-icon.png` | "VD" icon.                                                                                  |
 | `og-image.png`                        | Social preview (1200 × 630).                                                                |
@@ -106,7 +105,7 @@ src/
   hooks/                   useActiveSection, useSplitReveal, useSkillTips, useCountUp, useFetchWithCache, useFocusTrap …
   lib/                     gsap (plugin registration), lenis (smooth scroll + anchors), animations, helpers, overlay
   styles/globals.css       colour tokens, fallback fonts, grain, story layout, reduced-motion rules
-public/                    cv.pdf, certificates/, favicon.svg, og-image.png, apple-touch-icon.png (films go in media/)
+public/                    certificates/, favicon.svg, og-image.png, apple-touch-icon.png (films go in media/)
 tests/                     Playwright end-to-end tests
 scripts/                   prerender.mjs, generate-assets.mjs (regenerates og-image.png / apple-touch-icon.png)
 ```

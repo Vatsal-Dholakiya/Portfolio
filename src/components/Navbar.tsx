@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { AnimatePresence, m } from 'framer-motion'
-import { FileText, Menu, X } from 'lucide-react'
-import { asset, nav, person } from '../data/content'
+import { Menu, X } from 'lucide-react'
+import { nav, person } from '../data/content'
 import { EASE } from '../lib/animations'
 import { gsap, ScrollTrigger, useGSAP } from '../lib/gsap'
 import { lockScroll } from '../lib/lenis'
@@ -133,8 +133,6 @@ export function Navbar() {
   }, [])
   useFocusTrap(menuRef, open, close, toggleRef)
 
-  const cv = asset(person.links.cv)
-
   return (
     <>
       <header ref={header} className="fixed inset-x-0 top-0 z-50">
@@ -180,15 +178,6 @@ export function Navbar() {
               <LocalTime />
               <Battery />
             </span>
-            <a
-              href={cv}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hidden h-9 items-center gap-2 rounded-full border border-line-strong px-4 font-mono text-[0.72rem] tracking-[0.1em] text-bone uppercase transition-colors hover:border-emerald lg:inline-flex"
-            >
-              <FileText className="h-3.5 w-3.5" aria-hidden="true" />
-              {nav.resumeLabel}
-            </a>
             <button
               ref={toggleRef}
               type="button"
@@ -243,10 +232,6 @@ export function Navbar() {
                   </m.li>
                 ))}
               </ul>
-              <a href={cv} target="_blank" rel="noopener noreferrer" onClick={close} className="btn btn-ghost mt-8">
-                <FileText className="h-5 w-5" aria-hidden="true" />
-                {nav.resumeLabel}
-              </a>
             </nav>
           </m.div>
         )}

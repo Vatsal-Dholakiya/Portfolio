@@ -134,7 +134,6 @@ export const person = {
     githubRepos: 'https://github.com/Vatsal-Dholakiya?tab=repositories',
     stackoverflow: 'https://stackoverflow.com/users/12660050/vatsal-dholakiya',
     linkedin: 'https://www.linkedin.com/in/vatsal-dholakiya-0bba67182',
-    cv: '/cv.pdf',
   },
 }
 
@@ -149,7 +148,6 @@ export const nav = {
     { id: 'learning', label: 'Learning' },
     { id: 'contact', label: 'Contact' },
   ],
-  resumeLabel: 'Résumé',
   openMenu: 'Open menu',
   closeMenu: 'Close menu',
   menuLabel: 'Menu',
@@ -193,7 +191,6 @@ export const hero = {
   kicker: 'Software Developer · Android Developer · London',
   line: "I build software and Android apps that do real work — and I'm learning AI to build what comes next.",
   primaryCta: 'See my work',
-  secondaryCta: 'Download CV',
   availability: 'Open to opportunities',
   scrollCue: 'Scroll to explore',
   /** Code shown on the screens of the animated scenes */
@@ -761,7 +758,6 @@ export const contact = {
   cta: 'Start a conversation',
   compiling: ['Compiling message…', 'Tests passed', 'Opening email'],
   mailSubject: 'Hello Vatsal',
-  cvLabel: 'Download CV',
   preferencesTitle: 'Work preferences',
   preferences: ['Based in London, United Kingdom', 'Open to relocation', 'Visa sponsorship required'],
 }
@@ -780,12 +776,11 @@ export const terminal = {
   title: 'vatsal@portfolio',
   welcome: 'Type help to see commands. Esc closes.',
   commands: {
-    help: 'Commands: whoami, skills, learning, contact, cv, clear',
+    help: 'Commands: whoami, skills, learning, contact, clear',
     whoami: 'Vatsal Dholakiya — Software Developer & Android Developer, London. Currently exploring AI.',
     skills: 'Java · Python · SQL · Android SDK · REST APIs · Selenium · Git · Docker',
     learning: 'Learning now: Generative AI and Ethics of AI — hands-on, one project at a time.',
     contact: 'vatsal.dholakiya2000@gmail.com',
-    cv: 'Opening CV…',
   } as Record<string, string>,
   unknown: 'Command not found. Type help.',
 }

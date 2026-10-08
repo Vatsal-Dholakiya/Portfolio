@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, m } from 'framer-motion'
-import { Briefcase, Check, Copy, Download, Globe2, MapPin, Send } from 'lucide-react'
+import { Briefcase, Check, Copy, Globe2, MapPin, Send } from 'lucide-react'
 import { asset, contact, films, person } from '../data/content'
 import { EASE } from '../lib/animations'
 import { externalLink, mailto, prefersReducedMotion } from '../lib/helpers'
@@ -33,7 +33,7 @@ async function copyText(text: string) {
   }
 }
 
-/** Final call to action: kinetic heading, email with copy, the "compile" button that opens email, CV and preferences. */
+/** Final call to action: kinetic heading, email with copy, the "compile" button that opens email, and preferences. */
 export function Contact() {
   const { links } = person
   const [copied, setCopied] = useState(false)
@@ -120,12 +120,6 @@ export function Contact() {
                 <a href={href} {...externalLink} onClick={compile} className="btn btn-primary" data-cursor="Send">
                   <Send className="h-5 w-5" aria-hidden="true" />
                   {contact.cta}
-                </a>
-              </Magnetic>
-              <Magnetic>
-                <a href={asset(links.cv)} {...externalLink} className="btn btn-ghost" data-cursor="Save">
-                  <Download className="h-5 w-5" aria-hidden="true" />
-                  {contact.cvLabel}
                 </a>
               </Magnetic>
             </div>

@@ -1,6 +1,6 @@
-import { ArrowDownRight, Download, Mail } from 'lucide-react'
-import { asset, films, hero, person } from '../../data/content'
-import { externalLink, linkProps, mailto, present } from '../../lib/helpers'
+import { ArrowDownRight, Mail } from 'lucide-react'
+import { films, hero, person } from '../../data/content'
+import { linkProps, mailto, present } from '../../lib/helpers'
 import { FilmVideo } from '../film/FilmVideo'
 import { GitHubIcon, LinkedInIcon, StackOverflowIcon } from '../ui/BrandIcons'
 import { Magnetic } from '../ui/Magnetic'
@@ -61,12 +61,6 @@ export function FinalHero() {
               <a href="#projects" className="btn btn-primary" data-cursor="View">
                 {hero.primaryCta}
                 <ArrowDownRight className="h-5 w-5" aria-hidden="true" />
-              </a>
-            </Magnetic>
-            <Magnetic>
-              <a href={asset(links.cv)} {...externalLink} className="btn btn-ghost" data-cursor="Save">
-                <Download className="h-5 w-5" aria-hidden="true" />
-                {hero.secondaryCta}
               </a>
             </Magnetic>
           </div>
