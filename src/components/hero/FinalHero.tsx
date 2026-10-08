@@ -45,9 +45,7 @@ export function FinalHero() {
               </span>
             </span>
             <span className="block overflow-hidden pb-[0.06em]">
-              <span data-hero-line className="text-outline block">
-                {person.lastName}
-              </span>
+              <span data-hero-line className="text-outline block" data-text={person.lastName} />
             </span>
           </span>
         </h1>

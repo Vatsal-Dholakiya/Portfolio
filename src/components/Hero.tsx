@@ -27,7 +27,7 @@ export function Hero() {
   }, [])
 
   useGSAP(
-    () => {
+    (_context, contextSafe) => {
       const html = document.documentElement
       const building = html.classList.contains('js-build')
 
@@ -75,37 +75,57 @@ export function Hero() {
       gsap.from(device, { yPercent: 50, rotateX: 26, opacity: 0, duration: 1.4, ease: 'expo.out', delay: 0.15 })
       tl.to({}, { duration: 0.6 }, 0)
 
+      // The scrubbed timeline is filled in small chunks when the browser is idle, so loading never blocks for long.
+      // Pieces stay hidden (CSS) until their chunk places them off-screen.
+      const queue: (() => void)[] = []
+
       // 2. Pieces are dragged in one by one with a bouncy landing
-      visible.forEach((el, i) => {
-        const from = (el.dataset.from ?? 'left') as keyof typeof OFF
-        const at = 0.6 + i * (isDesktop ? 0.85 : 1.1)
-        const cursor = el.querySelector('[data-drag-cursor]')
-        const flash = el.querySelector('[data-piece-flash]')
-        const body = el.querySelector('[data-piece-body]')
-        tl.set(cursor, { opacity: 1 }, at)
-          .fromTo(el, { ...OFF[from], rotate: i % 2 ? 9 : -9 }, { x: 0, y: 0, rotate: 0, duration: 0.9, ease: 'back.out(1.6)' }, at)
-          .to(body, { scaleX: 1.06, scaleY: 0.94, duration: 0.12, ease: 'power2.out' }, at + 0.82)
-          .to(body, { scaleX: 1, scaleY: 1, duration: 0.3, ease: 'elastic.out(1, 0.4)' }, at + 0.94)
-          .to(cursor, { opacity: 0, duration: 0.15 }, at + 0.95)
-          .fromTo(flash, { opacity: 0.9, scale: 0.98 }, { opacity: 0, scale: 1.04, duration: 0.35 }, at + 0.9)
-      })
+      visible.forEach((el, i) =>
+        queue.push(() => {
+          const from = (el.dataset.from ?? 'left') as keyof typeof OFF
+          const at = 0.6 + i * (isDesktop ? 0.85 : 1.1)
+          const cursor = el.querySelector('[data-drag-cursor]')
+          const flash = el.querySelector('[data-piece-flash]')
+          const body = el.querySelector('[data-piece-body]')
+          tl.set(cursor, { opacity: 1 }, at)
+            .fromTo(el, { ...OFF[from], rotate: i % 2 ? 9 : -9 }, { x: 0, y: 0, rotate: 0, duration: 0.9, ease: 'back.out(1.6)' }, at)
+            .to(body, { scaleX: 1.06, scaleY: 0.94, duration: 0.12, ease: 'power2.out' }, at + 0.82)
+            .to(body, { scaleX: 1, scaleY: 1, duration: 0.3, ease: 'elastic.out(1, 0.4)' }, at + 0.94)
+            .to(cursor, { opacity: 0, duration: 0.15 }, at + 0.95)
+            .fromTo(flash, { opacity: 0.9, scale: 0.98 }, { opacity: 0, scale: 1.04, duration: 0.35 }, at + 0.9)
+          gsap.set(el, { visibility: 'visible' })
+        }),
+      )
       const built = 0.6 + visible.length * (isDesktop ? 0.85 : 1.1) + 0.3
 
-      // 3. Build succeeded
-      tl.to('[data-build-done]', { opacity: 1, duration: 0.3 }, built).to(
-        ['[data-build-label]', '[data-build-hint]'],
-        { opacity: 0, duration: 0.3 },
-        built,
-      )
+      queue.push(() => {
+        // 3. Build succeeded
+        tl.to('[data-build-done]', { opacity: 1, duration: 0.3 }, built).to(
+          ['[data-build-label]', '[data-build-hint]'],
+          { opacity: 0, duration: 0.3 },
+          built,
+        )
 
-      // 4. Camera pushes into the screen; the final hero takes over
-      const push = built + 0.5
-      tl.to(device, { scale: pushScale, rotateX: 0, duration: 2, ease: 'power2.in' }, push)
-        .to('[data-base]', { yPercent: 160, opacity: 0, duration: 0.8, ease: 'power2.in' }, push)
-        .to('[data-build-stage]', { opacity: 0, duration: 0.5 }, push + 1.6)
-        .to('[data-final-hero]', { opacity: 1, duration: 0.6 }, push + 1.5)
-        .from('[data-hero-line]', { yPercent: 110, duration: 0.8, ease: 'expo.out', stagger: 0.1 }, push + 1.7)
-        .from('[data-hero-item]', { y: 24, opacity: 0, duration: 0.6, stagger: 0.06 }, push + 2)
+        // 4. Camera pushes into the screen; the final hero takes over
+        const push = built + 0.5
+        tl.to(device, { scale: pushScale, rotateX: 0, duration: 2, ease: 'power2.in' }, push)
+          .to('[data-base]', { yPercent: 160, opacity: 0, duration: 0.8, ease: 'power2.in' }, push)
+          .to('[data-build-stage]', { opacity: 0, duration: 0.5 }, push + 1.6)
+          .to('[data-final-hero]', { opacity: 1, duration: 0.6 }, push + 1.5)
+          .from('[data-hero-line]', { yPercent: 110, duration: 0.8, ease: 'expo.out', stagger: 0.1 }, push + 1.7)
+          .from('[data-hero-item]', { y: 24, opacity: 0, duration: 0.6, stagger: 0.06 }, push + 2)
+      })
+
+      let handle = 0
+      const idle = (fn: () => void) =>
+        typeof window.requestIdleCallback === 'function' ? window.requestIdleCallback(fn, { timeout: 250 }) : window.setTimeout(fn, 16)
+      const runNext = contextSafe!(() => {
+        queue.shift()?.()
+        // Keep the scene in step with the scroll position if the visitor is already scrolling
+        tl.progress(tl.scrollTrigger?.progress ?? 0)
+        if (queue.length) handle = idle(runNext)
+      })
+      handle = idle(runNext)
 
       // Keyboard users who tab into the hero while it is still building jump to the end
       const onFocus = () => {
@@ -114,7 +134,11 @@ export function Hero() {
       }
       const finalHero = root.current!.querySelector('[data-final-hero]')
       finalHero?.addEventListener('focusin', onFocus)
-      return () => finalHero?.removeEventListener('focusin', onFocus)
+      return () => {
+        finalHero?.removeEventListener('focusin', onFocus)
+        if (typeof window.cancelIdleCallback === 'function') window.cancelIdleCallback(handle)
+        window.clearTimeout(handle)
+      }
     },
     { scope: root },
   )

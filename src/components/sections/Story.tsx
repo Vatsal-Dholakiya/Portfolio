@@ -1,6 +1,7 @@
 import { useRef } from 'react'
 import { story } from '../../data/content'
 import { gsap, useGSAP } from '../../lib/gsap'
+import { sectionsReady } from '../../lib/ready'
 import { SectionHead } from '../ui/SectionHead'
 import { Certificates } from './Certificates'
 
@@ -13,53 +14,63 @@ export function Story() {
 
   useGSAP(
     () => {
-      const mm = gsap.matchMedia()
-      mm.add('(min-width: 1024px) and (prefers-reduced-motion: no-preference)', () => {
-        const pin = root.current!.querySelector<HTMLElement>('[data-story-pin]')!
-        const track = root.current!.querySelector<HTMLElement>('[data-story-track]')!
-        const distance = () => Math.max(0, track.scrollWidth - window.innerWidth)
-        root.current!.dataset.horizontal = ''
+      // Pins are created once every section is on the page (see lib/ready.ts)
+      let mm: gsap.MatchMedia | undefined
+      let cancelled = false
+      void sectionsReady.then(() => {
+        if (cancelled) return
+        mm = gsap.matchMedia()
+        mm.add('(min-width: 1024px) and (prefers-reduced-motion: no-preference)', () => {
+          const pin = root.current!.querySelector<HTMLElement>('[data-story-pin]')!
+          const track = root.current!.querySelector<HTMLElement>('[data-story-track]')!
+          const distance = () => Math.max(0, track.scrollWidth - window.innerWidth)
+          root.current!.dataset.horizontal = ''
 
-        const move = gsap.to(track, {
-          x: () => -distance(),
-          ease: 'none',
-          scrollTrigger: {
-            trigger: pin,
-            start: 'top top',
-            end: () => `+=${distance()}`,
-            pin: true,
-            scrub: 0.8,
-            anticipatePin: 1,
-            invalidateOnRefresh: true,
-          },
-        })
-        gsap.fromTo(
-          '[data-story-progress]',
-          { scaleX: 0 },
-          { scaleX: 1, ease: 'none', scrollTrigger: { trigger: pin, start: 'top top', end: () => `+=${distance()}`, scrub: 0.8 } },
-        )
-
-        // Years parallax inside the moving track
-        gsap.utils.toArray<HTMLElement>('[data-year]', root.current).forEach((year) => {
-          gsap.fromTo(
-            year,
-            { x: 80 },
-            {
-              x: -80,
-              ease: 'none',
-              scrollTrigger: { trigger: year, containerAnimation: move, start: 'left right', end: 'right left', scrub: true },
+          const move = gsap.to(track, {
+            x: () => -distance(),
+            ease: 'none',
+            scrollTrigger: {
+              trigger: pin,
+              start: 'top top',
+              end: () => `+=${distance()}`,
+              pin: true,
+              scrub: 0.8,
+              anticipatePin: 1,
+              invalidateOnRefresh: true,
             },
+          })
+          gsap.fromTo(
+            '[data-story-progress]',
+            { scaleX: 0 },
+            { scaleX: 1, ease: 'none', scrollTrigger: { trigger: pin, start: 'top top', end: () => `+=${distance()}`, scrub: 0.8 } },
+          )
+
+          // Years parallax inside the moving track
+          gsap.utils.toArray<HTMLElement>('[data-year]', root.current).forEach((year) => {
+            gsap.fromTo(
+              year,
+              { x: 80 },
+              {
+                x: -80,
+                ease: 'none',
+                scrollTrigger: { trigger: year, containerAnimation: move, start: 'left right', end: 'right left', scrub: true },
+              },
+            )
+          })
+          return () => delete root.current?.dataset.horizontal
+        })
+        mm.add('(max-width: 1023px) and (prefers-reduced-motion: no-preference)', () => {
+          gsap.fromTo(
+            '[data-story-line]',
+            { scaleY: 0 },
+            { scaleY: 1, ease: 'none', scrollTrigger: { trigger: '[data-story-track]', start: 'top 70%', end: 'bottom 70%', scrub: 0.5 } },
           )
         })
-        return () => delete root.current?.dataset.horizontal
       })
-      mm.add('(max-width: 1023px) and (prefers-reduced-motion: no-preference)', () => {
-        gsap.fromTo(
-          '[data-story-line]',
-          { scaleY: 0 },
-          { scaleY: 1, ease: 'none', scrollTrigger: { trigger: '[data-story-track]', start: 'top 70%', end: 'bottom 70%', scrub: 0.5 } },
-        )
-      })
+      return () => {
+        cancelled = true
+        mm?.revert()
+      }
     },
     { scope: root },
   )
@@ -105,8 +116,9 @@ export function Story() {
                       className={`pointer-events-none font-display text-[clamp(4rem,9vw,8.5rem)] leading-[0.8] font-extrabold tracking-[-0.06em] ${
                         now ? 'text-ember/90' : 'text-outline'
                       }`}
+                      data-text={now ? undefined : c.year}
                     >
-                      {c.year}
+                      {now ? c.year : null}
                     </p>
                     <div className="mt-auto pt-10">
                       <p className="label text-mist">

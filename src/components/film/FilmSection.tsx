@@ -1,6 +1,7 @@
 import { useCallback, useRef, type ReactNode } from 'react'
 import type { Film } from '../../data/content'
-import { gsap, useGSAP } from '../../lib/gsap'
+import { gsap, ScrollTrigger, useGSAP } from '../../lib/gsap'
+import { sectionsReady } from '../../lib/ready'
 import { FilmVideo } from './FilmVideo'
 
 /**
@@ -42,27 +43,47 @@ export function FilmSection({
 
   useGSAP(
     () => {
-      const mm = gsap.matchMedia()
-      mm.add({ desktop: '(min-width: 768px)', motion: '(prefers-reduced-motion: no-preference)' }, (ctx) => {
-        const { desktop, motion } = ctx.conditions as { desktop: boolean; motion: boolean }
-        if (!motion) return
-        const tl = gsap.timeline({
-          defaults: { ease: 'none' },
-          scrollTrigger: {
-            trigger: pin.current,
-            start: 'top top',
-            end: () => `+=${window.innerHeight * (desktop ? length : mobileLength)}`,
-            pin: true,
-            scrub: 0.6,
-            anticipatePin: 1,
-            invalidateOnRefresh: true,
-          },
+      // Pins are created once every section is on the page (see lib/ready.ts)
+      let mm: gsap.MatchMedia | undefined
+      let cancelled = false
+      void sectionsReady.then(() => {
+        if (cancelled) return
+        mm = gsap.matchMedia()
+        mm.add({ desktop: '(min-width: 768px)', motion: '(prefers-reduced-motion: no-preference)' }, (ctx) => {
+          const { desktop, motion } = ctx.conditions as { desktop: boolean; motion: boolean }
+          if (!motion) return
+          const tl = gsap.timeline({
+            defaults: { ease: 'none' },
+            scrollTrigger: {
+              trigger: pin.current,
+              start: 'top top',
+              end: () => `+=${window.innerHeight * (desktop ? length : mobileLength)}`,
+              pin: true,
+              scrub: 0.6,
+              anticipatePin: 1,
+              invalidateOnRefresh: true,
+            },
+          })
+          // The pin exists from the start (so every position below it is right); the tweens are built shortly before
+          // the shot scrolls into view, so page load does not pay for setting up every scene at once
+          const build = () => {
+            if (!hasFilm) animate?.(tl, root.current!, desktop)
+            // Copy rises in at the start of the shot
+            tl.from(
+              root.current!.querySelectorAll('[data-film-copy] > *'),
+              { y: 30, opacity: 0, stagger: 0.05, duration: 0.15, ease: 'power2.out' },
+              0.02,
+            )
+            if (tl.duration() < 1) tl.to({}, { duration: 1 - tl.duration() })
+            tl.progress(tl.scrollTrigger?.progress ?? 0)
+          }
+          ScrollTrigger.create({ trigger: pin.current, start: 'top bottom+=75%', once: true, onEnter: build })
         })
-        if (!hasFilm) animate?.(tl, root.current!, desktop)
-        // Copy fades in early and out at the end of the shot
-        tl.from('[data-film-copy] > *', { y: 30, opacity: 0, stagger: 0.05, duration: 0.15, ease: 'power2.out' }, 0.02)
-        if (tl.duration() < 1) tl.to({}, { duration: 1 - tl.duration() })
       })
+      return () => {
+        cancelled = true
+        mm?.revert()
+      }
     },
     { scope: root, dependencies: [hasFilm] },
   )

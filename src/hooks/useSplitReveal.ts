@@ -22,12 +22,16 @@ export function useSplitReveal<T extends HTMLElement>(ref: React.RefObject<T | n
           delay,
           scrollTrigger: { trigger: el, start, once: true },
         })
-        ScrollTrigger.refresh()
       }
+      // Split only when the heading approaches the viewport, so page load does not pay for every heading at once
       let cancelled = false
-      void document.fonts.ready.then(() => !cancelled && run())
+      let near: ScrollTrigger | null = null
+      void document.fonts.ready.then(() => {
+        if (!cancelled) near = ScrollTrigger.create({ trigger: el, start: 'top bottom+=50%', once: true, onEnter: run })
+      })
       return () => {
         cancelled = true
+        near?.kill()
         split?.revert()
       }
     },

@@ -307,6 +307,10 @@ html.lenis body {
   paint-order: stroke fill;
   letter-spacing: -0.01em;
 }
+/* Decorative outlined words are drawn from data-text (always aria-hidden), so they are not read as page text */
+.text-outline[data-text]::before {
+  content: attr(data-text);
+}
 
 /* ============================================================
    Cinematic layers
@@ -424,6 +428,9 @@ html:not(.js-build) [data-build-stage] {
 }
 html.js-build [data-final-hero] {
   opacity: 0;
+}
+html.js-build [data-piece] {
+  visibility: hidden;
 }
 
 /* Word masks of kinetic headings: room for descenders (g, p, y) and italic overhang */

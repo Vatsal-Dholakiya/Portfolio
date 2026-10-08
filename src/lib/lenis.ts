@@ -1,6 +1,7 @@
 import Lenis from 'lenis'
 import { gsap, ScrollTrigger } from './gsap'
 import { prefersReducedMotion } from './helpers'
+import { afterPinsMeasured } from './ready'
 
 let lenis: Lenis | null = null
 let locks = 0
@@ -73,7 +74,7 @@ export function onAnchorClick(e: MouseEvent) {
   const id = link.getAttribute('href')!.slice(1)
   if (!id || !document.getElementById(id)) return
   e.preventDefault()
-  scrollToId(id)
+  afterPinsMeasured(() => scrollToId(id))
 }
 
 /** Browser back/forward between section hashes. */

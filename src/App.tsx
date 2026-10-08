@@ -3,6 +3,7 @@ import { LazyMotion, domAnimation } from 'framer-motion'
 import { nav } from './data/content'
 import { ScrollTrigger } from './lib/gsap'
 import { initSmoothScroll, onAnchorClick, onPopState, scrollToId } from './lib/lenis'
+import { afterPinsMeasured, markSectionsReady } from './lib/ready'
 import { Cursor } from './components/extras/Cursor'
 import { Grain } from './components/extras/Grain'
 import { Hero } from './components/Hero'
@@ -10,9 +11,21 @@ import { Navbar } from './components/Navbar'
 import { NotFound } from './components/NotFound'
 import { StatsStrip } from './components/sections/StatsStrip'
 
-// Below-the-fold sections are code-split
+// Below-the-fold sections are code-split and load one after another when the browser is idle, so each one
+// hydrates in its own short task instead of all at once
+let chain: Promise<unknown> = Promise.resolve()
+const idle = () =>
+  new Promise<void>((resolve) => {
+    if (typeof window === 'undefined') resolve()
+    else if (typeof window.requestIdleCallback === 'function') window.requestIdleCallback(() => resolve(), { timeout: 400 })
+    else window.setTimeout(resolve, 30)
+  })
 const named = <K extends string>(load: () => Promise<Record<K, React.ComponentType>>, key: K) =>
-  lazy(() => load().then((mod) => ({ default: mod[key] })))
+  lazy(() => {
+    const next = chain.then(idle).then(load)
+    chain = next
+    return next.then((mod) => ({ default: mod[key] }))
+  })
 const Mission = named(() => import('./components/sections/Mission'), 'Mission')
 const Pillars = named(() => import('./components/sections/Pillars'), 'Pillars')
 const Story = named(() => import('./components/sections/Story'), 'Story')
@@ -34,9 +47,9 @@ declare global {
 /** Once the code-split sections are on the page: measure pinned scenes again, then open a direct link such as /#work. */
 function AfterSections() {
   useEffect(() => {
-    ScrollTrigger.refresh()
+    markSectionsReady()
     const id = decodeURIComponent(location.hash.slice(1))
-    if (id && document.getElementById(id)) scrollToId(id, { updateHash: false, focus: false, instant: true })
+    if (id) afterPinsMeasured(() => document.getElementById(id) && scrollToId(id, { updateHash: false, focus: false, instant: true }))
     // Fonts change text sizes; re-measure when they are ready
     void document.fonts.ready.then(() => ScrollTrigger.refresh())
   }, [])
@@ -79,15 +92,13 @@ export default function App({ notFound = false }: { notFound?: boolean }) {
       <main id="main" tabIndex={-1} className="relative outline-none">
         <Hero />
         <StatsStrip />
+        {/* One boundary per section: React hydrates them separately and yields to the browser in between */}
+        {[Mission, Pillars, Story, DeveloperFilm, PhoneShowcase, WhatIBuild, FeaturedWork, NextChapter].map((Section, i) => (
+          <Suspense key={i} fallback={null}>
+            <Section />
+          </Suspense>
+        ))}
         <Suspense fallback={null}>
-          <Mission />
-          <Pillars />
-          <Story />
-          <DeveloperFilm />
-          <PhoneShowcase />
-          <WhatIBuild />
-          <FeaturedWork />
-          <NextChapter />
           <Contact />
           <AfterSections />
         </Suspense>

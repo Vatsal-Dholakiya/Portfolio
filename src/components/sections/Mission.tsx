@@ -18,7 +18,7 @@ export function Mission() {
       let cancelled = false
       void document.fonts.ready.then(() => {
         if (cancelled) return
-        split = SplitText.create(el, { type: 'words', aria: 'auto' })
+        split = SplitText.create(el, { type: 'words', aria: 'none' })
         gsap.fromTo(
           split.words,
           { opacity: 0.16 },
