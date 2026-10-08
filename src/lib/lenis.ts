@@ -34,13 +34,21 @@ export function scrollToY(y: number) {
  * Scrolls to a section id ("home" = top). The navbar offset comes from each section's CSS scroll-margin-top,
  * which both Lenis and native scrolling respect.
  */
-export function scrollToId(id: string, { updateHash = true, focus = true, instant = false } = {}) {
+export function scrollToId(id: string, { updateHash = false, focus = true, instant = false } = {}) {
   const target = document.getElementById(id)
   if (!target) return
   forceUnlock()
   const top = id === 'home'
-  if (lenis && !instant) lenis.scrollTo(top ? 0 : target)
-  else if (top) window.scrollTo({ top: 0, behavior: instant || prefersReducedMotion() ? 'auto' : 'smooth' })
+  if (lenis && !instant) {
+    // Pinned scenes can still change the page height while the scroll runs; when it ends, check where the
+    // section really is and finish the move (at most twice)
+    const settle = (tries: number) => () => {
+      // Sections land just below the navbar (their scroll-margin-top)
+      const off = top ? window.scrollY : target.getBoundingClientRect().top - (parseFloat(getComputedStyle(target).scrollMarginTop) || 0)
+      if (Math.abs(off) > 4 && tries > 0) lenis?.scrollTo(top ? 0 : target, { duration: 0.6, onComplete: settle(tries - 1) })
+    }
+    lenis.scrollTo(top ? 0 : target, { onComplete: settle(2) })
+  } else if (top) window.scrollTo({ top: 0, behavior: instant || prefersReducedMotion() ? 'auto' : 'smooth' })
   else target.scrollIntoView({ behavior: instant || prefersReducedMotion() ? 'auto' : 'smooth' })
   if (updateHash) history.pushState(null, '', top ? location.pathname + location.search : `#${id}`)
   if (focus) target.focus({ preventScroll: true })
@@ -81,10 +89,4 @@ export function onAnchorClick(e: MouseEvent) {
 export function onPopState() {
   const id = location.hash.slice(1) || 'home'
   scrollToId(id, { updateHash: false, focus: false })
-}
-
-/** Replaces the hash for the section in view without scrolling or adding history entries. */
-export function replaceHash(id: string | null) {
-  const url = id && id !== 'home' ? `#${id}` : location.pathname + location.search
-  if ((id ? `#${id}` : '') !== location.hash) history.replaceState(null, '', url)
 }

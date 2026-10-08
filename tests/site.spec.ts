@@ -17,17 +17,32 @@ async function expectSectionInView(page: import('@playwright/test').Page, id: st
 }
 
 test.describe('Navigation', () => {
-  test('every navbar link scrolls to its section and updates the URL', async ({ page, isMobile, consoleProblems }) => {
+  test('every navbar link scrolls to its section and highlights it', async ({ page, isMobile, consoleProblems }) => {
     test.skip(isMobile, 'desktop navbar')
     await page.goto('/')
+    // Nothing is highlighted at the top of the page
+    await expect(page.locator('header nav a[aria-current]')).toHaveCount(0)
     for (const id of sections) {
       await page.locator(`header nav a[href="#${id}"]`).click()
       await expectSectionInView(page, id)
-      await expect(page).toHaveURL(new RegExp(`#${id}$`))
+      await expect(page.locator(`header nav a[href="#${id}"]`)).toHaveAttribute('aria-current', 'location')
+      await expect(page.locator('header nav a[aria-current]')).toHaveCount(1)
     }
+    // The address bar stays clean, so a reload starts at the top
+    expect(new URL(page.url()).hash).toBe('')
     await page.locator('header a[href="#home"]').click()
     await expect.poll(() => page.evaluate(() => window.scrollY)).toBeLessThan(5)
     expect(consoleProblems).toEqual([])
+  })
+
+  test('the page always opens at the top, even after scrolling and reloading', async ({ page }) => {
+    await page.goto('/')
+    await page.locator('a[href="#projects"]:visible').first().click()
+    await expectSectionInView(page, 'projects')
+    await page.reload()
+    await page.waitForFunction(() => window.__vdReady === true)
+    await page.waitForTimeout(800)
+    expect(await page.evaluate(() => window.scrollY)).toBeLessThan(5)
   })
 
   test('mobile menu: links, Escape, outside tap, focus and scroll lock', async ({ page, isMobile, consoleProblems }) => {
@@ -61,16 +76,10 @@ test.describe('Navigation', () => {
     expect(consoleProblems).toEqual([])
   })
 
-  test('direct link /#projects opens at the section, and back/forward work', async ({ page }) => {
+  test('a shared link such as /#projects opens at that section, then the hash is cleared', async ({ page }) => {
     await page.goto('/#projects')
     await expectSectionInView(page, 'projects')
-    await page.goto('/')
-    await page.locator('a[href="#projects"]:visible').first().click()
-    await expectSectionInView(page, 'projects')
-    await page.goBack()
-    await expect.poll(() => page.evaluate(() => window.scrollY)).toBeLessThan(5)
-    await page.goForward()
-    await expectSectionInView(page, 'projects')
+    await expect.poll(() => new URL(page.url()).hash).toBe('')
   })
 })
 

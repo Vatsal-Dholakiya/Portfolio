@@ -47,8 +47,13 @@ declare global {
 function AfterSections() {
   useEffect(() => {
     markSectionsReady()
+    // A shared link such as /#projects opens at that section; the hash is then removed so a reload starts at the top
     const id = decodeURIComponent(location.hash.slice(1))
-    if (id) afterPinsMeasured(() => document.getElementById(id) && scrollToId(id, { updateHash: false, focus: false, instant: true }))
+    if (id)
+      afterPinsMeasured(() => {
+        if (document.getElementById(id)) scrollToId(id, { focus: false, instant: true })
+        history.replaceState(null, '', location.pathname + location.search)
+      })
     // Fonts change text sizes; re-measure when they are ready
     void document.fonts.ready.then(() => ScrollTrigger.refresh())
   }, [])
@@ -59,6 +64,9 @@ export default function App({ notFound = false }: { notFound?: boolean }) {
   useEffect(() => {
     window.__vdReady = true
     document.documentElement.classList.remove('nf')
+    // Always open at the top: the browser must not restore an old scroll position
+    ScrollTrigger.clearScrollMemory('manual')
+    if (!location.hash) window.scrollTo(0, 0)
     if (notFound) return
     const destroy = initSmoothScroll()
     document.addEventListener('click', onAnchorClick)

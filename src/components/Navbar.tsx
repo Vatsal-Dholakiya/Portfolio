@@ -100,16 +100,23 @@ export function Navbar() {
     }
   })
 
-  // One underline slides to the active link
+  // One underline slides to the active link; re-measured when fonts load or the window resizes
   useEffect(() => {
-    const bar = underline.current
-    const link = active ? list.current?.querySelector<HTMLElement>(`a[href="#${active}"]`) : null
-    if (!bar) return
-    if (!link) {
-      gsap.to(bar, { opacity: 0, duration: 0.25 })
-      return
+    const place = (animate: boolean) => {
+      const bar = underline.current
+      const link = active ? list.current?.querySelector<HTMLElement>(`a[href="#${active}"]`) : null
+      if (!bar) return
+      if (!link) {
+        gsap.to(bar, { opacity: 0, duration: 0.25 })
+        return
+      }
+      gsap.to(bar, { x: link.offsetLeft, scaleX: link.offsetWidth / 100, opacity: 1, duration: animate ? 0.5 : 0, ease: 'expo.out' })
     }
-    gsap.to(bar, { x: link.offsetLeft, scaleX: link.offsetWidth / 100, opacity: 1, duration: 0.5, ease: 'expo.out' })
+    place(true)
+    const replace = () => place(false)
+    window.addEventListener('resize', replace)
+    void document.fonts.ready.then(replace)
+    return () => window.removeEventListener('resize', replace)
   }, [active])
 
   useEffect(() => {
