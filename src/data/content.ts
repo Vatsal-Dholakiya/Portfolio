@@ -109,7 +109,7 @@ export interface Film {
 export const site = {
   /** FILL IN: your live domain without a trailing slash, e.g. 'https://vatsaldholakiya.com'.
    *  Used for the canonical URL, social previews and sitemap.xml. Leave '' until you have one. */
-  url: '',
+  url: 'https://www.vatsaldholakiya.com',
   title: 'Vatsal Dholakiya — Software Developer & Android Developer',
   description:
     'Vatsal Dholakiya is a London-based Software Developer and Android Developer who builds software that does real work, and is currently exploring Artificial Intelligence.',
