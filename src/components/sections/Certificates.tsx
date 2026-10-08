@@ -39,7 +39,7 @@ export function Certificates() {
         <h3 className="text-[clamp(1.75rem,3.5vw,2.75rem)] leading-none font-extrabold">{story.certificatesTitle}</h3>
         <span className="font-mono text-sm text-ash">{String(story.certificates.length).padStart(2, '0')}</span>
       </div>
-      <Stagger as="ul" className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5" stagger={0.07} amount={0.1}>
+      <Stagger as="ul" className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4" stagger={0.07} amount={0.1}>
         {story.certificates.map((cert) => (
           <RevealItem as="li" key={cert.title} className="min-w-0">
             <TiltCard innerClassName="flex h-full flex-col overflow-hidden">
@@ -48,11 +48,11 @@ export function Certificates() {
                   <img
                     src={asset(cert.image)}
                     alt=""
-                    width={1600}
-                    height={1131}
+                    width={cert.width ?? 1600}
+                    height={cert.height ?? 1131}
                     loading="lazy"
                     decoding="async"
-                    className="h-full w-full object-cover opacity-80 transition-[opacity,transform] duration-500 group-hover:scale-[1.03] group-hover:opacity-100"
+                    className="h-full w-full object-cover object-top opacity-80 transition-[opacity,transform] duration-500 group-hover:scale-[1.03] group-hover:opacity-100"
                   />
                   <span className="absolute top-3 right-3 grid h-8 w-8 place-items-center rounded-full bg-void/80 text-mist">
                     <Maximize2 className="h-3.5 w-3.5" aria-hidden="true" />

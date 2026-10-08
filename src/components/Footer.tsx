@@ -31,7 +31,7 @@ export function Footer() {
 
   return (
     <footer className="relative overflow-hidden border-t border-line">
-      <div className="container-x relative z-10 flex flex-col gap-8 pt-12 md:flex-row md:items-center md:justify-between">
+      <div className="container-x relative z-10 flex flex-col gap-8 py-12 md:flex-row md:items-center md:justify-between">
         <div className="space-y-2">
           <p className="text-sm text-mist">
             {footer.credit} · <span suppressHydrationWarning>{new Date().getFullYear()}</span>
@@ -58,12 +58,6 @@ export function Footer() {
           </a>
         </div>
       </div>
-      {/* Oversized outlined wordmark, cut off by the bottom edge */}
-      <p
-        aria-hidden="true"
-        className="text-outline pointer-events-none -mb-[0.18em] mt-6 text-center font-display text-[12vw] leading-[0.85] font-extrabold tracking-[-0.06em] uppercase select-none"
-        data-text={person.lastName}
-      />
     </footer>
   )
 }

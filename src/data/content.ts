@@ -69,6 +69,9 @@ export interface Certificate {
   image: string
   /** Credential URL; leave '' to hide the "View Credential" button */
   credential: string
+  /** Image size in pixels when it is not the usual landscape 1600 × 1131 */
+  width?: number
+  height?: number
 }
 
 export interface Repo {
@@ -224,7 +227,6 @@ export const stats = {
   items: [
     { value: 4, suffix: '+', label: 'Years building software' },
     { value: 10000, suffix: '+', label: 'WhatsApp messages sent a day by my automation tool' },
-    { value: 4.8, decimals: 1, suffix: '★', label: 'User rating for PostFactory' },
     { value: 5, label: 'Professional certifications' },
     { value: 563, label: 'Stack Overflow reputation', live: 'stackoverflow-reputation' },
     /** FILL IN: number of Android apps you shipped to Google Play — hidden while value is undefined */
@@ -240,7 +242,7 @@ export const about = {
   /** Words rendered in the serif italic accent */
   accentWords: ['busywork'],
   paragraphs: [
-    "I'm a Software Developer and Android Developer based in London. I built a WhatsApp automation tool that now sends more than 10,000 messages a day, and I worked on PostFactory, a business card design app rated 4.8 stars on Android and iOS.",
+    "I'm a Software Developer and Android Developer based in London. I built a WhatsApp automation tool that now sends more than 10,000 messages a day, and at CodeCreator Technologies I built PostFactory, a business card design app for Android.",
     'I hold an MSc in Cloud Computing with Distinction from the University of East London. I care about clean code, clear communication and software that keeps working long after handover. Right now I am learning Generative AI and the ethics of AI.',
   ],
 }
@@ -278,11 +280,9 @@ export const skills = {
       skills: [
         { name: 'Android SDK', full: 'Android Software Development Kit', usedAt: [uni, cc, pf] },
         { name: 'Android Studio', usedAt: [uni, cc, pf] },
-        { name: 'Flutter', usedAt: [pf] },
-        { name: 'iOS apps', full: 'Cross-platform release with Flutter', usedAt: [pf] },
         { name: 'Responsive UI', full: 'User interfaces for many screen sizes and densities', usedAt: [cc, pf] },
         { name: 'REST APIs', full: 'Representational State Transfer Application Programming Interfaces', usedAt: [cc, freelance] },
-        { name: 'Google Play releases', usedAt: [cc, pf] },
+        { name: 'Google Play releases', usedAt: [cc] },
       ],
     },
     {
@@ -353,7 +353,7 @@ export const story = {
       year: '2017',
       title: 'BSc Information Technology',
       place: 'Ganpat University, Gujarat, India · 2017 – 2020',
-      text: 'Where it started: Java, Android Studio and the fundamentals of building apps.',
+      text: 'Where it started: Java, Android Studio and the fundamentals of building apps. Graduated with a CGPA of 8.15.',
     },
     {
       year: '2019',
@@ -365,7 +365,7 @@ export const story = {
       year: '2020',
       title: 'Android Developer',
       place: 'CodeCreator Technologies, India',
-      text: 'Native apps for small businesses, built in a team — from first layout to Google Play release.',
+      text: 'Native Android apps for small businesses, built in a team, including PostFactory, a business card design app.',
     },
     {
       year: '2022',
@@ -393,6 +393,26 @@ export const story = {
   close: 'Close',
   /** Add a certificate by adding one entry here (and its image in public/certificates/) */
   certificates: [
+    {
+      title: 'MSc Cloud Computing, Pass with Distinction',
+      issuer: 'University of East London',
+      date: 'October 2023',
+      icon: 'cloud',
+      image: '/certificates/msc-cloud-computing.webp',
+      credential: '',
+      width: 1600,
+      height: 1132,
+    },
+    {
+      title: 'BSc Information Technology, CGPA 8.15',
+      issuer: 'Ganpat University',
+      date: 'December 2020',
+      icon: 'code',
+      image: '/certificates/bsc-information-technology.webp',
+      credential: '',
+      width: 1200,
+      height: 1617,
+    },
     {
       title: 'Ethical Hacking',
       issuer: 'Great Learning Academy',
@@ -498,7 +518,7 @@ export interface CaseStudy {
 export const projects = {
   label: 'Projects',
   title: 'Selected work.',
-  intro: 'Two products I built that are used by real businesses, followed by other work and my public code.',
+  intro: 'Two products I built for real businesses, followed by other work and my public code.',
   featuresLabel: 'Key features',
   impactLabel: 'Results',
   caseStudies: [
@@ -506,13 +526,13 @@ export const projects = {
       id: 'postfactory',
       kind: 'Mobile application',
       title: 'PostFactory',
-      tagline: 'Business card design app for Android and iOS',
+      tagline: 'Business card design app for Android',
       summary:
         'PostFactory lets entrepreneurs, freelancers and professionals design modern business cards in minutes, without complex design software. Users choose from hundreds of professionally crafted templates for different industries, then customise fonts, colours, icons, backgrounds and layouts with a few taps.',
       meta: [
+        { label: 'Built at', value: 'CodeCreator Technologies' },
         { label: 'Client', value: 'Mobile design platform for professionals' },
         { label: 'Duration', value: '8 months' },
-        { label: 'Platforms', value: 'Android and iOS' },
       ],
       features: [
         'Hundreds of professionally crafted templates',
@@ -522,16 +542,15 @@ export const projects = {
         'Real-time preview while editing',
         'Export as PNG, PDF or print-ready files',
         'Cloud storage for designs and templates',
-        'Cross-platform support for Android and iOS',
       ],
       impact: [
-        { value: '4.8★', label: 'Average user rating' },
-        { value: '2', label: 'Platforms launched: Android and iOS' },
         { value: 'Minutes', label: 'To design a card that used to take hours' },
+        { value: '100s', label: 'Professionally crafted templates' },
+        { value: '8 months', label: 'From first design to finished app' },
       ],
       result:
-        'Launched successfully on Android and iOS. Users praise the intuitive interface and professional templates, and business card design time dropped from hours to minutes.',
-      tags: ['Java', 'Android', 'Android Studio', 'Flutter', 'iOS', 'PHP', 'MySQL', 'CSS', 'UI/UX'],
+        'Built and delivered to the client as a complete Android app, cutting the time it takes to design a business card from hours to minutes.',
+      tags: ['Java', 'Android', 'Android Studio', 'XML', 'PHP', 'MySQL', 'CSS', 'UI/UX'],
       visual: 'phone',
     },
     {

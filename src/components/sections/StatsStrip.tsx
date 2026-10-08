@@ -19,8 +19,8 @@ export function StatsStrip() {
 
   return (
     <section id="stats" aria-label={stats.label} className="relative border-y border-line bg-carbon/40">
-      <div className="container-x">
-        <Stagger as="ul" className="grid grid-cols-2 lg:grid-cols-5" stagger={0.08} amount={0.3}>
+      <div className="container-x" style={{ '--stats': items.length } as React.CSSProperties}>
+        <Stagger as="ul" className="grid grid-cols-2 lg:grid-cols-[repeat(var(--stats),minmax(0,1fr))]" stagger={0.08} amount={0.3}>
           {items.map((s, i) => (
             <RevealItem
               as="li"

@@ -14,11 +14,12 @@ export function CertificateModal({ cert, open, onClose }: { cert: Certificate | 
               <img
                 src={asset(cert.image)}
                 alt={`${cert.title} certificate issued by ${cert.issuer}, ${cert.date}`}
-                width={1600}
-                height={1131}
+                width={cert.width ?? 1600}
+                height={cert.height ?? 1131}
                 loading="lazy"
                 decoding="async"
-                className="mx-auto aspect-[1600/1131] h-auto w-full rounded-lg object-contain"
+                className="mx-auto h-auto max-h-[70svh] w-auto max-w-full rounded-lg object-contain"
+                style={{ aspectRatio: `${cert.width ?? 1600} / ${cert.height ?? 1131}` }}
               />
             </div>
           )}
