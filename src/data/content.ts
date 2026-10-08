@@ -128,8 +128,7 @@ export const person = {
     github: 'https://github.com/Vatsal-Dholakiya',
     githubRepos: 'https://github.com/Vatsal-Dholakiya?tab=repositories',
     stackoverflow: 'https://stackoverflow.com/users/12660050/vatsal-dholakiya',
-    /** FILL IN: e.g. 'https://www.linkedin.com/in/your-name' — hidden everywhere while empty */
-    linkedin: '',
+    linkedin: 'https://www.linkedin.com/in/vatsal-dholakiya-0bba67182',
     cv: '/cv.pdf',
   },
 }
@@ -301,6 +300,8 @@ export const pillars = {
         { name: 'AI & ML fundamentals', full: 'Artificial Intelligence and Machine Learning', usedAt: [masters] },
         { name: 'MATLAB data analysis', full: 'Matrix Laboratory', usedAt: [masters] },
         { name: 'Python', usedAt: [uni] },
+        { name: 'Generative AI', usedAt: ['Learning now'] },
+        { name: 'Ethics of AI', full: 'Responsible and fair use of Artificial Intelligence', usedAt: ['Learning now'] },
       ],
     },
   ] as { id: string; title: string; icon: IconName; tag?: string; promise: string; body: string; skills: Skill[] }[],
@@ -323,11 +324,10 @@ export const story = {
   title: 'How I got here.',
   chapters: [
     {
-      /** FILL IN: the year you started your BSc */
-      year: 'BSc',
+      year: '2017',
       title: 'BSc Information Technology',
-      place: 'Ganpat University, Gujarat, India',
-      text: 'Where it started: my first Android apps, written in Java. Completed 2020.',
+      place: 'Ganpat University, Gujarat, India · 2017 – 2020',
+      text: 'Where it started: Java, Android Studio and the fundamentals of building apps.',
     },
     {
       year: '2019',
@@ -339,13 +339,12 @@ export const story = {
       year: '2020',
       title: 'Android Developer',
       place: 'CodeCreator Technologies, India',
-      text: 'Native apps for small businesses, from first layout to Google Play release.',
+      text: 'Native apps for small businesses, built in a team — from first layout to Google Play release.',
     },
     {
-      /** Your CV says 2023 – 2024; your brief said 2022 – 2023. Confirm and edit here. */
       year: '2022',
       title: 'MSc Cloud Computing',
-      place: 'University of East London',
+      place: 'University of East London · Sep 2022 – Sep 2023',
       text: 'Cloud platforms, security, and the fundamentals of AI and Machine Learning.',
       badge: 'Distinction',
     },
@@ -442,14 +441,13 @@ export const whatIBuild = {
   liveLabel: 'Live site',
   projects: [
     {
-      id: 'android-university',
-      title: 'Android Applications (University)',
-      summary: 'Native Android applications built in Java during my degree, using Firebase for data and authentication.',
-      tags: ['Java', 'XML', 'Android Studio', 'Firebase', 'Google Sign-In'],
+      id: 'android-business-apps',
+      title: 'Android Apps for Small Businesses',
+      summary:
+        'Native Android apps built in a team at CodeCreator Technologies: responsive layouts, REST API integration and Google Play releases. Client projects, so the code is private.',
+      tags: ['Java', 'XML', 'Android Studio', 'Android SDK', 'REST APIs', 'Google Play'],
       github: '',
       live: '',
-      /** FILL IN: one entry per app, e.g. { name: 'App name', description: 'One line.', github: 'https://github.com/...' } */
-      items: [],
     },
     {
       id: 'portfolio',
@@ -579,10 +577,11 @@ export const nextChapter = {
   title: 'Growing into AI.',
   text: 'I am a developer first. AI is what I am learning now — carefully, hands-on, and in public.',
   logTitle: 'Currently learning',
-  /** FILL IN: what you are learning now. Each entry: topic, a short note, and a status. Empty list hides the log. */
+  /** What you are learning now. Each entry: topic, a short note, and a status. Empty list hides the log. */
   log: [
     { topic: 'AI & Machine Learning fundamentals', note: 'Covered during my MSc.', status: 'Studied' },
-    { topic: '[FILL IN] Current topic or course', note: '[FILL IN] One line about what you are doing.', status: 'In progress' },
+    { topic: 'Generative AI', note: 'How generative models work and how to build with them.', status: 'In progress' },
+    { topic: 'Ethics of AI', note: 'Fairness, transparency and responsible use of AI.', status: 'In progress' },
   ],
   /** Screens in the built-in corridor scene */
   behind: ['Android app', 'Desktop automation', 'BUILD SUCCESSFUL'],
@@ -625,7 +624,7 @@ export const terminal = {
     help: 'Commands: whoami, skills, learning, contact, cv, clear',
     whoami: 'Vatsal Dholakiya — Software Developer & Android Developer, London. Currently exploring AI.',
     skills: 'Java · Python · SQL · Android SDK · REST APIs · Selenium · Git · Docker',
-    learning: 'AI and Machine Learning — learning hands-on, one project at a time.',
+    learning: 'Learning now: Generative AI and Ethics of AI — hands-on, one project at a time.',
     contact: 'vatsal.dholakiya2000@gmail.com',
     cv: 'Opening CV…',
   } as Record<string, string>,
