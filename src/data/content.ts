@@ -252,7 +252,7 @@ export const about = {
 const uni = 'University'
 const cc = 'CodeCreator Technologies'
 const freelance = 'Freelance'
-const mtit = 'Made Tech IT'
+const mtit = 'Made Tech IT Ltd'
 const masters = "Master's degree"
 const pf = 'PostFactory'
 
@@ -267,8 +267,8 @@ export const skills = {
       icon: 'code',
       skills: [
         { name: 'Java', usedAt: [uni, cc, freelance, pf] },
-        { name: 'Python', usedAt: [uni] },
-        { name: 'SQL', full: 'Structured Query Language', usedAt: [uni, freelance, pf] },
+        { name: 'Python', usedAt: [mtit, uni] },
+        { name: 'SQL', full: 'Structured Query Language', usedAt: [mtit, uni, freelance, pf] },
         { name: 'PHP', full: 'Hypertext Preprocessor', usedAt: [pf] },
         { name: 'XML', full: 'Extensible Markup Language', usedAt: [uni, cc] },
         { name: 'HTML & CSS', full: 'HyperText Markup Language and Cascading Style Sheets', usedAt: [freelance, pf] },
@@ -281,7 +281,8 @@ export const skills = {
         { name: 'Android SDK', full: 'Android Software Development Kit', usedAt: [uni, cc, pf] },
         { name: 'Android Studio', usedAt: [uni, cc, pf] },
         { name: 'Responsive UI', full: 'User interfaces for many screen sizes and densities', usedAt: [cc, pf] },
-        { name: 'REST APIs', full: 'Representational State Transfer Application Programming Interfaces', usedAt: [cc, freelance] },
+        { name: 'REST APIs', full: 'Representational State Transfer Application Programming Interfaces', usedAt: [mtit, cc, freelance] },
+        { name: 'Google Sign-In', usedAt: [cc, uni] },
         { name: 'Google Play releases', usedAt: [cc] },
       ],
     },
@@ -300,7 +301,7 @@ export const skills = {
       icon: 'database',
       skills: [
         { name: 'MySQL', usedAt: [uni, freelance, pf] },
-        { name: 'PostgreSQL', usedAt: [uni] },
+        { name: 'PostgreSQL', usedAt: [mtit, uni] },
         { name: 'SQLite', usedAt: [uni, freelance] },
         { name: 'Firebase', full: 'Realtime Database and Authentication', usedAt: [uni, freelance] },
       ],
@@ -309,8 +310,8 @@ export const skills = {
       title: 'Tools and practices',
       icon: 'git',
       skills: [
-        { name: 'Git & GitHub', usedAt: [uni, cc, freelance] },
-        { name: 'Docker', usedAt: ['Personal projects'] },
+        { name: 'Git & GitHub', usedAt: [mtit, cc, freelance, uni] },
+        { name: 'Docker', usedAt: [mtit] },
         { name: 'UI/UX design', full: 'User interface and user experience design', usedAt: [pf, 'Great Learning certificate'] },
         { name: 'Requirements gathering', usedAt: [mtit, freelance] },
         { name: 'Testing on real devices', usedAt: [cc, pf] },
@@ -321,7 +322,7 @@ export const skills = {
       icon: 'cloud',
       skills: [
         { name: 'AWS · Azure · GCP', full: 'Amazon Web Services, Microsoft Azure and Google Cloud Platform (academic)', usedAt: [masters] },
-        { name: 'Linux command line', usedAt: [masters, 'Self-taught'] },
+        { name: 'Linux command line', usedAt: [mtit, masters] },
         { name: 'TCP/IP, DNS, HTTP, SSH', full: 'Core networking protocols', usedAt: [masters] },
         { name: 'Wireshark', full: 'Packet capture and analysis', usedAt: ['Ethical Hacking course', masters] },
         { name: 'Nmap', full: 'Network Mapper: network and port scanning', usedAt: ['Ethical Hacking course', masters] },
@@ -364,7 +365,7 @@ export const story = {
     {
       year: '2020',
       title: 'Android Developer',
-      place: 'CodeCreator Technologies, India',
+      place: 'CodeCreator Technologies, India · Aug 2020 – Nov 2022',
       text: 'Native Android apps for small businesses, built in a team, including PostFactory, a business card design app.',
     },
     {
@@ -377,8 +378,8 @@ export const story = {
     {
       year: '2024',
       title: 'Software Developer',
-      place: 'Made Tech IT, London',
-      text: 'Client software from requirements to handover — built properly, explained clearly.',
+      place: 'Made Tech IT Ltd, London · Oct 2024 – present',
+      text: 'Client software in Java and Python with PostgreSQL, REST APIs, Git and Docker, from the business problem to delivery and handover.',
     },
     {
       year: 'Now',
@@ -704,7 +705,7 @@ export const nextChapter = {
   log: [
     { topic: 'AI and machine learning fundamentals', note: 'Covered during my MSc.', status: 'Studied' },
     { topic: 'Generative AI', note: 'How generative models work and how to build with them.', status: 'In progress' },
-    { topic: 'Ethics of AI', note: 'Fairness, transparency and responsible use of AI.', status: 'In progress' },
+    { topic: 'Ethics of AI', note: 'Course: Building and Implementing Ethical AI, Certified Institute for Technology and AI.', status: 'In progress' },
   ],
   /** Screens in the built-in corridor scene */
   behind: ['Android app', 'Desktop automation', 'Build successful'],
