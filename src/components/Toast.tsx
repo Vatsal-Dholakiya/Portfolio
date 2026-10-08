@@ -11,13 +11,13 @@ export function Toast({ show, message }: { show: boolean; message: string }) {
           <m.div
             key="toast"
             role="status"
-            className="flex items-center gap-2 rounded-full border border-border-strong bg-surface-2 px-5 py-3 text-sm font-medium text-text shadow-[0_12px_40px_rgba(5,6,10,0.6)]"
+            className="flex items-center gap-2 rounded-full border border-line-strong bg-graphite px-5 py-3 text-sm font-medium text-bone shadow-[0_12px_40px_rgba(0,0,0,0.6)]"
             initial={{ opacity: 0, y: 24, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 12, scale: 0.97 }}
             transition={{ duration: 0.4, ease: EASE }}
           >
-            <span className="bg-gradient grid h-5 w-5 place-items-center rounded-full text-on-gradient">
+            <span className="bg-gradient grid h-5 w-5 place-items-center rounded-full text-on-accent">
               <Check className="h-3.5 w-3.5" aria-hidden="true" />
             </span>
             {message}

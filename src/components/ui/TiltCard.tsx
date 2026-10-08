@@ -3,7 +3,7 @@ import { m, useMotionValue, useSpring, useTransform } from 'framer-motion'
 import { useIsTouch } from '../../hooks/useIsTouch'
 import { useReducedMotion } from '../../hooks/useReducedMotion'
 
-const MAX_TILT = 8 // degrees
+const MAX_TILT = 6 // degrees
 
 /**
  * Card shell with a 3D tilt toward the cursor and a gradient border glow that follows it.
@@ -60,7 +60,7 @@ export function TiltCard({
   return (
     <m.div
       ref={ref}
-      className={`group relative h-full rounded-2xl bg-border p-px ${className}`}
+      className={`group relative h-full rounded-2xl bg-line p-px ${className}`}
       style={{ rotateX, rotateY, transformPerspective: 1000 }}
     >
       {/* Border glow layer, clipped to the card's rounded rectangle */}
@@ -70,7 +70,7 @@ export function TiltCard({
           style={{ x: glowX, y: glowY, translateX: '-50%', translateY: '-50%', opacity: glowOpacity }}
         />
       </div>
-      <div className={`relative h-full rounded-[calc(1rem-1px)] bg-surface ${innerClassName}`}>{children}</div>
+      <div className={`relative h-full rounded-[calc(1rem-1px)] bg-carbon ${innerClassName}`}>{children}</div>
     </m.div>
   )
 }

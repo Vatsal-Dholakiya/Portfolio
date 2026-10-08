@@ -1,11 +1,14 @@
 import { useEffect, useRef, useState } from 'react'
-import { Briefcase, Check, Copy, Globe2, MapPin, Send } from 'lucide-react'
-import { contact, person } from '../data/content'
-import { linkProps, mailto, present } from '../lib/helpers'
+import { AnimatePresence, m } from 'framer-motion'
+import { Briefcase, Check, Copy, Download, Globe2, MapPin, Send } from 'lucide-react'
+import { asset, contact, films, person } from '../data/content'
+import { EASE } from '../lib/animations'
+import { mailto, prefersReducedMotion } from '../lib/helpers'
 import { Toast } from './Toast'
-import { GitHubIcon, LinkedInIcon, StackOverflowIcon } from './ui/BrandIcons'
 import { Magnetic } from './ui/Magnetic'
 import { Reveal } from './ui/Reveal'
+import { useSplitReveal } from '../hooks/useSplitReveal'
+import { Accented } from './ui/SectionHead'
 
 const preferenceIcons = [MapPin, Globe2, Briefcase]
 
@@ -30,115 +33,144 @@ async function copyText(text: string) {
   }
 }
 
+/** Final call to action: kinetic heading, email with copy, the "compile" button that opens email, CV and preferences. */
 export function Contact() {
   const { links } = person
   const [copied, setCopied] = useState(false)
-  const timer = useRef<number | undefined>(undefined)
-  useEffect(() => () => window.clearTimeout(timer.current), [])
+  const [compiled, setCompiled] = useState(-1)
+  const timers = useRef<number[]>([])
+  const heading = useRef<HTMLHeadingElement>(null)
+  useSplitReveal(heading)
+  useEffect(() => () => timers.current.forEach((t) => window.clearTimeout(t)), [])
+
+  const later = (fn: () => void, ms: number) => timers.current.push(window.setTimeout(fn, ms))
 
   const copy = async () => {
     await copyText(links.email)
     setCopied(true)
-    window.clearTimeout(timer.current)
-    timer.current = window.setTimeout(() => setCopied(false), 2200)
+    later(() => setCopied(false), 2200)
+  }
+
+  const href = mailto(links.email, contact.mailSubject)
+  // A one-second fake build log, then the email opens. The link still works on its own (no JavaScript, modified clicks).
+  const compile = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0 || prefersReducedMotion() || compiled >= 0) return
+    e.preventDefault()
+    contact.compiling.forEach((_, i) => later(() => setCompiled(i), i * 380))
+    later(() => {
+      window.location.href = href
+    }, contact.compiling.length * 380)
+    later(() => setCompiled(-1), contact.compiling.length * 380 + 2000)
   }
 
   const [user, domain] = links.email.split('@')
-  const socials = present([
-    { label: 'GitHub', href: links.github, icon: <GitHubIcon className="h-4 w-4" /> },
-    { label: 'Stack Overflow', href: links.stackoverflow, icon: <StackOverflowIcon className="h-4 w-4" /> },
-    { label: 'LinkedIn', href: links.linkedin, icon: <LinkedInIcon className="h-4 w-4" /> },
-  ])
+  const backdrop = films.nextChapter.poster
 
   return (
-    <section id="contact" aria-labelledby="contact-title" tabIndex={-1} className="section-y relative outline-none">
-      <div className="container-x">
-        <Reveal className="relative overflow-hidden rounded-[1.75rem] border border-border bg-surface px-5 py-14 sm:px-10 md:px-14 md:py-16">
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute -top-32 -left-24 h-80 w-80 rounded-full bg-[radial-gradient(circle,rgba(124,92,255,0.28),transparent_70%)]"
-          />
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute -right-20 -bottom-32 h-80 w-80 rounded-full bg-[radial-gradient(circle,rgba(34,211,238,0.16),transparent_70%)]"
-          />
+    <section id="contact" aria-labelledby="contact-title" tabIndex={-1} className="relative overflow-hidden outline-none">
+      {/* Background: the last frame of The Next Chapter, or an ember glow until it exists */}
+      <div aria-hidden="true" className="absolute inset-0">
+        {backdrop ? (
+          <img src={asset(backdrop)} alt="" loading="lazy" decoding="async" className="h-full w-full object-cover opacity-35" />
+        ) : (
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_75%_30%,rgba(255,138,61,0.10),transparent_70%),radial-gradient(ellipse_50%_50%_at_15%_80%,rgba(46,230,166,0.08),transparent_70%)]" />
+        )}
+        <div className="absolute inset-0 bg-gradient-to-b from-void via-void/60 to-void" />
+      </div>
 
-          <div className="relative grid gap-12 lg:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)] lg:gap-14">
-            <div className="min-w-0">
-              <p className="mono-label">07. {contact.kicker}</p>
-              <h2 id="contact-title" className="mt-3 max-w-3xl text-[clamp(2.25rem,5.5vw,3.75rem)] leading-[1.05] font-bold text-text">
-                {contact.heading}
-              </h2>
-              <p className="mt-5 text-lg text-body">{contact.line}</p>
+      <div className="container-x section-y relative">
+        <p className="label mb-8 flex items-center gap-3">
+          <span className="text-emerald">08</span>
+          <span className="h-px w-8 bg-line-strong" aria-hidden="true" />
+          {contact.label}
+        </p>
+        <h2
+          ref={heading}
+          id="contact-title"
+          className="max-w-[12ch] text-[clamp(3.25rem,11vw,10rem)] leading-[0.88] font-extrabold tracking-[-0.055em]"
+        >
+          <Accented text={contact.heading} words={[contact.accentWord]} />
+        </h2>
 
-              <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center">
-                <a
-                  href={mailto(links.email)}
-                  className="text-gradient w-fit min-w-0 font-display text-[clamp(1.125rem,4.4vw,2.25rem)] leading-tight font-bold"
-                >
-                  {/* Allow a line break only before the @ on narrow screens */}
-                  {user}
-                  <wbr />@{domain}
-                </a>
-                <button
-                  type="button"
-                  onClick={copy}
-                  aria-label={contact.copyAria}
-                  className="btn btn-outline min-h-11 w-fit px-4 py-2.5 font-sans text-[0.9375rem] font-medium"
-                >
-                  {copied ? <Check className="h-4 w-4 text-accent" aria-hidden="true" /> : <Copy className="h-4 w-4" aria-hidden="true" />}
-                  {copied ? contact.copied : contact.copy}
-                </button>
-              </div>
+        <div className="mt-14 grid gap-12 lg:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)] lg:gap-16">
+          <Reveal className="min-w-0">
+            <p className="max-w-2xl text-lg text-mist md:text-xl">{contact.line}</p>
 
-              {socials.length > 0 && (
-                <ul className="mt-8 flex flex-wrap gap-3" aria-label="Profiles">
-                  {socials.map((s) => (
-                    <li key={s.label}>
-                      <a
-                        href={s.href}
-                        {...linkProps(s.href)}
-                        className="inline-flex items-center gap-2 rounded-xl border border-border bg-surface-2 px-4 py-2.5 text-sm font-medium text-text transition-colors hover:border-primary-soft"
-                      >
-                        <span className="text-primary-soft">{s.icon}</span>
-                        {s.label}
-                        <span className="sr-only">(opens in a new tab)</span>
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              )}
-
-              <div className="mt-10">
-                <Magnetic>
-                  <a href={mailto(links.email, contact.mailSubject)} className="btn btn-primary">
-                    <Send className="h-5 w-5" aria-hidden="true" />
-                    {contact.sayHello}
-                  </a>
-                </Magnetic>
-              </div>
+            <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center">
+              <a
+                href={mailto(links.email)}
+                className="w-fit min-w-0 font-display text-[clamp(1.25rem,4.6vw,2.5rem)] leading-tight font-semibold tracking-[-0.03em] text-bone underline decoration-emerald/40 decoration-1 underline-offset-[0.2em] transition-colors hover:text-emerald"
+                data-cursor="Write"
+              >
+                {/* Allow a line break only before the @ on narrow screens */}
+                {user}
+                <wbr />@{domain}
+              </a>
+              <button
+                type="button"
+                onClick={copy}
+                aria-label={contact.copyAria}
+                className="btn btn-ghost min-h-11 w-fit px-4 py-2.5 text-[0.9375rem]"
+                data-cursor="Copy"
+              >
+                {copied ? <Check className="h-4 w-4 text-emerald" aria-hidden="true" /> : <Copy className="h-4 w-4" aria-hidden="true" />}
+                {copied ? contact.copied : contact.copy}
+              </button>
             </div>
 
-            <aside className="min-w-0 self-start rounded-2xl border border-border bg-bg/60 p-6 sm:p-7" aria-labelledby="prefs-title">
-              <h3 id="prefs-title" className="font-display text-lg font-semibold text-text">
-                {contact.preferencesTitle}
-              </h3>
-              <ul className="mt-5 space-y-4">
-                {contact.preferences.map((pref, i) => {
-                  const Icon = preferenceIcons[i] ?? Briefcase
-                  return (
-                    <li key={pref} className="flex items-center gap-3 text-[0.9375rem] text-body">
-                      <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg border border-border bg-surface-2 text-primary-soft">
-                        <Icon className="h-4 w-4" aria-hidden="true" />
-                      </span>
-                      {pref}
-                    </li>
-                  )
-                })}
-              </ul>
-            </aside>
-          </div>
-        </Reveal>
+            <div className="mt-10 flex flex-wrap items-center gap-3">
+              <Magnetic>
+                <a href={href} onClick={compile} className="btn btn-primary" data-cursor="Send">
+                  <Send className="h-5 w-5" aria-hidden="true" />
+                  {contact.cta}
+                </a>
+              </Magnetic>
+              <Magnetic>
+                <a href={asset(links.cv)} download className="btn btn-ghost" data-cursor="Save">
+                  <Download className="h-5 w-5" aria-hidden="true" />
+                  {contact.cvLabel}
+                </a>
+              </Magnetic>
+            </div>
+
+            {/* Compile log */}
+            <div aria-live="polite" className="mt-5 min-h-[4.5rem] font-mono text-sm">
+              <AnimatePresence>
+                {compiled >= 0 &&
+                  contact.compiling.slice(0, compiled + 1).map((line) => (
+                    <m.p
+                      key={line}
+                      className="flex items-center gap-2 text-emerald"
+                      initial={{ opacity: 0, x: -8 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.25, ease: EASE }}
+                    >
+                      <Check className="h-3.5 w-3.5" aria-hidden="true" />
+                      {line}
+                    </m.p>
+                  ))}
+              </AnimatePresence>
+            </div>
+          </Reveal>
+
+          <Reveal as="article" className="card min-w-0 self-start p-6 sm:p-7" delay={0.1}>
+            <h3 className="label text-mist">{contact.preferencesTitle}</h3>
+            <ul className="mt-5 space-y-4">
+              {contact.preferences.map((pref, i) => {
+                const Icon = preferenceIcons[i] ?? Briefcase
+                return (
+                  <li key={pref} className="flex items-center gap-3 text-[0.9375rem] text-mist">
+                    <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg border border-line bg-graphite text-emerald">
+                      <Icon className="h-4 w-4" aria-hidden="true" />
+                    </span>
+                    {pref}
+                  </li>
+                )
+              })}
+            </ul>
+          </Reveal>
+        </div>
       </div>
       <Toast show={copied} message={contact.copied} />
     </section>

@@ -1,21 +1,22 @@
 /**
  * ============================================================================
- *  ALL SITE CONTENT LIVES IN THIS FILE.
+ *  ALL SITE CONTENT LIVES IN THIS FILE  (v4 — cinematic edition)
  * ============================================================================
- *  Edit text, links, dates, skills, projects and certificates here only.
+ *  Edit text, links, dates, skills, projects, certificates and films here only.
  *  Components read everything from this file; nothing is hard-coded in them.
  *
  *  Rules
- *  - Leave any optional field as '' (empty string) to hide it on the site.
- *    Example: linkedin: '' hides every LinkedIn icon and link.
+ *  - Leave any optional field as '' (or an empty list) to hide it on the site.
  *  - Paths that start with "/" point to files in the public/ folder.
  *  - Items marked  FILL IN  are still waiting for your details.
+ *  - AI is described only as a learning focus and future direction.
  * ============================================================================
  */
 
 /* ------------------------------------------------------------------ Types */
 
-export type IconName = 'android' | 'monitor' | 'code' | 'database' | 'git' | 'cloud' | 'brain' | 'shield' | 'cpu' | 'smartphone' | 'palette'
+export type IconName =
+  'android' | 'monitor' | 'code' | 'database' | 'git' | 'cloud' | 'brain' | 'shield' | 'smartphone' | 'palette' | 'workflow' | 'terminal'
 
 export interface Skill {
   name: string
@@ -25,25 +26,23 @@ export interface Skill {
   usedAt: string[]
 }
 
-export interface SkillCategory {
-  title: string
-  icon: IconName
-  /** Optional small label on the card, e.g. "Academic" */
-  label?: string
-  skills: Skill[]
+export interface Stat {
+  /** Numeric value counts up; use `text` for non-numeric values */
+  value?: number
+  prefix?: string
+  suffix?: string
+  label: string
+  /** 'stackoverflow-reputation' is replaced by the live value from the Stack Exchange API */
+  live?: 'stackoverflow-reputation'
 }
 
-export interface Role {
+export interface Chapter {
+  year: string
   title: string
-  company: string
-  location: string
-  /** Leave '' to hide the dates for this role */
-  period: string
-  current?: boolean
-  points: string[]
-  tags: string[]
-  /** Optional in-page link to a project, e.g. { label: 'See project', projectId: 'whatsapp-suite' } */
-  projectLink?: { label: string; projectId: string }
+  place: string
+  text: string
+  /** Optional highlighted badge, e.g. 'Distinction' */
+  badge?: string
 }
 
 export interface Project {
@@ -55,10 +54,6 @@ export interface Project {
   github: string
   /** Leave '' to hide */
   live: string
-  /** Shown instead of a code link, e.g. for client work */
-  privateLabel?: string
-  /** Bullet list shown in the expandable "Key Features" panel (featured project) */
-  features?: string[]
   /** Optional list of sub-items, e.g. individual university apps */
   items?: { name: string; description: string; github: string }[]
 }
@@ -72,17 +67,6 @@ export interface Certificate {
   image: string
   /** Credential URL; leave '' to hide the "View Credential" button */
   credential: string
-}
-
-export interface Degree {
-  degree: string
-  school: string
-  location: string
-  /** Leave '' to hide */
-  years: string
-  /** Shown as a gradient badge; leave '' to hide */
-  award: string
-  modules: string[]
 }
 
 export interface Repo {
@@ -101,6 +85,20 @@ export interface StackOverflowStats {
   bronze: number
 }
 
+/** A generated film. Leave `src` as '' to use the built-in animated code scene instead. */
+export interface Film {
+  /** MP4 (H.264) path, e.g. '/media/v1-orbit.mp4' */
+  src: string
+  /** Optional WebM version */
+  webm: string
+  /** Optional smaller version for phones */
+  mobileSrc: string
+  /** First-frame image shown before the video loads */
+  poster: string
+  /** Describes the film for screen readers */
+  alt: string
+}
+
 /* ------------------------------------------------------------------ Site */
 
 export const site = {
@@ -109,7 +107,7 @@ export const site = {
   url: '',
   title: 'Vatsal Dholakiya — Software Developer & Android Developer',
   description:
-    'Vatsal Dholakiya is a London-based Software Developer and Android Developer with an MSc in Cloud Computing (Distinction), building software that automates real business work.',
+    'Vatsal Dholakiya is a London-based Software Developer and Android Developer who builds software that does real work, and is currently exploring Artificial Intelligence.',
   ogImage: '/og-image.png',
   ogImageAlt: 'Vatsal Dholakiya, Software Developer and Android Developer',
   locale: 'en_GB',
@@ -122,7 +120,9 @@ export const person = {
   lastName: 'Dholakiya',
   initials: 'VD',
   jobTitle: 'Software Developer',
+  roleLine: 'Software Developer · Android Developer · Exploring AI',
   location: 'London, United Kingdom',
+  timeZone: 'Europe/London',
   links: {
     email: 'vatsal.dholakiya2000@gmail.com',
     github: 'https://github.com/Vatsal-Dholakiya',
@@ -138,79 +138,109 @@ export const person = {
 
 export const nav = {
   links: [
-    { id: 'about', label: 'About' },
-    { id: 'skills', label: 'Skills' },
-    { id: 'experience', label: 'Experience' },
-    { id: 'projects', label: 'Projects' },
-    { id: 'certifications', label: 'Certifications' },
-    { id: 'education', label: 'Education' },
+    { id: 'work', label: 'Work' },
+    { id: 'story', label: 'Story' },
+    { id: 'pillars', label: 'Skills' },
+    { id: 'next', label: 'Learning' },
     { id: 'contact', label: 'Contact' },
   ],
-  resumeLabel: 'Resume',
+  resumeLabel: 'Résumé',
   openMenu: 'Open menu',
   closeMenu: 'Close menu',
   menuLabel: 'Menu',
   homeLabel: 'Vatsal Dholakiya, back to top',
   skipLink: 'Skip to content',
+  progressLabel: 'Page progress',
+}
+
+/* ------------------------------------------------------------------ Films */
+
+export const films: Record<'orbit' | 'developer' | 'nextChapter' | 'showcase', Film> = {
+  /** V1 Hero Orbit — loops behind the hero */
+  orbit: {
+    src: '',
+    webm: '',
+    mobileSrc: '',
+    poster: '',
+    alt: 'Vatsal standing in a dark studio lit by emerald light as the camera circles him.',
+  },
+  /** V2 The Developer — scrubbed by scroll */
+  developer: {
+    src: '',
+    webm: '',
+    mobileSrc: '',
+    poster: '',
+    alt: 'Vatsal working at a desk at night, surrounded by floating screens of code, Android Studio and app interfaces.',
+  },
+  /** V3 The Next Chapter — scrubbed by scroll */
+  nextChapter: {
+    src: '',
+    webm: '',
+    mobileSrc: '',
+    poster: '',
+    alt: 'Vatsal walking down a dark corridor of screens: apps and code behind him, AI visuals ahead.',
+  },
+  /** V4 Project Showcase — scrubbed by scroll */
+  showcase: {
+    src: '',
+    webm: '',
+    mobileSrc: '',
+    poster: '',
+    alt: 'A smartphone lifts from a desk as code streams in and an Android app assembles and launches.',
+  },
 }
 
 /* ------------------------------------------------------------------ Hero */
 
 export const hero = {
-  greeting: 'Hi, my name is',
-  roles: ['Software Developer', 'Android Developer', 'Cloud & AI Enthusiast'],
-  intro:
-    "I build Android applications and desktop software that automate real business work, and I'm now growing my skills in Artificial Intelligence and Machine Learning.",
-  primaryCta: 'View My Work',
+  buildLabel: '// building the portfolio',
+  scrollHint: 'Scroll to build',
+  skipIntro: 'Skip intro',
+  buildDone: 'build succeeded',
+  kicker: 'Software Developer · Android Developer · London',
+  line: "I build software and Android apps that do real work — and I'm learning AI to build what comes next.",
+  primaryCta: 'See my work',
   secondaryCta: 'Download CV',
   availability: 'Open to opportunities',
-  scrollLabel: 'Scroll to About',
+  scrollCue: 'Scroll to explore',
+  /** Text shown inside the pieces dragged onto the laptop screen */
+  pieces: {
+    code: ['public class Developer {', '  String focus = "Android";', '  void build() { ship(); }', '}'],
+    button: 'Ship it',
+    stat: { value: '~90%', label: 'messaging automated' },
+    skills: ['Java', 'Android', 'SQL', 'Git'],
+    chat: { title: 'AI · learning', question: 'What should I learn next?', answer: 'Model basics → small projects.' },
+    appTitle: 'Orders',
+  },
 }
 
-/* ----------------------------------------------------------------- About */
+/* ----------------------------------------------------------------- Stats */
 
-export const about = {
-  title: 'About me',
-  paragraphs: [
-    "I'm a London-based Software Developer with a Master of Science in Cloud Computing, awarded with Distinction by the University of East London, and a Bachelor of Science in Information Technology from Ganpat University, Gujarat, India.",
-    'My path into software began with Android development in Java during my degree, which led to building production Android applications for small businesses at CodeCreator Technologies. As a freelancer, I designed and delivered a WhatsApp bulk-messaging and customer-engagement desktop application for small retailers such as jewellery shops, automating around 90% of their manual messaging.',
-    'Today I work as a Software Developer at Made Tech IT, building software for clients and guiding them from requirements through delivery and handover. Beyond development, I work hands-on with Linux, networking protocols and security tools, and I contribute to Stack Overflow by answering Android and Java questions.',
-  ],
-  /** Profile photo in public/; if it fails to load, a "VD" avatar is shown instead */
-  photo: '/profile.webp',
-  /** Optional smaller copies of the photo for phones (file path + pixel width); leave [] if you only have one size */
-  photoSizes: [
-    { src: '/profile-360.webp', width: 360 },
-    { src: '/profile-480.webp', width: 480 },
-    { src: '/profile.webp', width: 676 },
-  ] as { src: string; width: number }[],
-  photoAlt: 'Portrait of Vatsal Dholakiya',
-  stats: [
-    { value: 4, suffix: '+', label: 'Years Experience' },
-    { text: 'MSc', label: 'with Distinction' },
-    { value: 4, suffix: '+', label: 'Certifications' },
-  ] as { value?: number; suffix?: string; text?: string; label: string }[],
-  interestsTitle: 'Interests & Career Focus',
-  interests: [
-    {
-      icon: 'brain',
-      title: 'Artificial Intelligence & Machine Learning',
-      text: 'Actively learning, with the goal of building my career in AI.',
-    },
-    {
-      icon: 'smartphone',
-      title: 'Software & Android Development',
-      text: 'Open to software development, application development and Android roles.',
-    },
-    {
-      icon: 'shield',
-      title: 'Cloud & Security',
-      text: 'Interested in cloud platforms, networking and system security.',
-    },
-  ] as { icon: IconName; title: string; text: string }[],
+export const stats = {
+  label: 'In numbers',
+  items: [
+    { value: 4, suffix: '+', label: 'Years building software' },
+    { value: 90, prefix: '~', suffix: '%', label: 'Manual messaging automated for a client' },
+    { value: 5, label: 'Certifications' },
+    { value: 563, label: 'Stack Overflow reputation', live: 'stackoverflow-reputation' },
+    { value: 47, label: 'Stack Overflow answers' },
+    /** FILL IN: number of Android apps you shipped to Google Play — hidden while value is undefined */
+    { label: 'Android apps on Google Play' },
+  ] as Stat[],
 }
 
-/* ---------------------------------------------------------------- Skills */
+/* --------------------------------------------------------------- Mission */
+
+export const mission = {
+  label: 'Mission',
+  statement:
+    'Good software disappears into the work it does. I build the kind people stop noticing — because it just works. And I am learning AI to make the next thing smarter.',
+  /** Words rendered in the serif italic accent */
+  accentWords: ['disappears', 'works.', 'smarter.'],
+  support: 'Based in London. Building since 2019. Currently exploring AI and Machine Learning.',
+}
+
+/* --------------------------------------------------------------- Pillars */
 
 const uni = 'University'
 const cc = 'CodeCreator Technologies'
@@ -218,196 +248,199 @@ const freelance = 'Freelance'
 const mtit = 'Made Tech IT'
 const masters = "Master's degree"
 
-export const skills = {
-  title: 'Skills',
-  hint: 'Hover or tap a skill to see where I used it.',
+export const pillars = {
+  label: 'What I do',
+  title: 'Three things, done properly.',
   usedAtLabel: 'Used at',
-  categories: [
+  hint: 'Hover or tap a skill to see where I used it.',
+  items: [
     {
+      id: 'software',
+      title: 'Software Development',
+      icon: 'monitor',
+      promise: 'Software that removes busywork.',
+      body: 'Desktop and business software built from real requirements, then delivered and handed over properly.',
+      skills: [
+        { name: 'Java', usedAt: [uni, cc, freelance] },
+        { name: 'Python', usedAt: [uni] },
+        { name: 'SQL', full: 'Structured Query Language', usedAt: [uni, freelance] },
+        { name: 'PostgreSQL', usedAt: [uni, freelance] },
+        { name: 'MySQL', usedAt: [uni, freelance] },
+        { name: 'SQLite', usedAt: [uni, freelance] },
+        { name: 'Selenium automation', usedAt: [freelance] },
+        { name: 'Git & GitHub', usedAt: [uni, cc, freelance] },
+        { name: 'Docker', usedAt: ['Projects'] },
+        { name: 'Requirements gathering', usedAt: [mtit] },
+      ],
+    },
+    {
+      id: 'android',
       title: 'Android Development',
       icon: 'android',
+      promise: 'Native apps, shipped to real users.',
+      body: 'Native Android apps in Java and XML for small businesses, connected to REST APIs and released on Google Play.',
       skills: [
         { name: 'Java', usedAt: [uni, cc] },
         { name: 'XML layouts', full: 'Extensible Markup Language', usedAt: [uni, cc] },
-        { name: 'Android Studio', usedAt: [uni, cc] },
         { name: 'Android SDK', full: 'Software Development Kit', usedAt: [uni, cc] },
+        { name: 'Android Studio', usedAt: [uni, cc] },
         { name: 'Responsive UI', full: 'User Interface design for multiple screen sizes and densities', usedAt: [cc] },
         { name: 'Firebase', full: 'Realtime Database and Authentication', usedAt: [uni] },
-        { name: 'Google Sign-In', usedAt: [uni] },
-        { name: 'REST API integration', full: 'Representational State Transfer Application Programming Interface', usedAt: [cc] },
-        { name: 'Google Play Store releases', usedAt: [cc] },
+        { name: 'REST APIs', full: 'Representational State Transfer Application Programming Interfaces', usedAt: [cc] },
+        { name: 'Google Play releases', usedAt: [cc] },
       ],
     },
     {
-      title: 'Desktop & Software Development',
-      icon: 'monitor',
-      skills: [
-        { name: 'Java desktop applications', full: 'NetBeans and Eclipse', usedAt: [freelance] },
-        { name: 'Selenium automation', usedAt: [freelance] },
-        { name: 'Excel data import & processing', usedAt: [freelance] },
-        { name: 'Requirements gathering', usedAt: [mtit] },
-        { name: 'Solution guidance & handover', usedAt: [mtit] },
-      ],
-    },
-    {
-      title: 'Programming & Web',
-      icon: 'code',
-      skills: [
-        { name: 'Java', usedAt: [uni] },
-        { name: 'Python', usedAt: [uni] },
-        { name: 'HTML', full: 'HyperText Markup Language', usedAt: [uni] },
-        { name: 'CSS', full: 'Cascading Style Sheets', usedAt: [uni] },
-        { name: 'Web design', usedAt: [uni] },
-        { name: 'Web development', usedAt: [uni] },
-        { name: 'MATLAB', full: 'Matrix Laboratory', usedAt: [masters] },
-      ],
-    },
-    {
-      title: 'Databases',
-      icon: 'database',
-      skills: [
-        { name: 'SQLite', usedAt: [uni, freelance] },
-        { name: 'MySQL', usedAt: [uni, freelance] },
-        { name: 'SQL', full: 'Structured Query Language', usedAt: [uni, freelance] },
-        { name: 'Firebase Realtime Database', usedAt: [uni, freelance] },
-        { name: 'PostgreSQL', usedAt: [uni, freelance] },
-      ],
-    },
-    {
-      title: 'Engineering Practices',
-      icon: 'git',
-      skills: [
-        { name: 'Git & GitHub', usedAt: [uni, cc, freelance] },
-        { name: 'Debugging & error resolution', usedAt: [uni, cc, freelance] },
-        { name: 'Team collaboration', usedAt: [uni, cc, freelance] },
-        { name: 'Docker', usedAt: ['Projects'] },
-      ],
-    },
-    {
-      title: 'Cloud Computing',
-      icon: 'cloud',
-      label: 'Academic',
-      skills: [
-        { name: 'Amazon Web Services', usedAt: [masters] },
-        { name: 'Microsoft Azure', usedAt: [masters] },
-        { name: 'Google Cloud Platform', usedAt: [masters] },
-        { name: 'Cloud architecture', usedAt: [masters] },
-        { name: 'Cloud security concepts', usedAt: [masters] },
-      ],
-    },
-    {
-      title: 'Artificial Intelligence & Machine Learning',
+      id: 'ai',
+      title: 'Learning AI',
       icon: 'brain',
-      label: 'Academic / Learning',
+      tag: 'In progress',
+      promise: "Where I'm heading.",
+      body: 'I studied AI and Machine Learning fundamentals during my MSc, and I am now learning hands-on, one small project at a time.',
       skills: [
         { name: 'AI & ML fundamentals', full: 'Artificial Intelligence and Machine Learning', usedAt: [masters] },
-        { name: 'MATLAB data analysis & modelling', full: 'Matrix Laboratory', usedAt: [masters] },
+        { name: 'MATLAB data analysis', full: 'Matrix Laboratory', usedAt: [masters] },
+        { name: 'Python', usedAt: [uni] },
       ],
     },
-    {
-      title: 'Networking & Security',
-      icon: 'shield',
-      skills: [
-        { name: 'Linux command line', usedAt: ['Self-taught', masters] },
-        { name: 'Windows Command Prompt', usedAt: ['Self-taught', masters] },
-        { name: 'Wireshark', full: 'Packet capture and analysis', usedAt: ['Ethical Hacking course', masters] },
-        { name: 'Nmap', full: 'Network Mapper: network and port scanning', usedAt: ['Ethical Hacking course', masters] },
-        { name: 'TCP/IP', full: 'Transmission Control Protocol / Internet Protocol', usedAt: [] },
-        { name: 'UDP', full: 'User Datagram Protocol', usedAt: [] },
-        { name: 'DHCP', full: 'Dynamic Host Configuration Protocol', usedAt: [] },
-        { name: 'DNS', full: 'Domain Name System', usedAt: [] },
-        { name: 'HTTP/HTTPS', full: 'HyperText Transfer Protocol / Secure', usedAt: [] },
-        { name: 'FTP', full: 'File Transfer Protocol', usedAt: [] },
-        { name: 'SSH', full: 'Secure Shell', usedAt: [] },
-        { name: 'ARP', full: 'Address Resolution Protocol', usedAt: [] },
-        { name: 'ICMP', full: 'Internet Control Message Protocol', usedAt: [] },
-        { name: 'VMware', usedAt: ['Coursework', 'Personal projects'] },
-        { name: 'VirtualBox', usedAt: ['Coursework', 'Personal projects'] },
-        { name: 'Windows Server', usedAt: ['Coursework', 'Personal projects'] },
-        { name: 'Active Directory', usedAt: ['Coursework', 'Personal projects'] },
-      ],
-    },
-  ] satisfies SkillCategory[] as SkillCategory[],
+  ] as { id: string; title: string; icon: IconName; tag?: string; promise: string; body: string; skills: Skill[] }[],
+  alsoTitle: 'Also comfortable with',
+  also: [
+    { name: 'Linux command line', usedAt: ['Self-taught', masters] },
+    { name: 'Wireshark', full: 'Packet capture and analysis', usedAt: ['Ethical Hacking course', masters] },
+    { name: 'Nmap', full: 'Network Mapper: network and port scanning', usedAt: ['Ethical Hacking course', masters] },
+    { name: 'TCP/IP, DNS, HTTP/HTTPS, SSH', full: 'Core networking protocols', usedAt: [masters] },
+    { name: 'AWS · Azure · GCP', full: 'Amazon Web Services, Microsoft Azure, Google Cloud Platform (academic)', usedAt: [masters] },
+    { name: 'VMware · VirtualBox', usedAt: ['Coursework', 'Personal projects'] },
+    { name: 'Windows Server · Active Directory', usedAt: ['Coursework', 'Personal projects'] },
+  ] as Skill[],
 }
 
-/* ------------------------------------------------------------ Experience */
+/* ----------------------------------------------------------------- Story */
 
-export const experience = {
-  title: 'Experience',
-  roles: [
+export const story = {
+  label: 'Story',
+  title: 'How I got here.',
+  chapters: [
     {
-      title: 'Software Developer',
-      company: 'Made Tech IT',
-      location: 'London, United Kingdom',
-      period: 'Oct 2024 – Present',
-      current: true,
-      points: [
-        'Design and develop software solutions tailored to each client’s business needs.',
-        'Consult with clients to gather requirements and recommend the most suitable technical approach.',
-        'Guide clients through delivery, handover and knowledge transfer so they can confidently use and maintain their solutions.',
-      ],
-      tags: ['Requirements gathering', 'Solution design', 'Client handover'],
+      /** FILL IN: the year you started your BSc */
+      year: 'BSc',
+      title: 'BSc Information Technology',
+      place: 'Ganpat University, Gujarat, India',
+      text: 'Where it started: my first Android apps, written in Java. Completed 2020.',
     },
     {
-      title: 'Android Developer',
-      company: 'CodeCreator Technologies',
-      location: 'India',
-      period: 'Aug 2020 – Nov 2022',
-      points: [
-        'Developed native Android applications in Java and XML for jewellery retailers and other small businesses.',
-        'Designed responsive interfaces that adapt across screen sizes and device densities.',
-        'Integrated REST APIs and managed Google Play Store releases end to end.',
-        'Collaborated with the development team on feature delivery, debugging and releases.',
-      ],
-      tags: ['Java', 'XML', 'Android SDK', 'REST APIs', 'Google Play'],
-    },
-    {
+      year: '2019',
       title: 'Freelance Software Developer',
-      company: 'Self-employed',
-      location: 'India',
-      /** Dates hidden on request; restore with 'Mar 2019 – Jun 2021' */
-      period: '',
-      points: [
-        'Designed and built a WhatsApp bulk-messaging and customer-engagement desktop application for a product company serving small businesses.',
-      ],
-      tags: ['Java', 'NetBeans', 'Selenium', 'SQLite', 'MySQL', 'Firebase'],
-      projectLink: { label: 'See project', projectId: 'whatsapp-suite' },
+      place: 'Self-employed, India',
+      text: 'A WhatsApp automation tool for small retailers — around 90% of their manual messaging, gone.',
     },
-  ] satisfies Role[] as Role[],
-  currentLabel: 'Current',
+    {
+      year: '2020',
+      title: 'Android Developer',
+      place: 'CodeCreator Technologies, India',
+      text: 'Native apps for small businesses, from first layout to Google Play release.',
+    },
+    {
+      /** Your CV says 2023 – 2024; your brief said 2022 – 2023. Confirm and edit here. */
+      year: '2022',
+      title: 'MSc Cloud Computing',
+      place: 'University of East London',
+      text: 'Cloud platforms, security, and the fundamentals of AI and Machine Learning.',
+      badge: 'Distinction',
+    },
+    {
+      year: '2024',
+      title: 'Software Developer',
+      place: 'Made Tech IT, London',
+      text: 'Client software from requirements to handover — built properly, explained clearly.',
+    },
+    {
+      year: 'Now',
+      title: 'Learning AI',
+      place: 'Ongoing',
+      text: 'Exploring AI and Machine Learning, one honest project at a time.',
+    },
+  ] as Chapter[],
+  certificatesTitle: 'Certificates',
+  viewCredential: 'View Credential',
+  viewCertificate: 'View certificate',
+  close: 'Close',
+  /** Add a certificate by adding one entry here (and its image in public/certificates/) */
+  certificates: [
+    {
+      title: 'Ethical Hacking',
+      issuer: 'Great Learning Academy',
+      date: 'February 2022',
+      icon: 'shield',
+      image: '/certificates/ethical-hacking.webp',
+      credential: 'https://www.mygreatlearning.com/certificate/PEBXWXBY',
+    },
+    {
+      title: 'Cloud Foundations',
+      issuer: 'Great Learning Academy',
+      date: 'July 2020',
+      icon: 'cloud',
+      image: '/certificates/cloud-foundations.webp',
+      credential: 'https://www.mygreatlearning.com/certificate/HFFENWXA',
+    },
+    {
+      title: 'Object-Oriented Programming in Java',
+      issuer: 'Great Learning Academy',
+      date: 'July 2021',
+      icon: 'code',
+      image: '/certificates/oop-java.webp',
+      credential: 'https://www.mygreatlearning.com/certificate/HKOQRUKS',
+    },
+    {
+      title: 'GitHub Tutorial for Beginners',
+      issuer: 'Great Learning Academy',
+      date: 'July 2021',
+      icon: 'git',
+      image: '/certificates/github.webp',
+      credential: 'https://www.mygreatlearning.com/certificate/YNTHADPU',
+    },
+    {
+      title: 'Introduction to UI/UX Design',
+      issuer: 'Great Learning Academy',
+      date: 'July 2021',
+      icon: 'palette',
+      image: '/certificates/ui-ux.webp',
+      credential: 'https://www.mygreatlearning.com/certificate/XUMTKXBL',
+    },
+  ] as Certificate[],
 }
 
-/* -------------------------------------------------------------- Projects */
+/* ------------------------------------------------------ Developer (film) */
 
-export const projects = {
-  title: 'Projects',
-  featuredLabel: 'Featured project',
-  featuresLabel: 'Key Features',
-  showFeatures: 'Show key features',
-  hideFeatures: 'Hide key features',
+export const developer = {
+  label: 'The Developer',
+  title: 'Night shift. Real work.',
+  text: 'Code editors, Android Studio, APIs, a terminal compiling — and a couple of screens for what I am learning next.',
+  /** Labels on the floating screens of the built-in animated scene */
+  panels: {
+    editor: 'MainActivity.java',
+    studio: 'Android Studio',
+    terminal: 'terminal',
+    api: 'GET /api/orders',
+    ai: ['learning / neural-networks', 'learning / loss-curve'],
+  },
+}
+
+/* --------------------------------------------------------- What I build */
+
+export const whatIBuild = {
+  label: 'Projects',
+  title: 'What I build.',
+  showcaseCaption: 'Code in. App out.',
+  capabilities: [
+    { icon: 'workflow', title: 'Business automation software', text: 'Desktop tools that take repetitive work off people’s plates.' },
+    { icon: 'smartphone', title: 'Native Android apps', text: 'Responsive, API-connected and ready for Google Play.' },
+    { icon: 'terminal', title: 'Client software, end to end', text: 'Requirements, build, testing and a proper handover.' },
+  ] as { icon: IconName; title: string; text: string }[],
   sourceLabel: 'Source code',
   liveLabel: 'Live site',
-  featured: {
-    id: 'whatsapp-suite',
-    title: 'WhatsApp Business Automation Suite',
-    summary:
-      'A desktop application that lets small businesses such as jewellery shops reach thousands of customers in a single campaign, automating around 90% of their manual messaging work.',
-    tags: ['Java', 'NetBeans', 'Selenium', 'SQLite', 'MySQL', 'Firebase', 'XML', 'HTML'],
-    github: '',
-    live: '',
-    privateLabel: 'Private client project',
-    features: [
-      'Bulk messaging to thousands of contacts in a single campaign.',
-      'Contact import directly from Excel files.',
-      'Group Grabber: extracts contacts from WhatsApp groups.',
-      'Number Filter: verifies which numbers are registered on WhatsApp and removes invalid ones before sending.',
-      'Personalised messages that address each customer by name.',
-      'Automated birthday and anniversary messages, including occasion-based discount offers, sent alongside regular campaigns without interrupting them.',
-      'Local storage in SQLite, synchronised to MySQL through APIs, with Firebase integration.',
-    ],
-  } satisfies Project as Project,
-  impact: { value: 90, prefix: '~', suffix: '%', label: 'of manual messaging work automated' },
-  others: [
+  projects: [
     {
       id: 'android-university',
       title: 'Android Applications (University)',
@@ -420,14 +453,51 @@ export const projects = {
     },
     {
       id: 'portfolio',
-      title: 'Personal Portfolio',
-      summary:
-        'This website: a fast, accessible single-page portfolio with smooth scrolling, motion and live GitHub and Stack Overflow data.',
-      tags: ['React', 'TypeScript', 'Tailwind CSS', 'Framer Motion'],
+      title: 'This Portfolio',
+      summary: 'A cinematic, scroll-driven portfolio with live GitHub and Stack Overflow data, built to be fast and accessible.',
+      tags: ['React', 'TypeScript', 'GSAP', 'Tailwind CSS'],
       github: 'https://github.com/Vatsal-Dholakiya/Portfolio',
       live: '',
     },
-  ] satisfies Project[] as Project[],
+  ] as Project[],
+  /** The phone app assembled in the built-in showcase scene */
+  phoneApp: { title: 'Orders', items: ['Gold chain · 22K', 'Anniversary offer', 'Bulk message · 1,200'], button: 'Send campaign' },
+}
+
+/* --------------------------------------------------------- Featured work */
+
+export const featured = {
+  id: 'whatsapp-suite',
+  label: 'Featured work',
+  title: 'WhatsApp Business Automation Suite',
+  badge: 'Private client project',
+  summary: 'A desktop application that lets small businesses such as jewellery shops reach thousands of customers in a single campaign.',
+  impact: { value: 90, prefix: '~', suffix: '%', label: 'of manual messaging work automated' },
+  steps: [
+    {
+      title: 'Problem',
+      text: 'Shop staff were messaging customers one by one: slow, repetitive, and easy to get wrong.',
+    },
+    {
+      title: 'Build',
+      text: 'A Java desktop app that imports contacts, filters invalid numbers and sends personalised campaigns automatically.',
+    },
+    {
+      title: 'Result',
+      text: 'Around 90% of the manual messaging work automated, with birthday and anniversary offers running alongside campaigns.',
+    },
+  ],
+  featuresLabel: 'Key features',
+  features: [
+    'Bulk messaging to thousands of contacts in a single campaign.',
+    'Contact import directly from Excel files.',
+    'Group Grabber: extracts contacts from WhatsApp groups.',
+    'Number Filter: removes numbers not registered on WhatsApp before sending.',
+    'Personalised messages that address each customer by name.',
+    'Automated birthday and anniversary messages with occasion-based offers.',
+    'Local storage in SQLite, synchronised to MySQL through APIs, with Firebase integration.',
+  ],
+  tags: ['Java', 'NetBeans', 'Selenium', 'SQLite', 'MySQL', 'Firebase', 'XML', 'HTML'],
 }
 
 /* ---------------------------------------------------------------- GitHub */
@@ -502,103 +572,38 @@ export const stackoverflow = {
   fallback: { reputation: 563, gold: 0, silver: 6, bronze: 20 } satisfies StackOverflowStats,
 }
 
-/* -------------------------------------------------------- Certifications */
+/* --------------------------------------------------------- Next chapter */
 
-export const certifications = {
-  title: 'Certifications',
-  viewCredential: 'View Credential',
-  viewCertificate: 'View certificate',
-  close: 'Close',
-  /** Add a certificate by adding one entry here (and its image in public/certificates/) */
-  items: [
-    {
-      title: 'Ethical Hacking',
-      issuer: 'Great Learning Academy',
-      date: 'February 2022',
-      icon: 'shield',
-      image: '/certificates/ethical-hacking.webp',
-      credential: 'https://www.mygreatlearning.com/certificate/PEBXWXBY',
-    },
-    {
-      title: 'Cloud Foundations',
-      issuer: 'Great Learning Academy',
-      date: 'July 2020',
-      icon: 'cloud',
-      image: '/certificates/cloud-foundations.webp',
-      credential: 'https://www.mygreatlearning.com/certificate/HFFENWXA',
-    },
-    {
-      title: 'Object-Oriented Programming in Java',
-      issuer: 'Great Learning Academy',
-      date: 'July 2021',
-      icon: 'code',
-      image: '/certificates/oop-java.webp',
-      credential: 'https://www.mygreatlearning.com/certificate/HKOQRUKS',
-    },
-    {
-      title: 'GitHub Tutorial for Beginners',
-      issuer: 'Great Learning Academy',
-      date: 'July 2021',
-      icon: 'git',
-      image: '/certificates/github.webp',
-      credential: 'https://www.mygreatlearning.com/certificate/YNTHADPU',
-    },
-    {
-      title: 'Introduction to UI/UX Design',
-      issuer: 'Great Learning Academy',
-      date: 'July 2021',
-      icon: 'palette',
-      image: '/certificates/ui-ux.webp',
-      credential: 'https://www.mygreatlearning.com/certificate/XUMTKXBL',
-    },
-  ] satisfies Certificate[] as Certificate[],
+export const nextChapter = {
+  label: 'The next chapter',
+  title: 'Growing into AI.',
+  text: 'I am a developer first. AI is what I am learning now — carefully, hands-on, and in public.',
+  logTitle: 'Currently learning',
+  /** FILL IN: what you are learning now. Each entry: topic, a short note, and a status. Empty list hides the log. */
+  log: [
+    { topic: 'AI & Machine Learning fundamentals', note: 'Covered during my MSc.', status: 'Studied' },
+    { topic: '[FILL IN] Current topic or course', note: '[FILL IN] One line about what you are doing.', status: 'In progress' },
+  ],
+  /** Screens in the built-in corridor scene */
+  behind: ['Android app', 'Desktop automation', 'BUILD SUCCESSFUL'],
+  ahead: ['neural networks', 'training data', 'next: build with AI'],
 }
 
-/* ------------------------------------------------------------- Education */
-
-export const education = {
-  title: 'Education',
-  modulesLabel: 'Modules',
-  degrees: [
-    {
-      degree: 'Master of Science in Cloud Computing',
-      school: 'University of East London',
-      location: 'London, United Kingdom',
-      years: '2022 – 2023',
-      award: 'Distinction',
-      modules: [
-        'Cloud Computing',
-        'Artificial Intelligence',
-        'Machine Learning',
-        'Security',
-        'Distributed Systems & Virtualisation',
-        'Database Systems',
-      ],
-    },
-    {
-      degree: 'Bachelor of Science in Information Technology',
-      school: 'Ganpat University',
-      location: 'Gujarat, India',
-      /** FILL IN start year, e.g. '2017 – 2020' (your CV states "Completed 2020") */
-      years: 'Completed 2020',
-      award: '',
-      modules: ['Android Development', 'Web Design', 'System Analysis and Design', 'Databases', 'Computer Networks'],
-    },
-  ] satisfies Degree[] as Degree[],
-}
-
-/* --------------------------------------------------------------- Contact */
+/* ------------------------------------------------------------------ CTA */
 
 export const contact = {
-  kicker: 'Contact',
-  heading: "Let's build something together.",
-  line: 'Open to software development, Android and AI roles.',
+  label: 'Contact',
+  heading: "Let's build what's next.",
+  accentWord: 'next.',
+  line: 'Open to software development, Android and AI-focused roles. Based in London, open to relocation.',
   copy: 'Copy',
   copied: 'Copied!',
   copyAria: 'Copy email address',
-  sayHello: 'Say Hello',
+  cta: 'Start a conversation',
+  compiling: ['compiling message…', 'tests passed', 'opening email'],
   mailSubject: 'Hello Vatsal',
-  preferencesTitle: 'Work Preferences',
+  cvLabel: 'Download CV',
+  preferencesTitle: 'Work preferences',
   preferences: ['Based in London, United Kingdom', 'Open to relocation', 'Visa sponsorship required'],
 }
 
@@ -607,6 +612,24 @@ export const contact = {
 export const footer = {
   credit: 'Designed & built by Vatsal Dholakiya',
   backToTop: 'Back to top',
+  localTime: 'London',
+  terminalHint: 'Press ` for the terminal',
+}
+
+/* -------------------------------------------------------------- Terminal */
+
+export const terminal = {
+  title: 'vatsal@portfolio',
+  welcome: 'Type help to see commands. Esc closes.',
+  commands: {
+    help: 'Commands: whoami, skills, learning, contact, cv, clear',
+    whoami: 'Vatsal Dholakiya — Software Developer & Android Developer, London. Currently exploring AI.',
+    skills: 'Java · Python · SQL · Android SDK · REST APIs · Selenium · Git · Docker',
+    learning: 'AI and Machine Learning — learning hands-on, one project at a time.',
+    contact: 'vatsal.dholakiya2000@gmail.com',
+    cv: 'Opening CV…',
+  } as Record<string, string>,
+  unknown: 'Command not found. Type help.',
 }
 
 /* ------------------------------------------------------------------- 404 */

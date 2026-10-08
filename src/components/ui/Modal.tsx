@@ -50,7 +50,7 @@ export function Modal({
       {open && (
         <m.div
           key="backdrop"
-          className="fixed inset-0 z-[80] grid place-items-center bg-bg/80 p-4 backdrop-blur-md sm:p-6"
+          className="fixed inset-0 z-[80] grid place-items-center bg-void/80 p-4 backdrop-blur-md sm:p-6"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -62,7 +62,7 @@ export function Modal({
             role="dialog"
             aria-modal="true"
             aria-labelledby={labelledBy}
-            className="relative flex max-h-full w-full max-w-3xl flex-col overflow-hidden rounded-2xl border border-border-strong bg-surface"
+            className="relative flex max-h-full w-full max-w-3xl flex-col overflow-hidden rounded-2xl border border-line-strong bg-carbon"
             initial={{ opacity: 0, y: 24, scale: 0.97 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 12, scale: 0.98 }}

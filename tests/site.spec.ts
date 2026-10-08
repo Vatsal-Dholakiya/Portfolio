@@ -1,6 +1,6 @@
 import { expect, navHeight, scrollThrough, test } from './fixtures'
 
-const sections = ['about', 'skills', 'experience', 'projects', 'certifications', 'education', 'contact']
+const sections = ['work', 'story', 'pillars', 'next', 'contact']
 
 /** Waits until the section's top sits just below the sticky navbar (smooth scrolling has finished). */
 async function expectSectionInView(page: import('@playwright/test').Page, id: string) {
@@ -58,16 +58,16 @@ test.describe('Navigation', () => {
     expect(consoleProblems).toEqual([])
   })
 
-  test('direct link /#projects opens at the section, and back/forward work', async ({ page }) => {
-    await page.goto('/#projects')
-    await expectSectionInView(page, 'projects')
+  test('direct link /#work opens at the section, and back/forward work', async ({ page }) => {
+    await page.goto('/#work')
+    await expectSectionInView(page, 'work')
     await page.goto('/')
-    await page.locator('a[href="#projects"]:visible').first().click()
-    await expectSectionInView(page, 'projects')
+    await page.locator('a[href="#work"]:visible').first().click()
+    await expectSectionInView(page, 'work')
     await page.goBack()
     await expect.poll(() => page.evaluate(() => window.scrollY)).toBeLessThan(5)
     await page.goForward()
-    await expectSectionInView(page, 'projects')
+    await expectSectionInView(page, 'work')
   })
 })
 
@@ -129,8 +129,8 @@ test.describe('Links', () => {
 
 test.describe('Certificates', () => {
   test('modal opens and closes with Escape, the close button and the backdrop', async ({ page, consoleProblems }) => {
-    await page.goto('/#certifications')
-    const card = page.locator('#certifications li button[aria-haspopup="dialog"]').first()
+    await page.goto('/#certificates')
+    const card = page.locator('#certificates li button[aria-haspopup="dialog"]').first()
     const dialog = page.locator('[role="dialog"][aria-modal="true"]')
 
     await card.click()
@@ -156,33 +156,28 @@ test.describe('Certificates', () => {
 })
 
 test.describe('Projects and data', () => {
-  test('"See project" opens the featured project key features', async ({ page }) => {
-    await page.goto('/#experience')
-    const link = page.locator('#experience a[href="#whatsapp-suite"]')
-    await link.scrollIntoViewIfNeeded()
-    await link.click()
-    const toggle = page.locator('#whatsapp-suite button[aria-expanded]')
-    await expect(toggle).toHaveAttribute('aria-expanded', 'true')
-    await expect(page.locator('#whatsapp-suite ul li', { hasText: 'Group Grabber' })).toBeVisible()
-    await toggle.click()
-    await expect(toggle).toHaveAttribute('aria-expanded', 'false')
+  test('featured work shows the WhatsApp case study and its key features', async ({ page }) => {
+    await page.goto('/#work')
+    await expect(page.locator('#work-title')).toHaveText('WhatsApp Business Automation Suite')
+    await expect(page.locator('#work li', { hasText: 'Group Grabber' })).toHaveCount(1)
+    await expect(page.locator('#work li', { hasText: 'Problem' })).toHaveCount(1)
   })
 
   test('GitHub grid shows live repositories without forks, and caches them', async ({ page }) => {
-    await page.goto('/#projects')
-    const cards = page.locator('#projects h4 a')
+    await page.goto('/#work')
+    const cards = page.locator('#work h4 a')
     await expect(cards.first()).toBeVisible()
-    await expect(page.locator('#projects h4', { hasText: 'some-fork' })).toHaveCount(0)
+    await expect(page.locator('#work h4', { hasText: 'some-fork' })).toHaveCount(0)
     expect(await page.evaluate(() => !!sessionStorage.getItem('gh-repos-v2'))).toBe(true)
   })
 
   test('GitHub and Stack Overflow fall back gracefully when the APIs fail', async ({ page }) => {
     await page.route('**/api.github.com/**', (r) => r.fulfill({ status: 403, json: { message: 'API rate limit exceeded' } }))
     await page.route('**/api.stackexchange.com/**', (r) => r.abort())
-    await page.goto('/#projects')
-    await expect(page.locator('#projects [role="status"]')).toBeVisible()
-    await expect(page.locator('#projects h4 a').first()).toBeVisible()
-    const so = page.locator('#projects article', { hasText: 'Reputation' })
+    await page.goto('/#work')
+    await expect(page.locator('#work [role="status"]')).toBeVisible()
+    await expect(page.locator('#work h4 a').first()).toBeVisible()
+    const so = page.locator('#work article', { hasText: 'Reputation' })
     await so.scrollIntoViewIfNeeded()
     await expect(so).toContainText('563', { timeout: 6000 })
   })
@@ -192,6 +187,31 @@ test.describe('Projects and data', () => {
     await page.goto('/#contact')
     await page.locator('button[aria-label="Copy email address"]').click()
     await expect(page.locator('[role="status"]', { hasText: 'Copied!' })).toBeVisible()
+  })
+
+  test('"Start a conversation" prints the compile log and links to email', async ({ page }) => {
+    await page.goto('/#contact')
+    const cta = page.locator('#contact a', { hasText: 'Start a conversation' })
+    await expect(cta).toHaveAttribute('href', /^mailto:vatsal\.dholakiya2000@gmail\.com\?subject=/)
+    await cta.click()
+    await expect(page.locator('#contact', { hasText: 'tests passed' })).toBeVisible()
+  })
+
+  test('terminal opens with the backtick key, runs commands and closes on Escape', async ({ page, isMobile }) => {
+    test.skip(isMobile, 'keyboard easter egg')
+    await page.goto('/')
+    await page.keyboard.press('`')
+    const terminal = page.locator('[role="dialog"]', { hasText: 'vatsal@portfolio' })
+    await expect(terminal).toBeVisible()
+    await expect(page.locator('#terminal-input')).toBeFocused()
+    await page.keyboard.type('whoami')
+    await page.keyboard.press('Enter')
+    await expect(terminal).toContainText('Software Developer & Android Developer')
+    await page.keyboard.type('nope')
+    await page.keyboard.press('Enter')
+    await expect(terminal).toContainText('Command not found')
+    await page.keyboard.press('Escape')
+    await expect(terminal).toHaveCount(0)
   })
 })
 
@@ -213,8 +233,8 @@ test.describe('Layout and accessibility', () => {
   })
 
   test('skill tooltip opens, stays inside the viewport and closes on Escape', async ({ page, isMobile }) => {
-    await page.goto('/#skills')
-    const chip = page.locator('#skills button.chip').first()
+    await page.goto('/#pillars')
+    const chip = page.locator('#pillars button.chip').first()
     await chip.scrollIntoViewIfNeeded()
     await page.waitForTimeout(300)
     if (isMobile) await chip.tap()
@@ -229,34 +249,39 @@ test.describe('Layout and accessibility', () => {
     await expect(tip).toHaveCount(0)
   })
 
-  test('reduced motion: no intro, all content visible', async ({ browser }) => {
+  test('reduced motion: no build sequence, final hero and all content visible', async ({ browser }) => {
     const context = await browser.newContext({ reducedMotion: 'reduce' })
     const page = await context.newPage()
     const { mockNetwork } = await import('./fixtures')
     await mockNetwork(page)
     await page.goto('/')
-    expect(await page.evaluate(() => document.documentElement.classList.contains('show-intro'))).toBe(false)
+    expect(await page.evaluate(() => document.documentElement.classList.contains('js-build'))).toBe(false)
+    await expect(page.locator('[data-build-stage]')).toBeHidden()
+    await expect(page.locator('h1')).toBeVisible()
     const hidden = await page.$$eval('main [data-reveal]', (els) => els.filter((e) => getComputedStyle(e).opacity !== '1').length)
     expect(hidden).toBe(0)
     await context.close()
   })
 
-  test('intro shows on the first visit and is gone within 1.2 seconds', async ({ browser }) => {
-    const context = await browser.newContext()
+  test('hero builds on the first visit, "Skip intro" reaches the final hero, and a reload skips the build', async ({
+    browser,
+    isMobile,
+  }) => {
+    const context = await browser.newContext(isMobile ? { viewport: { width: 412, height: 915 }, isMobile: true, hasTouch: true } : {})
     const page = await context.newPage()
     const { mockNetwork } = await import('./fixtures')
     await mockNetwork(page)
-    await page.goto('/', { waitUntil: 'domcontentloaded' })
-    const visibleFor = await page.evaluate(
-      () =>
-        new Promise<number>((resolve) => {
-          const start = performance.getEntriesByName('first-paint')[0]?.startTime ?? 0
-          const check = () =>
-            document.documentElement.classList.contains('show-intro') ? requestAnimationFrame(check) : resolve(performance.now() - start)
-          check()
-        }),
-    )
-    expect(visibleFor).toBeLessThanOrEqual(1200)
+    await page.goto('/')
+    await page.waitForFunction(() => window.__vdReady === true)
+    expect(await page.evaluate(() => document.documentElement.classList.contains('js-build'))).toBe(true)
+    await expect(page.locator('[data-build-stage]')).toBeVisible()
+    await page.locator('[data-build-stage] button', { hasText: 'Skip intro' }).click()
+    await expect
+      .poll(() => page.evaluate(() => Number(getComputedStyle(document.querySelector('[data-final-hero]')!).opacity)), { timeout: 8000 })
+      .toBe(1)
+    await expect.poll(() => page.evaluate(() => sessionStorage.getItem('vd-built')), { timeout: 8000 }).toBe('1')
+    await page.reload()
+    expect(await page.evaluate(() => document.documentElement.classList.contains('js-build'))).toBe(false)
     await context.close()
   })
 })

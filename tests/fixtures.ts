@@ -60,8 +60,8 @@ export const test = base.extend<{ consoleProblems: string[] }>({
   },
   page: async ({ page }, use) => {
     await mockNetwork(page)
-    // Skip the once-per-session intro so tests start immediately (it has its own test)
-    await page.addInitScript(() => sessionStorage.setItem('vd-intro', '1'))
+    // Skip the once-per-session hero build sequence so tests start at the final hero (it has its own test)
+    await page.addInitScript(() => sessionStorage.setItem('vd-built', '1'))
     // Every navigation waits until the page is fully loaded and hydrated, as a visitor would see it
     const goto = page.goto.bind(page)
     page.goto = async (url, options) => {
@@ -76,7 +76,7 @@ export const test = base.extend<{ consoleProblems: string[] }>({
 
 export { expect }
 
-export const navHeight = 72
+export const navHeight = 64
 
 /** Scrolls the page from top to bottom so every reveal and lazy element mounts. */
 export async function scrollThrough(page: Page) {

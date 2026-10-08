@@ -1,6 +1,6 @@
 import { useEffect, type RefObject } from 'react'
 
-const FOCUSABLE = 'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'
+const FOCUSABLE = 'a[href], button:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex="-1"])'
 
 /**
  * While `active`: moves focus into `ref`, keeps Tab inside it and closes on Escape.

@@ -3,6 +3,7 @@ import { AnimatePresence, m } from 'framer-motion'
 import { FileText, Menu, X } from 'lucide-react'
 import { asset, nav, person } from '../data/content'
 import { EASE } from '../lib/animations'
+import { gsap, ScrollTrigger, useGSAP } from '../lib/gsap'
 import { lockScroll } from '../lib/lenis'
 import { announceOverlay, onOtherOverlay } from '../lib/overlay'
 import { useActiveSection } from '../hooks/useActiveSection'
@@ -11,29 +12,111 @@ import { Monogram } from './ui/Monogram'
 
 const ids = nav.links.map((l) => l.id)
 
+/** Live clock for the configured time zone. Renders "--:--" until mounted (pre-rendered HTML stays stable). */
+function LocalTime() {
+  const [time, setTime] = useState('--:--')
+  useEffect(() => {
+    const fmt = new Intl.DateTimeFormat('en-GB', { hour: '2-digit', minute: '2-digit', timeZone: person.timeZone })
+    const update = () => setTime(fmt.format(new Date()))
+    const first = window.setTimeout(update, 0)
+    const id = window.setInterval(update, 15_000)
+    return () => {
+      window.clearTimeout(first)
+      window.clearInterval(id)
+    }
+  }, [])
+  return <span className="tabular-nums">{time}</span>
+}
+
+/** Battery icon whose charge follows page scroll progress. */
+function Battery() {
+  const fill = useRef<SVGRectElement>(null)
+  useGSAP(() => {
+    gsap.fromTo(
+      fill.current,
+      { scaleX: 0 },
+      { scaleX: 1, ease: 'none', transformOrigin: 'left center', scrollTrigger: { start: 0, end: 'max', scrub: 0.3 } },
+    )
+  })
+  return (
+    <svg viewBox="0 0 26 13" className="h-[13px] w-[26px]" role="img" aria-label={nav.progressLabel}>
+      <rect x="0.5" y="0.5" width="22" height="12" rx="3" fill="none" stroke="rgba(237,238,233,0.45)" />
+      <rect x="23.5" y="4" width="2" height="5" rx="1" fill="rgba(237,238,233,0.45)" />
+      <rect ref={fill} x="2.5" y="2.5" width="18" height="8" rx="1.5" fill="#2EE6A6" />
+    </svg>
+  )
+}
+
 export function Navbar() {
-  const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
   const active = useActiveSection(ids)
+  const header = useRef<HTMLElement>(null)
+  const list = useRef<HTMLUListElement>(null)
+  const underline = useRef<HTMLSpanElement>(null)
   const menuRef = useRef<HTMLDivElement>(null)
   const toggleRef = useRef<HTMLButtonElement>(null)
+  const openRef = useRef(open)
   const close = useCallback(() => setOpen(false), [])
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40)
-    onScroll()
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
+    openRef.current = open
+  }, [open])
+
+  // Hide on scroll down, show on scroll up (transform only)
+  useGSAP(() => {
+    const el = header.current
+    if (!el) return
+    let hidden = false
+    const show = (visible: boolean) => {
+      if (hidden === !visible) return
+      hidden = !visible
+      gsap.to(el, { yPercent: visible ? 0 : -110, duration: 0.45, ease: 'expo.out' })
+    }
+    // After an in-page link jump the bar stays visible (the next link is one click away) until the visitor scrolls themselves
+    let jumped = false
+    ScrollTrigger.create({
+      start: 0,
+      end: 'max',
+      onUpdate: (self) => {
+        if (openRef.current || el.contains(document.activeElement) || jumped) return show(true)
+        show(self.scroll() < 160 || self.direction === -1)
+      },
+    })
+    const onFocus = () => show(true)
+    const onClick = (e: MouseEvent) => {
+      if ((e.target as Element).closest?.('a[href^="#"]')) jumped = true
+    }
+    const onUserScroll = () => {
+      jumped = false
+    }
+    const userEvents = ['wheel', 'touchmove', 'keydown'] as const
+    el.addEventListener('focusin', onFocus)
+    document.addEventListener('click', onClick, true)
+    userEvents.forEach((type) => window.addEventListener(type, onUserScroll, { passive: true }))
+    return () => {
+      el.removeEventListener('focusin', onFocus)
+      document.removeEventListener('click', onClick, true)
+      userEvents.forEach((type) => window.removeEventListener(type, onUserScroll))
+    }
+  })
+
+  // One underline slides to the active link
+  useEffect(() => {
+    const bar = underline.current
+    const link = active ? list.current?.querySelector<HTMLElement>(`a[href="#${active}"]`) : null
+    if (!bar) return
+    if (!link) {
+      gsap.to(bar, { opacity: 0, duration: 0.25 })
+      return
+    }
+    gsap.to(bar, { x: link.offsetLeft, scaleX: link.offsetWidth / 100, opacity: 1, duration: 0.5, ease: 'expo.out' })
+  }, [active])
 
   useEffect(() => {
     if (!open) return
     announceOverlay('menu')
-    const unlock = lockScroll()
-    return unlock
+    return lockScroll()
   }, [open])
-
-  // Close if another overlay opens, or if the window grows to desktop width
   useEffect(() => onOtherOverlay('menu', close), [close])
   useEffect(() => {
     const mq = window.matchMedia('(min-width: 768px)')
@@ -41,60 +124,61 @@ export function Navbar() {
     mq.addEventListener('change', onChange)
     return () => mq.removeEventListener('change', onChange)
   }, [])
-
   useFocusTrap(menuRef, open, close, toggleRef)
 
   const cv = asset(person.links.cv)
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50">
-      {/* Frosted layer fades in after 40px of scrolling (opacity only) */}
-      <div
-        aria-hidden="true"
-        className={`absolute inset-0 border-b border-border bg-surface/70 backdrop-blur-xl transition-opacity duration-500 ${
-          scrolled || open ? 'opacity-100' : 'opacity-0'
-        }`}
-      />
+    <header ref={header} className="fixed inset-x-0 top-0 z-50">
+      <div aria-hidden="true" className="absolute inset-0 border-b border-line bg-void/70 backdrop-blur-xl" />
       <div className="container-x relative flex h-[var(--nav-h)] items-center justify-between gap-4">
-        <a href="#home" className="relative z-[60] shrink-0 rounded-xl" aria-label={nav.homeLabel}>
-          <Monogram />
+        <a
+          href="#home"
+          className="relative z-[60] flex shrink-0 items-center gap-3 rounded-xl"
+          aria-label={nav.homeLabel}
+          data-cursor="Top"
+        >
+          <Monogram className="h-8 w-8" />
+          <span className="label hidden text-bone lg:inline">
+            {person.firstName} {person.lastName}
+          </span>
         </a>
 
         <nav aria-label="Main" className="hidden md:block">
-          <ul className="flex items-center gap-0.5 lg:gap-1">
-            {nav.links.map((item) => {
-              const isActive = active === item.id
-              return (
-                <li key={item.id}>
-                  <a
-                    href={`#${item.id}`}
-                    aria-current={isActive ? 'location' : undefined}
-                    className={`relative block rounded-lg px-2 py-2 text-[0.875rem] font-medium transition-colors duration-300 hover:text-text lg:px-3.5 lg:text-[0.9375rem] ${
-                      isActive ? 'text-text' : 'text-muted'
-                    }`}
-                  >
-                    {item.label}
-                    <span
-                      aria-hidden="true"
-                      className={`bg-gradient ease-out-expo absolute inset-x-2 -bottom-0.5 h-0.5 origin-left rounded-full transition-[opacity,transform] duration-500 lg:inset-x-3.5 ${
-                        isActive ? 'scale-x-100 opacity-100' : 'scale-x-0 opacity-0'
-                      }`}
-                    />
-                  </a>
-                </li>
-              )
-            })}
+          <ul ref={list} className="relative flex items-center gap-1">
+            {nav.links.map((item) => (
+              <li key={item.id}>
+                <a
+                  href={`#${item.id}`}
+                  aria-current={active === item.id ? 'location' : undefined}
+                  className={`block px-3 py-2 font-mono text-[0.75rem] tracking-[0.12em] uppercase transition-colors duration-300 hover:text-bone ${
+                    active === item.id ? 'text-bone' : 'text-ash'
+                  }`}
+                >
+                  {item.label}
+                </a>
+              </li>
+            ))}
+            <span
+              ref={underline}
+              aria-hidden="true"
+              className="pointer-events-none absolute bottom-0.5 left-0 h-px w-[100px] origin-left bg-emerald opacity-0"
+            />
           </ul>
         </nav>
 
-        <div className="relative z-[60] flex items-center gap-2">
+        <div className="relative z-[60] flex items-center gap-3 sm:gap-4">
+          <span className="label hidden items-center gap-3 text-mist sm:flex" aria-label={`Local time in ${person.location}`}>
+            <LocalTime />
+            <Battery />
+          </span>
           <a
             href={cv}
             target="_blank"
             rel="noopener noreferrer"
-            className="hidden h-10 items-center gap-2 rounded-xl border border-border-strong px-3.5 text-sm font-medium text-text transition-colors hover:border-primary-soft hover:bg-surface-2 md:inline-flex"
+            className="hidden h-9 items-center gap-2 rounded-full border border-line-strong px-4 font-mono text-[0.72rem] tracking-[0.1em] text-bone uppercase transition-colors hover:border-emerald md:inline-flex"
           >
-            <FileText className="h-4 w-4" aria-hidden="true" />
+            <FileText className="h-3.5 w-3.5" aria-hidden="true" />
             {nav.resumeLabel}
           </a>
           <button
@@ -119,12 +203,11 @@ export function Navbar() {
             role="dialog"
             aria-modal="true"
             aria-label={nav.menuLabel}
-            className="fixed inset-0 z-[55] flex flex-col bg-bg/95 px-5 pt-24 pb-10 backdrop-blur-xl md:hidden"
+            className="fixed inset-0 z-[55] flex flex-col bg-void/97 px-5 pt-24 pb-10 backdrop-blur-xl md:hidden"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0, transition: { duration: 0.25, ease: EASE } }}
             transition={{ duration: 0.35, ease: EASE }}
-            // A tap on empty space (outside the links) closes the menu
             onClick={(e) => {
               if (!(e.target as Element).closest('a, button')) close()
             }}
@@ -134,38 +217,27 @@ export function Navbar() {
                 {nav.links.map((item, i) => (
                   <m.li
                     key={item.id}
-                    initial={{ opacity: 0, y: 24 }}
+                    initial={{ opacity: 0, y: 28 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, transition: { duration: 0.2 } }}
-                    transition={{ duration: 0.5, ease: EASE, delay: 0.05 + i * 0.05 }}
-                    className="border-b border-border"
+                    transition={{ duration: 0.6, ease: EASE, delay: 0.05 + i * 0.05 }}
+                    className="border-b border-line"
                   >
                     <a
                       href={`#${item.id}`}
                       onClick={close}
-                      aria-current={active === item.id ? 'location' : undefined}
-                      className="flex items-baseline gap-4 py-4 font-display text-[1.75rem] font-bold text-text"
+                      className="flex items-baseline justify-between py-4 font-display text-[2.4rem] leading-none font-extrabold tracking-[-0.04em] text-bone"
                     >
-                      <span className="font-mono text-sm font-normal text-accent">{String(i + 1).padStart(2, '0')}.</span>
                       {item.label}
+                      <span className="font-mono text-xs font-normal tracking-normal text-emerald">{String(i + 1).padStart(2, '0')}</span>
                     </a>
                   </m.li>
                 ))}
               </ul>
-              <m.a
-                href={cv}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={close}
-                className="btn btn-outline mt-8"
-                initial={{ opacity: 0, y: 24 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, transition: { duration: 0.2 } }}
-                transition={{ duration: 0.5, ease: EASE, delay: 0.45 }}
-              >
+              <a href={cv} target="_blank" rel="noopener noreferrer" onClick={close} className="btn btn-ghost mt-8">
                 <FileText className="h-5 w-5" aria-hidden="true" />
                 {nav.resumeLabel}
-              </m.a>
+              </a>
             </nav>
           </m.div>
         )}

@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="en-GB" style="background: #0a0b10; color-scheme: dark">
+<html lang="en-GB" style="background: #050607; color-scheme: dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="theme-color" content="#0A0B10" />
+    <meta name="theme-color" content="#050607" />
     <meta name="color-scheme" content="dark" />
     <!--seo-->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -15,18 +15,18 @@
     <link
       rel="preload"
       as="style"
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;800&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@1&display=swap"
     />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;800&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@1&display=swap"
       media="print"
       onload="this.media = 'all'"
     />
     <noscript>
       <link
         rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@600;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;800&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@1&display=swap"
       />
       <style>
         [data-reveal] {
@@ -36,7 +36,7 @@
       </style>
     </noscript>
 
-    <!-- Before first paint: intro once per session (not with reduced motion or a #section link); 404 detection -->
+    <!-- Before first paint: the hero build sequence once per session (not with reduced motion or a #section link); 404 detection -->
     <script>
       ;(function () {
         var d = document.documentElement
@@ -48,19 +48,15 @@
           d.classList.add('nf')
         } else {
           try {
-            if (!matchMedia('(prefers-reduced-motion: reduce)').matches && !location.hash && !sessionStorage.getItem('vd-intro')) {
-              d.classList.add('show-intro')
-              window.__introStart = performance.now()
-              // Hard cap: the intro never stays longer than 1.2 seconds, even on a slow device
-              setTimeout(function () {
-                d.classList.remove('show-intro')
-              }, 1150)
+            if (!matchMedia('(prefers-reduced-motion: reduce)').matches && !location.hash && !sessionStorage.getItem('vd-built')) {
+              d.classList.add('js-build')
             }
           } catch (e) {}
         }
+        // Safety net: if the app has not started after 4 seconds, show the plain page
         setTimeout(function () {
-          if (!window.__vdReady) d.classList.remove('show-intro', 'nf')
-        }, 3000)
+          if (!window.__vdReady) d.classList.remove('js-build', 'nf')
+        }, 4000)
       })()
     </script>
   </head>

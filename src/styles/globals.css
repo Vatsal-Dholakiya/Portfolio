@@ -1,97 +1,88 @@
 @import 'tailwindcss';
 
 /* ============================================================
-   Colour system
+   Colour system — cinematic: black void, emerald light, warm ember
+   (all text pairs ≥ 5.7:1, WCAG AA)
    ============================================================ */
 :root {
-  --bg: #0a0b10;
-  --surface: #12141c;
-  --surface-2: #1a1d29;
-  --border: rgba(255, 255, 255, 0.08);
-  --border-strong: rgba(255, 255, 255, 0.14);
-  --text: #e6e8f0;
-  --text-muted: #9aa3b2;
-  /* Long-form reading text: brighter than muted for crisp paragraphs (11.9:1 on --bg) */
-  --text-body: #c5cbd8;
-  --primary: #7c5cff;
-  /* Lighter violet for text and icons: #7C5CFF itself is only 4.2:1 on the background */
-  --primary-soft: #a996ff;
-  --accent: #22d3ee;
-  --highlight: #f472b6;
-  --success: #34d399;
-  --on-gradient: #0a0b10;
-  --gradient: linear-gradient(135deg, #7c5cff 0%, #22d3ee 100%);
-  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --void: #050607;
+  --carbon: #0b0e0d;
+  --graphite: #131816;
+  --line: rgba(237, 238, 233, 0.08);
+  --line-strong: rgba(237, 238, 233, 0.16);
+  --bone: #edeee9;
+  --mist: #b9c0bc;
+  --ash: #8a938e;
+  --emerald: #2ee6a6;
+  --emerald-deep: #0f6b4c;
+  --ember: #ff8a3d;
+  --on-accent: #050607;
+  --gradient: linear-gradient(120deg, #2ee6a6 0%, #b8f5dd 45%, #ff8a3d 100%);
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --nav-h: 4rem;
+  --section-py: clamp(6rem, 14vh, 11rem);
   color-scheme: dark;
 }
 
 @theme {
-  --color-bg: var(--bg);
-  --color-surface: var(--surface);
-  --color-surface-2: var(--surface-2);
-  --color-border: var(--border);
-  --color-border-strong: var(--border-strong);
-  --color-text: var(--text);
-  --color-muted: var(--text-muted);
-  --color-body: var(--text-body);
-  --color-primary: var(--primary);
-  --color-primary-soft: var(--primary-soft);
-  --color-accent: var(--accent);
-  --color-highlight: var(--highlight);
-  --color-success: var(--success);
-  --color-on-gradient: var(--on-gradient);
+  --color-void: var(--void);
+  --color-carbon: var(--carbon);
+  --color-graphite: var(--graphite);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-bone: var(--bone);
+  --color-mist: var(--mist);
+  --color-ash: var(--ash);
+  --color-emerald: var(--emerald);
+  --color-emerald-deep: var(--emerald-deep);
+  --color-ember: var(--ember);
+  --color-on-accent: var(--on-accent);
 
-  --font-display: 'Space Grotesk', 'Space Grotesk Fallback', ui-sans-serif, system-ui, sans-serif;
-  --font-sans: 'Inter', 'Inter Fallback', ui-sans-serif, system-ui, sans-serif;
-  --font-mono: 'JetBrains Mono', 'JetBrains Mono Fallback', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+  --font-display: 'Geist', 'Geist Fallback', ui-sans-serif, system-ui, sans-serif;
+  --font-sans: 'Geist', 'Geist Fallback', ui-sans-serif, system-ui, sans-serif;
+  --font-serif: 'Instrument Serif', 'Instrument Serif Fallback', ui-serif, Georgia, serif;
+  --font-mono: 'Geist Mono', 'Geist Mono Fallback', ui-monospace, 'SFMono-Regular', Menlo, monospace;
 
-  --ease-out-expo: cubic-bezier(0.22, 1, 0.36, 1);
-  --radius-card: 1rem;
-}
-
-/* Layout tokens */
-:root {
-  --nav-h: 4.5rem;
-  --section-py: clamp(4rem, 10vh, 7rem);
+  --ease-cine: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* Fallback faces with the web fonts' measured metrics, so text does not shift when fonts swap in */
 @font-face {
-  font-family: 'Inter Fallback';
+  font-family: 'Geist Fallback';
   src: local('Arial'), local('ArialMT'), local('Liberation Sans'), local('Helvetica');
-  size-adjust: 106.74%;
-  ascent-override: 90.88%;
-  descent-override: 22.49%;
+  size-adjust: 103.5%;
+  ascent-override: 97.6%;
+  descent-override: 29%;
   line-gap-override: 0%;
 }
 @font-face {
-  font-family: 'Space Grotesk Fallback';
-  src: local('Arial'), local('ArialMT'), local('Liberation Sans'), local('Helvetica');
-  size-adjust: 101.46%;
-  ascent-override: 96.59%;
-  descent-override: 28.58%;
-  line-gap-override: 0%;
-}
-@font-face {
-  font-family: 'JetBrains Mono Fallback';
+  font-family: 'Geist Mono Fallback';
   src: local('Courier New'), local('CourierNewPSMT'), local('Liberation Mono');
   size-adjust: 99.98%;
-  ascent-override: 102.02%;
+  ascent-override: 101.02%;
   descent-override: 30%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: 'Instrument Serif Fallback';
+  src: local('Times New Roman'), local('TimesNewRomanPSMT'), local('Liberation Serif');
+  font-style: italic;
+  size-adjust: 86.03%;
+  ascent-override: 115.08%;
+  descent-override: 36.03%;
   line-gap-override: 0%;
 }
 
 /* ============================================================
-   Base
+   Base — unlayered so no host or default stylesheet can override it
    ============================================================ */
-/* Page ground, text colour and fonts are deliberately NOT inside a cascade layer:
-   unlayered rules always beat layered ones, so a host page, embed or browser default
-   stylesheet can never turn the background light or swap the fonts. */
 html {
   -webkit-text-size-adjust: 100%;
-  background: var(--bg);
-  color: var(--text);
+  background: var(--void);
+  color: var(--bone);
   color-scheme: dark;
+  scrollbar-width: thin;
+  scrollbar-color: var(--graphite) var(--void);
 }
 html,
 html body {
@@ -99,62 +90,55 @@ html body {
 }
 html body {
   margin: 0;
-  background: var(--bg);
-  color: var(--text);
+  background: var(--void);
+  color: var(--mist);
   font-family: var(--font-sans);
-  font-size: 1rem;
-  line-height: 1.7;
+  font-size: 1.0625rem;
+  line-height: 1.65;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
-}
-
-@layer base {
-  h1,
-  h2,
-  h3 {
-    font-family: var(--font-display);
-    text-wrap: balance;
-    letter-spacing: -0.02em;
-  }
-  ::selection {
-    background: rgba(124, 92, 255, 0.35);
-    color: var(--text);
-  }
-  :focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 3px;
-    border-radius: 6px;
-  }
-  /* Single source of the sticky-navbar offset: used by native anchors and by Lenis */
-  section[id] {
-    scroll-margin-top: var(--nav-h);
-  }
-  img {
-    max-width: 100%;
-    height: auto;
-  }
-}
-
-/* Thin custom scrollbar */
-html {
-  scrollbar-width: thin;
-  scrollbar-color: var(--surface-2) var(--bg);
 }
 ::-webkit-scrollbar {
   width: 10px;
   height: 10px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--bg);
+  background: var(--void);
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--surface-2);
-  border: 2px solid var(--bg);
+  background: var(--graphite);
+  border: 2px solid var(--void);
   border-radius: 999px;
 }
-::-webkit-scrollbar-thumb:hover {
-  background: #262a3a;
+
+@layer base {
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    color: var(--bone);
+    text-wrap: balance;
+    letter-spacing: -0.035em;
+  }
+  ::selection {
+    background: rgba(46, 230, 166, 0.3);
+    color: var(--bone);
+  }
+  :focus-visible {
+    outline: 2px solid var(--emerald);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+  section[id] {
+    scroll-margin-top: var(--nav-h);
+  }
+  img,
+  video {
+    max-width: 100%;
+    height: auto;
+  }
 }
 
 /* Lenis */
@@ -175,19 +159,34 @@ html.lenis body {
 @layer components {
   .container-x {
     width: 100%;
-    max-width: calc(75rem + 2.5rem); /* 1200px content + gutters */
+    max-width: calc(80rem + 2.5rem); /* 1280px + gutters */
     margin-inline: auto;
     padding-inline: 1.25rem;
   }
   @media (min-width: 768px) {
     .container-x {
-      max-width: calc(75rem + 4rem);
+      max-width: calc(80rem + 4rem);
       padding-inline: 2rem;
     }
   }
-
   .section-y {
     padding-block: var(--section-py);
+  }
+
+  .label {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ash);
+  }
+
+  .accent {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 400;
+    letter-spacing: -0.01em;
   }
 
   .text-gradient {
@@ -197,15 +196,15 @@ html.lenis body {
     color: transparent;
     -webkit-text-fill-color: transparent;
   }
-
   .bg-gradient {
     background-image: var(--gradient);
   }
 
   .card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-card);
+    background: var(--carbon);
+    border: 1px solid var(--line);
+    border-radius: 1rem;
+    box-shadow: inset 0 1px 0 rgba(237, 238, 233, 0.05);
   }
 
   .chip {
@@ -213,19 +212,12 @@ html.lenis body {
     align-items: center;
     padding: 0.375rem 0.75rem;
     border-radius: 999px;
-    border: 1px solid var(--border);
-    background: var(--surface-2);
+    border: 1px solid var(--line);
+    background: var(--graphite);
     font-size: 0.8125rem;
     font-weight: 500;
     line-height: 1.35;
-    color: var(--text);
-  }
-
-  .mono-label {
-    font-family: var(--font-mono);
-    font-size: 0.8125rem;
-    letter-spacing: 0.02em;
-    color: var(--accent);
+    color: var(--bone);
   }
 
   .btn {
@@ -233,32 +225,50 @@ html.lenis body {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 0.5rem;
-    min-height: 3rem;
-    padding: 0.75rem 1.5rem;
-    border-radius: 0.875rem;
+    gap: 0.6rem;
+    min-height: 3.25rem;
+    padding: 0.85rem 1.6rem;
+    border-radius: 999px;
     font-family: var(--font-display);
-    font-weight: 700;
-    font-size: 1.1875rem; /* large text: AA needs 3:1, met by the dark label on the whole gradient */
+    font-weight: 600;
+    font-size: 1rem;
     line-height: 1;
     white-space: nowrap;
+    overflow: hidden;
+    isolation: isolate;
     transition:
-      border-color 0.3s var(--ease),
-      background-color 0.3s var(--ease),
-      color 0.3s var(--ease);
+      color 0.4s var(--ease),
+      border-color 0.4s var(--ease);
+  }
+  /* Fill sweep on hover (transform only) */
+  .btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    transform: translateY(101%);
+    transition: transform 0.5s var(--ease);
+  }
+  .btn:hover::before {
+    transform: translateY(0);
   }
   .btn-primary {
-    background-image: var(--gradient);
-    color: var(--on-gradient);
+    background: var(--emerald);
+    color: var(--on-accent);
   }
-  .btn-outline {
-    border: 1px solid var(--border-strong);
-    background: rgba(18, 20, 28, 0.6);
-    color: var(--text);
+  .btn-primary::before {
+    background: var(--bone);
   }
-  .btn-outline:hover {
-    border-color: var(--primary-soft);
-    background: var(--surface-2);
+  .btn-ghost {
+    border: 1px solid var(--line-strong);
+    color: var(--bone);
+  }
+  .btn-ghost::before {
+    background: var(--graphite);
+  }
+  .btn-ghost:hover {
+    border-color: var(--emerald);
   }
 
   .icon-btn {
@@ -266,21 +276,20 @@ html.lenis body {
     place-items: center;
     width: 2.75rem;
     height: 2.75rem;
-    border-radius: 0.875rem;
-    border: 1px solid var(--border);
-    background: var(--surface);
-    color: var(--text-muted);
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    color: var(--mist);
     transition:
       color 0.3s var(--ease),
       border-color 0.3s var(--ease);
   }
   .icon-btn:hover {
-    color: var(--text);
-    border-color: var(--primary-soft);
+    color: var(--bone);
+    border-color: var(--emerald);
   }
 
   .link {
-    color: var(--primary-soft);
+    color: var(--emerald);
     text-decoration: underline;
     text-decoration-color: transparent;
     text-underline-offset: 4px;
@@ -291,74 +300,66 @@ html.lenis body {
   }
 }
 
+/* Outlined display type. Unlayered so its letter spacing wins: tighter tracking would make the strokes of neighbouring letters cross */
+.text-outline {
+  color: var(--void);
+  -webkit-text-stroke: 3px rgba(237, 238, 233, 0.3);
+  paint-order: stroke fill;
+  letter-spacing: -0.01em;
+}
+
 /* ============================================================
-   Aurora background (pure CSS, transform only)
+   Cinematic layers
    ============================================================ */
-.aurora-blob {
-  position: absolute;
-  border-radius: 50%;
-  will-change: transform;
-  animation: drift 26s var(--ease) infinite alternate;
+
+/* Film grain: a tiny noise tile shifted in steps (transform only) */
+.grain {
+  position: fixed;
+  inset: -50%;
+  z-index: 80;
+  pointer-events: none;
+  opacity: 0.06;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='1'/></svg>");
+  animation: grain 0.8s steps(4) infinite;
 }
-.aurora-blob.b1 {
-  width: 62vmax;
-  height: 62vmax;
-  left: -18vmax;
-  top: -24vmax;
-  background: radial-gradient(circle at center, rgba(124, 92, 255, 0.42), rgba(124, 92, 255, 0) 65%);
-}
-.aurora-blob.b2 {
-  width: 54vmax;
-  height: 54vmax;
-  right: -20vmax;
-  top: -6vmax;
-  background: radial-gradient(circle at center, rgba(34, 211, 238, 0.26), rgba(34, 211, 238, 0) 65%);
-  animation-duration: 32s;
-  animation-delay: -8s;
-}
-.aurora-blob.b3 {
-  width: 46vmax;
-  height: 46vmax;
-  left: 22vmax;
-  bottom: -28vmax;
-  background: radial-gradient(circle at center, rgba(244, 114, 182, 0.13), rgba(244, 114, 182, 0) 65%);
-  animation-duration: 38s;
-  animation-delay: -16s;
-}
-@keyframes drift {
+@keyframes grain {
   0% {
-    transform: translate3d(0, 0, 0) scale(1);
+    transform: translate3d(0, 0, 0);
+  }
+  25% {
+    transform: translate3d(-3%, 2%, 0);
   }
   50% {
-    transform: translate3d(6vmax, 4vmax, 0) scale(1.08);
+    transform: translate3d(2%, -3%, 0);
+  }
+  75% {
+    transform: translate3d(-2%, -1%, 0);
   }
   100% {
-    transform: translate3d(-4vmax, 7vmax, 0) scale(0.95);
+    transform: translate3d(1%, 3%, 0);
   }
 }
-.aurora-paused .aurora-blob {
-  animation-play-state: paused;
+
+.vignette {
+  background: radial-gradient(ellipse 80% 70% at 50% 45%, transparent 40%, rgba(5, 6, 7, 0.85) 100%);
 }
 
-.dot-grid {
-  background-image: radial-gradient(rgba(230, 232, 240, 0.13) 1px, transparent 1.2px);
-  background-size: 26px 26px;
-  -webkit-mask-image: radial-gradient(ellipse 75% 65% at 50% 45%, var(--bg) 20%, transparent 80%);
-  mask-image: radial-gradient(ellipse 75% 65% at 50% 45%, var(--bg) 20%, transparent 80%);
+/* Emerald studio light sweeping behind the hero (used until the Hero Orbit film exists) */
+.studio-light {
+  background:
+    radial-gradient(ellipse 35% 55% at 50% 42%, rgba(46, 230, 166, 0.16), transparent 70%),
+    radial-gradient(ellipse 25% 35% at 62% 58%, rgba(255, 138, 61, 0.08), transparent 70%);
 }
-
-/* Rotating gradient frame (photo) */
-.spin-slow {
-  animation: spin 9s linear infinite;
+.orbit-light {
+  animation: orbit 14s linear infinite;
 }
-@keyframes spin {
+@keyframes orbit {
   to {
     transform: rotate(360deg);
   }
 }
 
-/* Typing caret */
-.caret {
+.blink {
   animation: blink 1s steps(1) infinite;
 }
 @keyframes blink {
@@ -367,28 +368,6 @@ html.lenis body {
   }
 }
 
-/* Scroll indicator dot */
-.scroll-dot {
-  animation: scroll-dot 1.8s var(--ease) infinite;
-}
-@keyframes scroll-dot {
-  0% {
-    transform: translateY(0);
-    opacity: 0;
-  }
-  30% {
-    opacity: 1;
-  }
-  80% {
-    transform: translateY(12px);
-    opacity: 0;
-  }
-  100% {
-    opacity: 0;
-  }
-}
-
-/* "Open to opportunities" pulsing dot */
 .pulse-dot {
   animation: pulse-dot 2s var(--ease) infinite;
 }
@@ -403,7 +382,6 @@ html.lenis body {
   }
 }
 
-/* Skeleton shimmer */
 .skeleton {
   animation: pulse-soft 1.6s ease-in-out infinite;
 }
@@ -413,17 +391,76 @@ html.lenis body {
   }
 }
 
-/* ============================================================
-   Intro overlay: only visible when index.html marks the first visit
-   ============================================================ */
-.intro {
+.marquee-track {
+  animation: marquee 40s linear infinite;
+}
+@keyframes marquee {
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+/* Custom cursor (desktop only; the native cursor stays for text fields) */
+.cursor {
   display: none;
 }
-html.show-intro .intro {
-  display: grid;
+@media (hover: hover) and (pointer: fine) {
+  html.has-cursor .cursor {
+    display: block;
+  }
+  html.has-cursor body,
+  html.has-cursor a,
+  html.has-cursor button {
+    cursor: none;
+  }
 }
-html.show-intro body {
-  overflow: hidden;
+
+/* ============================================================
+   Hero assembly: before JavaScript takes over, the final hero is shown
+   (no-JS, reduced motion). html.js-build switches to the build stage.
+   ============================================================ */
+html:not(.js-build) [data-build-stage] {
+  display: none;
+}
+html.js-build [data-final-hero] {
+  opacity: 0;
+}
+
+/* Word masks of kinetic headings: room for descenders (g, p, y) and italic overhang */
+.split-word-mask {
+  padding: 0 0.08em 0.14em;
+  margin: 0 -0.08em -0.14em;
+}
+
+/* Story timeline: a three-column grid on desktop, or a pinned sideways track once JavaScript enables it */
+@media (min-width: 1024px) {
+  .story-track {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+  [data-horizontal] .story-pin {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100svh;
+    overflow: hidden;
+  }
+  [data-horizontal] .story-progress {
+    display: block;
+  }
+  [data-horizontal] .story-track {
+    display: flex;
+    flex-direction: row;
+    width: max-content;
+    max-width: none;
+    padding-inline: max(2rem, calc((100vw - 80rem) / 2));
+    will-change: transform;
+  }
+  [data-horizontal] .story-track > li {
+    width: min(32rem, 40vw);
+    flex-shrink: 0;
+  }
 }
 
 /* Unknown path: hide the pre-rendered home page until the 404 view renders */
@@ -439,16 +476,13 @@ html.nf #root {
     opacity: 1 !important;
     transform: none !important;
   }
-  .aurora-blob,
-  .spin-slow,
-  .caret,
-  .scroll-dot,
+  .grain,
+  .orbit-light,
+  .blink,
   .pulse-dot,
-  .skeleton {
+  .skeleton,
+  .marquee-track {
     animation: none !important;
-  }
-  html.show-intro .intro {
-    display: none;
   }
   *,
   *::before,

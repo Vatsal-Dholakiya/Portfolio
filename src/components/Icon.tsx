@@ -3,7 +3,6 @@ import {
   BrainCircuit,
   Cloud,
   CodeXml,
-  Cpu,
   Database,
   GitBranch,
   Monitor,
@@ -11,6 +10,8 @@ import {
   ShieldCheck,
   Smartphone,
   TabletSmartphone,
+  Terminal,
+  Workflow,
   type LucideProps,
 } from 'lucide-react'
 import type { IconName } from '../data/content'
@@ -24,9 +25,10 @@ const icons: Record<IconName, ComponentType<LucideProps>> = {
   cloud: Cloud,
   brain: BrainCircuit,
   shield: ShieldCheck,
-  cpu: Cpu,
   smartphone: Smartphone,
   palette: Palette,
+  workflow: Workflow,
+  terminal: Terminal,
 }
 
 /** Maps an icon name from content.ts to a lucide-react icon. */
@@ -39,7 +41,7 @@ export function Icon({ name, className = 'h-5 w-5' }: { name: IconName; classNam
 export function IconTile({ name, size = 'md' }: { name: IconName; size?: 'md' | 'lg' }) {
   return (
     <span
-      className={`grid shrink-0 place-items-center rounded-xl border border-border bg-surface-2 text-primary-soft ${
+      className={`grid shrink-0 place-items-center rounded-xl border border-line bg-graphite text-emerald ${
         size === 'lg' ? 'h-12 w-12' : 'h-11 w-11'
       }`}
     >

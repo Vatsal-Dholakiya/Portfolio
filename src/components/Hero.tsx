@@ -1,131 +1,135 @@
-import { useEffect, useState } from 'react'
-import { m, type Variants } from 'framer-motion'
-import { ArrowRight, Download, Mail, MapPin } from 'lucide-react'
-import { asset, hero, person } from '../data/content'
-import { EASE } from '../lib/animations'
-import { linkProps, mailto, present } from '../lib/helpers'
-import { introDone } from '../lib/intro'
-import { Aurora } from './Aurora'
-import { GradientName } from './GradientName'
-import { RoleTyper } from './RoleTyper'
-import { GitHubIcon, LinkedInIcon, StackOverflowIcon } from './ui/BrandIcons'
-import { Magnetic } from './ui/Magnetic'
+import { useCallback, useRef } from 'react'
+import { gsap, ScrollTrigger, useGSAP } from '../lib/gsap'
+import { scrollToY } from '../lib/lenis'
+import { BuildStage } from './hero/BuildStage'
+import { FinalHero } from './hero/FinalHero'
 
-const NAME_TIME = 0.55 // seconds after the name starts before the role line follows
+const BUILT_KEY = 'vd-built'
+const OFF = { left: { x: '-75vw' }, right: { x: '75vw' }, top: { y: '-90vh' }, bottom: { y: '90vh' } } as const
 
-const fade = (delay: number): Variants => ({
-  hidden: { opacity: 0, y: 24 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: EASE, delay } },
-})
-
+/**
+ * Hero — "Built in front of you".
+ * When html.js-build is set (first visit in this session, motion allowed), the section pins and the visitor's
+ * scroll assembles the scene, then the camera pushes into the screen to reveal the final hero.
+ * Otherwise (repeat visit, reduced motion, no JavaScript) the final hero is shown directly.
+ */
 export function Hero() {
-  const [play, setPlay] = useState(false)
-  useEffect(() => {
-    let alive = true
-    introDone.then(() => alive && setPlay(true))
-    return () => {
-      alive = false
+  const root = useRef<HTMLElement>(null)
+  const stRef = useRef<ScrollTrigger | null>(null)
+
+  // Remember the build for this session so a reload starts at the final hero
+  const finish = useCallback(() => {
+    try {
+      sessionStorage.setItem(BUILT_KEY, '1')
+    } catch {
+      /* storage blocked */
     }
   }, [])
 
-  const { links } = person
-  const socials = present([
-    { href: links.github, label: 'GitHub', icon: <GitHubIcon /> },
-    { href: links.stackoverflow, label: 'Stack Overflow', icon: <StackOverflowIcon /> },
-    { href: links.linkedin, label: 'LinkedIn', icon: <LinkedInIcon /> },
-    { href: links.email && mailto(links.email), label: 'Email', icon: <Mail className="h-5 w-5" aria-hidden="true" /> },
-  ])
-  const state = play ? 'show' : 'hidden'
+  useGSAP(
+    () => {
+      const html = document.documentElement
+      const building = html.classList.contains('js-build')
+
+      // Final hero entrance (used directly when there is no build sequence)
+      const intro = () =>
+        gsap
+          .timeline()
+          .from('[data-hero-line]', { yPercent: 110, duration: 1.1, ease: 'expo.out', stagger: 0.08 })
+          .from('[data-hero-item]', { y: 24, opacity: 0, duration: 0.9, ease: 'expo.out', stagger: 0.07 }, '-=0.7')
+
+      if (!building) {
+        if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) intro()
+        return
+      }
+
+      const pin = root.current!.querySelector<HTMLElement>('[data-pin]')!
+      const device = root.current!.querySelector<HTMLElement>('[data-device]')!
+      const screen = root.current!.querySelector<HTMLElement>('[data-screen]')!
+      const pieces = gsap.utils.toArray<HTMLElement>('[data-piece]', root.current)
+      const isDesktop = window.matchMedia('(min-width: 768px)').matches
+      const visible = pieces.filter((el) => getComputedStyle(el).display !== 'none')
+
+      // Camera push: scale so the screen fills the viewport
+      const pushScale = () => Math.max(window.innerWidth / screen.offsetWidth, window.innerHeight / screen.offsetHeight) * 1.04
+
+      gsap.set('[data-final-hero]', { opacity: 0 })
+      gsap.set('[data-drag-cursor]', { opacity: 0 })
+
+      const tl = gsap.timeline({
+        defaults: { ease: 'none' },
+        scrollTrigger: {
+          trigger: pin,
+          start: 'top top',
+          end: () => `+=${window.innerHeight * (isDesktop ? 2.5 : 1.6)}`,
+          pin: true,
+          scrub: 0.6,
+          anticipatePin: 1,
+          invalidateOnRefresh: true,
+          onLeave: finish,
+        },
+      })
+      stRef.current = tl.scrollTrigger ?? null
+
+      // 1. The device slides up into view as the page loads (scroll then drives the build)
+      gsap.from(device, { yPercent: 50, rotateX: 26, opacity: 0, duration: 1.4, ease: 'expo.out', delay: 0.15 })
+      tl.to({}, { duration: 0.6 }, 0)
+
+      // 2. Pieces are dragged in one by one with a bouncy landing
+      visible.forEach((el, i) => {
+        const from = (el.dataset.from ?? 'left') as keyof typeof OFF
+        const at = 0.6 + i * (isDesktop ? 0.85 : 1.1)
+        const cursor = el.querySelector('[data-drag-cursor]')
+        const flash = el.querySelector('[data-piece-flash]')
+        const body = el.querySelector('[data-piece-body]')
+        tl.set(cursor, { opacity: 1 }, at)
+          .fromTo(el, { ...OFF[from], rotate: i % 2 ? 9 : -9 }, { x: 0, y: 0, rotate: 0, duration: 0.9, ease: 'back.out(1.6)' }, at)
+          .to(body, { scaleX: 1.06, scaleY: 0.94, duration: 0.12, ease: 'power2.out' }, at + 0.82)
+          .to(body, { scaleX: 1, scaleY: 1, duration: 0.3, ease: 'elastic.out(1, 0.4)' }, at + 0.94)
+          .to(cursor, { opacity: 0, duration: 0.15 }, at + 0.95)
+          .fromTo(flash, { opacity: 0.9, scale: 0.98 }, { opacity: 0, scale: 1.04, duration: 0.35 }, at + 0.9)
+      })
+      const built = 0.6 + visible.length * (isDesktop ? 0.85 : 1.1) + 0.3
+
+      // 3. Build succeeded
+      tl.to('[data-build-done]', { opacity: 1, duration: 0.3 }, built).to(
+        ['[data-build-label]', '[data-build-hint]'],
+        { opacity: 0, duration: 0.3 },
+        built,
+      )
+
+      // 4. Camera pushes into the screen; the final hero takes over
+      const push = built + 0.5
+      tl.to(device, { scale: pushScale, rotateX: 0, duration: 2, ease: 'power2.in' }, push)
+        .to('[data-base]', { yPercent: 160, opacity: 0, duration: 0.8, ease: 'power2.in' }, push)
+        .to('[data-build-stage]', { opacity: 0, duration: 0.5 }, push + 1.6)
+        .to('[data-final-hero]', { opacity: 1, duration: 0.6 }, push + 1.5)
+        .from('[data-hero-line]', { yPercent: 110, duration: 0.8, ease: 'expo.out', stagger: 0.1 }, push + 1.7)
+        .from('[data-hero-item]', { y: 24, opacity: 0, duration: 0.6, stagger: 0.06 }, push + 2)
+
+      // Keyboard users who tab into the hero while it is still building jump to the end
+      const onFocus = () => {
+        const st = stRef.current
+        if (st && st.progress < 1) scrollToY(st.end)
+      }
+      const finalHero = root.current!.querySelector('[data-final-hero]')
+      finalHero?.addEventListener('focusin', onFocus)
+      return () => finalHero?.removeEventListener('focusin', onFocus)
+    },
+    { scope: root },
+  )
+
+  const skip = useCallback(() => {
+    const st = stRef.current
+    if (st) scrollToY(st.end + 1)
+  }, [])
 
   return (
-    <section
-      id="home"
-      aria-label="Introduction"
-      tabIndex={-1}
-      className="relative flex min-h-[100svh] items-center overflow-hidden outline-none"
-    >
-      <Aurora />
-
-      <div className="container-x relative pt-32 pb-28">
-        <m.p data-reveal className="mono-label text-[0.9375rem]" initial="hidden" animate={state} variants={fade(0)}>
-          {hero.greeting}
-        </m.p>
-
-        <h1 className="mt-4 text-[clamp(2.5rem,7vw,5.5rem)] leading-[1.05] font-bold tracking-[-0.03em]">
-          <GradientName text={`${person.firstName} ${person.lastName}`} play={play} />
-        </h1>
-
-        <m.p
-          data-reveal
-          className="mt-4 min-h-[1.3em] font-display text-[clamp(1.375rem,3.6vw,2.25rem)] leading-tight font-semibold text-muted"
-          initial="hidden"
-          animate={state}
-          variants={fade(NAME_TIME)}
-        >
-          <RoleTyper roles={hero.roles} start={play} />
-        </m.p>
-
-        {/* Static on purpose: visible from the first paint (largest text block, good for LCP) */}
-        <p className="mt-6 max-w-[40rem] text-[1.0625rem] leading-relaxed text-body md:text-lg">{hero.intro}</p>
-
-        <m.div data-reveal className="mt-10 flex flex-wrap gap-4" initial="hidden" animate={state} variants={fade(NAME_TIME + 0.2)}>
-          <Magnetic>
-            <a href="#projects" className="btn btn-primary">
-              {hero.primaryCta}
-              <ArrowRight className="h-5 w-5" aria-hidden="true" />
-            </a>
-          </Magnetic>
-          <Magnetic>
-            <a href={asset(links.cv)} download className="btn btn-outline">
-              <Download className="h-5 w-5" aria-hidden="true" />
-              {hero.secondaryCta}
-            </a>
-          </Magnetic>
-        </m.div>
-
-        <m.div
-          data-reveal
-          className="mt-10 flex flex-wrap items-center gap-3"
-          initial="hidden"
-          animate={state}
-          variants={fade(NAME_TIME + 0.3)}
-        >
-          <ul className="flex items-center gap-3" aria-label="Profiles">
-            {socials.map((s) => (
-              <li key={s.label}>
-                <a href={s.href} aria-label={s.label} className="icon-btn" {...linkProps(s.href)}>
-                  {s.icon}
-                </a>
-              </li>
-            ))}
-          </ul>
-          <span aria-hidden="true" className="mx-1 hidden h-6 w-px bg-border-strong sm:block" />
-          <p className="inline-flex items-center gap-2 rounded-full border border-success/30 bg-success/10 px-4 py-2 text-sm font-medium text-text">
-            <span className="relative flex h-2.5 w-2.5" aria-hidden="true">
-              <span className="pulse-dot absolute inset-0 rounded-full bg-success" />
-              <span className="relative h-2.5 w-2.5 rounded-full bg-success" />
-            </span>
-            {hero.availability}
-          </p>
-          <p className="inline-flex items-center gap-2 rounded-full border border-border bg-surface/60 px-4 py-2 text-sm text-muted">
-            <MapPin className="h-4 w-4 text-accent" aria-hidden="true" />
-            {person.location}
-          </p>
-        </m.div>
+    <section ref={root} id="home" aria-label="Introduction" tabIndex={-1} className="relative outline-none">
+      <div data-pin className="relative h-[100svh] min-h-[34rem] overflow-hidden">
+        <FinalHero />
+        <BuildStage onSkip={skip} />
       </div>
-
-      <m.a
-        href="#about"
-        aria-label={hero.scrollLabel}
-        className="absolute bottom-7 left-1/2 hidden -translate-x-1/2 sm:block"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: play ? 1 : 0 }}
-        transition={{ duration: 0.8, delay: NAME_TIME + 0.6 }}
-      >
-        <span className="flex h-11 w-7 justify-center rounded-full border border-border-strong pt-2">
-          <span className="scroll-dot block h-2 w-1 rounded-full bg-accent" />
-        </span>
-      </m.a>
     </section>
   )
 }

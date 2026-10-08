@@ -1,22 +1,32 @@
 import Lenis from 'lenis'
+import { gsap, ScrollTrigger } from './gsap'
 import { prefersReducedMotion } from './helpers'
 
 let lenis: Lenis | null = null
 let locks = 0
 
-/** Starts Lenis smooth scrolling (skipped with reduced motion). Returns a cleanup that destroys it. */
+/**
+ * Starts Lenis smooth scrolling on GSAP's clock so pinned, scroll-scrubbed scenes and smooth scrolling stay in sync.
+ * Skipped with reduced motion. Returns a cleanup that destroys it.
+ */
 export function initSmoothScroll() {
   if (prefersReducedMotion()) return () => {}
-  lenis = new Lenis({ duration: 1.1, easing: (t) => 1 - Math.pow(1 - t, 4) })
-  let frame = requestAnimationFrame(function raf(time) {
-    lenis?.raf(time)
-    frame = requestAnimationFrame(raf)
-  })
+  lenis = new Lenis({ lerp: 0.08, wheelMultiplier: 1 })
+  lenis.on('scroll', ScrollTrigger.update)
+  const tick = (time: number) => lenis?.raf(time * 1000)
+  gsap.ticker.add(tick)
+  gsap.ticker.lagSmoothing(0)
   return () => {
-    cancelAnimationFrame(frame)
+    gsap.ticker.remove(tick)
     lenis?.destroy()
     lenis = null
   }
+}
+
+/** Scrolls to an absolute position (used by "Skip intro"). */
+export function scrollToY(y: number) {
+  if (lenis) lenis.scrollTo(y, { duration: 1.2 })
+  else window.scrollTo({ top: y, behavior: prefersReducedMotion() ? 'auto' : 'smooth' })
 }
 
 /**

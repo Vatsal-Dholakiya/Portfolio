@@ -46,8 +46,8 @@ function RepoCard({ repo }: { repo: Repo }) {
   return (
     <TiltCard innerClassName="flex h-full flex-col p-6">
       <div className="flex items-start justify-between gap-4">
-        <h4 className="min-w-0 font-display text-lg font-semibold text-text">
-          <a href={repo.url} {...externalLink} className="break-words hover:text-primary-soft focus-visible:text-primary-soft">
+        <h4 className="min-w-0 font-display text-lg font-semibold text-bone">
+          <a href={repo.url} {...externalLink} className="break-words hover:text-emerald focus-visible:text-emerald">
             {/* Stretched link: the whole card is clickable */}
             <span className="absolute inset-0 rounded-2xl" aria-hidden="true" />
             {repo.name}
@@ -55,12 +55,12 @@ function RepoCard({ repo }: { repo: Repo }) {
           </a>
         </h4>
         <ArrowUpRight
-          className="h-5 w-5 shrink-0 text-muted transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+          className="h-5 w-5 shrink-0 text-ash transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
           aria-hidden="true"
         />
       </div>
-      <p className="mt-2 flex-1 text-[0.9375rem] leading-relaxed text-body">{description}</p>
-      <p className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-1 font-mono text-xs text-muted">
+      <p className="mt-2 flex-1 text-[0.9375rem] leading-relaxed text-mist">{description}</p>
+      <p className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-1 font-mono text-xs text-ash">
         {repo.language && (
           <span className="inline-flex items-center gap-1.5">
             <span
@@ -86,10 +86,10 @@ function RepoCard({ repo }: { repo: Repo }) {
 function Skeleton() {
   return (
     <li className="card skeleton h-[11.5rem] p-6" aria-hidden="true">
-      <span className="block h-5 w-2/5 rounded-md bg-surface-2" />
-      <span className="mt-4 block h-3.5 w-11/12 rounded-md bg-surface-2" />
-      <span className="mt-2 block h-3.5 w-3/5 rounded-md bg-surface-2" />
-      <span className="mt-9 block h-3 w-1/2 rounded-md bg-surface-2" />
+      <span className="block h-5 w-2/5 rounded-md bg-graphite" />
+      <span className="mt-4 block h-3.5 w-11/12 rounded-md bg-graphite" />
+      <span className="mt-2 block h-3.5 w-3/5 rounded-md bg-graphite" />
+      <span className="mt-9 block h-3 w-1/2 rounded-md bg-graphite" />
     </li>
   )
 }
@@ -101,8 +101,8 @@ export function GitHubRepos() {
     <div className="min-w-0">
       <Reveal className="mb-8 flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className="mono-label">{github.kicker}</p>
-          <h3 className="mt-2 text-2xl font-bold text-text md:text-[1.75rem]">{github.title}</h3>
+          <p className="label">{github.kicker}</p>
+          <h3 className="mt-2 text-2xl font-bold text-bone md:text-[1.75rem]">{github.title}</h3>
         </div>
         <a href={person.links.githubRepos} {...externalLink} className="link inline-flex items-center gap-2 text-sm font-medium">
           <GitHubIcon className="h-4 w-4" />
@@ -115,14 +115,14 @@ export function GitHubRepos() {
       {state.status === 'fallback' && (
         <div
           role="status"
-          className="mb-6 flex flex-wrap items-center gap-3 rounded-xl border border-border bg-surface px-4 py-3 text-sm text-muted"
+          className="mb-6 flex flex-wrap items-center gap-3 rounded-xl border border-line bg-carbon px-4 py-3 text-sm text-ash"
         >
-          <CircleAlert className="h-4 w-4 shrink-0 text-accent" aria-hidden="true" />
+          <CircleAlert className="h-4 w-4 shrink-0 text-emerald" aria-hidden="true" />
           <span className="min-w-0 flex-1">{github.errorMessage}</span>
           <button
             type="button"
             onClick={retry}
-            className="inline-flex items-center gap-1.5 rounded-lg px-2 py-1 font-medium text-primary-soft hover:text-text"
+            className="inline-flex items-center gap-1.5 rounded-lg px-2 py-1 font-medium text-emerald hover:text-bone"
           >
             <RefreshCw className="h-3.5 w-3.5" aria-hidden="true" /> {github.retry}
           </button>
