@@ -1,6 +1,6 @@
 import { expect, navHeight, scrollThrough, test } from './fixtures'
 
-const sections = ['work', 'story', 'pillars', 'next', 'contact']
+const sections = ['about', 'skills', 'experience', 'projects', 'learning', 'contact']
 
 /** Waits until the section's top sits just below the sticky navbar (smooth scrolling has finished). */
 async function expectSectionInView(page: import('@playwright/test').Page, id: string) {
@@ -38,6 +38,9 @@ test.describe('Navigation', () => {
       await toggle.click()
       const menu = page.locator('#mobile-menu')
       await expect(menu).toBeVisible()
+      // The menu covers the whole screen, even after the header has slid away on scroll
+      const box = (await menu.boundingBox())!
+      expect(box.height).toBeGreaterThanOrEqual(page.viewportSize()!.height - 1)
       expect(await page.evaluate(() => document.documentElement.style.overflow)).toBe('hidden')
       await menu.locator(`a[href="#${id}"]`).click()
       await expect(menu).toHaveCount(0)
@@ -58,16 +61,16 @@ test.describe('Navigation', () => {
     expect(consoleProblems).toEqual([])
   })
 
-  test('direct link /#work opens at the section, and back/forward work', async ({ page }) => {
-    await page.goto('/#work')
-    await expectSectionInView(page, 'work')
+  test('direct link /#projects opens at the section, and back/forward work', async ({ page }) => {
+    await page.goto('/#projects')
+    await expectSectionInView(page, 'projects')
     await page.goto('/')
-    await page.locator('a[href="#work"]:visible').first().click()
-    await expectSectionInView(page, 'work')
+    await page.locator('a[href="#projects"]:visible').first().click()
+    await expectSectionInView(page, 'projects')
     await page.goBack()
     await expect.poll(() => page.evaluate(() => window.scrollY)).toBeLessThan(5)
     await page.goForward()
-    await expectSectionInView(page, 'work')
+    await expectSectionInView(page, 'projects')
   })
 })
 
@@ -156,28 +159,28 @@ test.describe('Certificates', () => {
 })
 
 test.describe('Projects and data', () => {
-  test('featured work shows the WhatsApp case study and its key features', async ({ page }) => {
-    await page.goto('/#work')
-    await expect(page.locator('#work-title')).toHaveText('WhatsApp Business Automation Suite')
-    await expect(page.locator('#work li', { hasText: 'Group Grabber' })).toHaveCount(1)
-    await expect(page.locator('#work li', { hasText: 'Problem' })).toHaveCount(1)
+  test('projects show the PostFactory and WhatsApp case studies with their features', async ({ page }) => {
+    await page.goto('/#projects')
+    await expect(page.locator('#postfactory-title')).toHaveText('PostFactory')
+    await expect(page.locator('#whatsapp-automation-title')).toHaveText('WhatsApp Business Automation')
+    await expect(page.locator('#projects li', { hasText: 'Number filter' })).toHaveCount(1)
   })
 
   test('GitHub grid shows live repositories without forks, and caches them', async ({ page }) => {
-    await page.goto('/#work')
-    const cards = page.locator('#work h4 a')
+    await page.goto('/#projects')
+    const cards = page.locator('#projects h4 a')
     await expect(cards.first()).toBeVisible()
-    await expect(page.locator('#work h4', { hasText: 'some-fork' })).toHaveCount(0)
+    await expect(page.locator('#projects h4', { hasText: 'some-fork' })).toHaveCount(0)
     expect(await page.evaluate(() => !!sessionStorage.getItem('gh-repos-v2'))).toBe(true)
   })
 
   test('GitHub and Stack Overflow fall back gracefully when the APIs fail', async ({ page }) => {
     await page.route('**/api.github.com/**', (r) => r.fulfill({ status: 403, json: { message: 'API rate limit exceeded' } }))
     await page.route('**/api.stackexchange.com/**', (r) => r.abort())
-    await page.goto('/#work')
-    await expect(page.locator('#work [role="status"]')).toBeVisible()
-    await expect(page.locator('#work h4 a').first()).toBeVisible()
-    const so = page.locator('#work article', { hasText: 'Reputation' })
+    await page.goto('/#projects')
+    await expect(page.locator('#projects [role="status"]')).toBeVisible()
+    await expect(page.locator('#projects h4 a').first()).toBeVisible()
+    const so = page.locator('#projects article', { hasText: 'Reputation' })
     await so.scrollIntoViewIfNeeded()
     await expect(so).toContainText('563', { timeout: 6000 })
   })
@@ -233,8 +236,8 @@ test.describe('Layout and accessibility', () => {
   })
 
   test('skill tooltip opens, stays inside the viewport and closes on Escape', async ({ page, isMobile }) => {
-    await page.goto('/#pillars')
-    const chip = page.locator('#pillars button.chip').first()
+    await page.goto('/#skills')
+    const chip = page.locator('#skills button.chip').first()
     await chip.scrollIntoViewIfNeeded()
     await page.waitForTimeout(300)
     if (isMobile) await chip.tap()

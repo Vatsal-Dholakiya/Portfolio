@@ -35,13 +35,13 @@ export function SectionHead({
   const ref = useRef<HTMLHeadingElement>(null)
   useSplitReveal(ref)
   return (
-    <div className={`mb-14 md:mb-20 ${className}`}>
+    <div className={`mb-12 md:mb-16 ${className}`}>
       <p className="label mb-6 flex items-center gap-3">
         <span className={tone === 'ember' ? 'text-ember' : 'text-emerald'}>{String(index).padStart(2, '0')}</span>
         <span className="h-px w-8 bg-line-strong" aria-hidden="true" />
         {label}
       </p>
-      <h2 ref={ref} id={id} className="max-w-[18ch] text-[clamp(2.25rem,5.5vw,4.75rem)] leading-[0.98] font-extrabold tracking-[-0.045em]">
+      <h2 ref={ref} id={id} className="max-w-[22ch] text-[clamp(2rem,4.2vw,3.5rem)] leading-[1.05] font-bold tracking-[-0.035em]">
         <Accented text={title} words={accent} className={tone === 'ember' ? 'text-ember' : 'text-emerald'} />
       </h2>
       {children}

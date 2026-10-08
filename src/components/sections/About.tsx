@@ -1,12 +1,12 @@
 import { useRef } from 'react'
-import { mission } from '../../data/content'
+import { about } from '../../data/content'
 import { gsap, SplitText, useGSAP } from '../../lib/gsap'
 import { prefersReducedMotion } from '../../lib/helpers'
 import { Accented } from '../ui/SectionHead'
 import { Reveal } from '../ui/Reveal'
 
-/** A huge statement whose words light up one by one as it scrolls through the viewport. */
-export function Mission() {
+/** About: a short statement whose words light up as it scrolls into view, then two paragraphs. */
+export function About() {
   const section = useRef<HTMLElement>(null)
   const text = useRef<HTMLParagraphElement>(null)
 
@@ -39,27 +39,34 @@ export function Mission() {
   )
 
   return (
-    <section ref={section} id="mission" aria-labelledby="mission-label" className="section-y relative overflow-hidden">
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute top-1/2 left-1/2 h-[60vmax] w-[60vmax] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(46,230,166,0.07),transparent_65%)]"
-      />
+    <section
+      ref={section}
+      id="about"
+      aria-labelledby="about-label"
+      tabIndex={-1}
+      className="section-y relative overflow-hidden outline-none"
+    >
       <div className="container-x relative">
-        <p id="mission-label" className="label mb-10 flex items-center gap-3">
+        <p id="about-label" className="label mb-8 flex items-center gap-3">
           <span className="text-emerald">01</span>
           <span className="h-px w-8 bg-line-strong" aria-hidden="true" />
-          {mission.label}
+          {about.label}
         </p>
-        <p
-          ref={text}
-          className="max-w-[22ch] font-display text-[clamp(1.75rem,4vw,3.5rem)] leading-[1.04] font-semibold tracking-[-0.045em] text-bone"
-        >
-          <Accented text={mission.statement} words={mission.accentWords} />
-        </p>
-        <Reveal className="mt-12 flex max-w-xl items-start gap-4">
-          <span className="mt-3 h-px w-10 shrink-0 bg-emerald" aria-hidden="true" />
-          <p className="text-lg text-mist">{mission.support}</p>
-        </Reveal>
+        <div className="grid gap-10 lg:grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)] lg:gap-16">
+          <p
+            ref={text}
+            className="max-w-[24ch] font-display text-[clamp(1.75rem,3.4vw,2.75rem)] leading-[1.15] font-semibold tracking-[-0.03em] text-bone"
+          >
+            <Accented text={about.statement} words={about.accentWords} />
+          </p>
+          <Reveal className="space-y-5 lg:pt-2">
+            {about.paragraphs.map((para) => (
+              <p key={para} className="text-[1.0625rem] leading-relaxed text-mist">
+                {para}
+              </p>
+            ))}
+          </Reveal>
+        </div>
       </div>
     </section>
   )

@@ -31,6 +31,8 @@ export interface Stat {
   value?: number
   prefix?: string
   suffix?: string
+  /** Decimal places shown, e.g. 1 for 4.8 */
+  decimals?: number
   label: string
   /** 'stackoverflow-reputation' is replaced by the live value from the Stack Exchange API */
   live?: 'stackoverflow-reputation'
@@ -137,10 +139,11 @@ export const person = {
 
 export const nav = {
   links: [
-    { id: 'work', label: 'Work' },
-    { id: 'story', label: 'Story' },
-    { id: 'pillars', label: 'Skills' },
-    { id: 'next', label: 'Learning' },
+    { id: 'about', label: 'About' },
+    { id: 'skills', label: 'Skills' },
+    { id: 'experience', label: 'Experience' },
+    { id: 'projects', label: 'Projects' },
+    { id: 'learning', label: 'Learning' },
     { id: 'contact', label: 'Contact' },
   ],
   resumeLabel: 'Résumé',
@@ -154,7 +157,7 @@ export const nav = {
 
 /* ------------------------------------------------------------------ Films */
 
-export const films: Record<'orbit' | 'developer' | 'nextChapter' | 'showcase', Film> = {
+export const films: Record<'orbit' | 'developer' | 'nextChapter', Film> = {
   /** V1 Hero Orbit — loops behind the hero */
   orbit: {
     src: '',
@@ -179,14 +182,6 @@ export const films: Record<'orbit' | 'developer' | 'nextChapter' | 'showcase', F
     poster: '',
     alt: 'Vatsal walking down a dark corridor of screens: apps and code behind him, AI visuals ahead.',
   },
-  /** V4 Project Showcase — scrubbed by scroll */
-  showcase: {
-    src: '',
-    webm: '',
-    mobileSrc: '',
-    poster: '',
-    alt: 'A smartphone lifts from a desk as code streams in and an Android app assembles and launches.',
-  },
 }
 
 /* ------------------------------------------------------------------ Hero */
@@ -204,115 +199,155 @@ export const hero = {
   },
 }
 
+/* ----------------------------------------------------- Build animation */
+
+export const build = {
+  label: '// Built in front of you',
+  title: 'Code, screens and features, assembled piece by piece.',
+  scrollHint: 'Scroll to build',
+  buildDone: 'Build succeeded',
+  /** Text inside the pieces dragged onto the screen */
+  pieces: {
+    button: 'Ship it',
+    stat: { value: '10,000+', label: 'Messages a day' },
+    skills: ['Java', 'Android', 'SQL', 'Git'],
+    chat: { title: 'AI · Learning', question: 'What should I learn next?', answer: 'Generative AI, step by step.' },
+    appTitle: 'Orders',
+    secondApp: 'Customers',
+  },
+}
+
 /* ----------------------------------------------------------------- Stats */
 
 export const stats = {
   label: 'In numbers',
   items: [
     { value: 4, suffix: '+', label: 'Years building software' },
-    { value: 90, prefix: '~', suffix: '%', label: 'Manual messaging automated for a client' },
-    { value: 5, label: 'Certifications' },
+    { value: 10000, suffix: '+', label: 'WhatsApp messages sent a day by my automation tool' },
+    { value: 4.8, decimals: 1, suffix: '★', label: 'User rating for PostFactory' },
+    { value: 5, label: 'Professional certifications' },
     { value: 563, label: 'Stack Overflow reputation', live: 'stackoverflow-reputation' },
-    { value: 47, label: 'Stack Overflow answers' },
     /** FILL IN: number of Android apps you shipped to Google Play — hidden while value is undefined */
     { label: 'Android apps on Google Play' },
   ] as Stat[],
 }
 
-/* --------------------------------------------------------------- Mission */
+/* ----------------------------------------------------------------- About */
 
-export const mission = {
-  label: 'Mission',
-  statement:
-    'Good software disappears into the work it does. I build the kind people stop noticing — because it just works. And I am learning AI to make the next thing smarter.',
+export const about = {
+  label: 'About',
+  statement: 'I build software that removes busywork — desktop tools and mobile apps that businesses rely on every day.',
   /** Words rendered in the serif italic accent */
-  accentWords: ['disappears', 'works.', 'smarter.'],
-  support: 'Based in London. Building since 2019. Currently exploring AI and Machine Learning.',
+  accentWords: ['busywork'],
+  paragraphs: [
+    "I'm a Software Developer and Android Developer based in London. I built a WhatsApp automation tool that now sends more than 10,000 messages a day, and I worked on PostFactory, a business card design app rated 4.8 stars on Android and iOS.",
+    'I hold an MSc in Cloud Computing with Distinction from the University of East London. I care about clean code, clear communication and software that keeps working long after handover. Right now I am learning Generative AI and the ethics of AI.',
+  ],
 }
 
-/* --------------------------------------------------------------- Pillars */
+/* ---------------------------------------------------------------- Skills */
 
 const uni = 'University'
 const cc = 'CodeCreator Technologies'
 const freelance = 'Freelance'
 const mtit = 'Made Tech IT'
 const masters = "Master's degree"
+const pf = 'PostFactory'
 
-export const pillars = {
-  label: 'What I do',
-  title: 'Three things, done properly.',
+export const skills = {
+  label: 'Skills',
+  title: 'The tools I work with.',
   usedAtLabel: 'Used at',
-  hint: 'Hover or tap a skill to see where I used it.',
-  items: [
+  hint: 'Hover over or tap a skill to see where I have used it.',
+  groups: [
     {
-      id: 'software',
-      title: 'Software Development',
-      icon: 'monitor',
-      promise: 'Software that removes busywork.',
-      body: 'Desktop and business software built from real requirements, then delivered and handed over properly.',
+      title: 'Languages',
+      icon: 'code',
       skills: [
-        { name: 'Java', usedAt: [uni, cc, freelance] },
+        { name: 'Java', usedAt: [uni, cc, freelance, pf] },
         { name: 'Python', usedAt: [uni] },
-        { name: 'SQL', full: 'Structured Query Language', usedAt: [uni, freelance] },
-        { name: 'PostgreSQL', usedAt: [uni, freelance] },
-        { name: 'MySQL', usedAt: [uni, freelance] },
+        { name: 'SQL', full: 'Structured Query Language', usedAt: [uni, freelance, pf] },
+        { name: 'PHP', full: 'Hypertext Preprocessor', usedAt: [pf] },
+        { name: 'XML', full: 'Extensible Markup Language', usedAt: [uni, cc] },
+        { name: 'HTML & CSS', full: 'HyperText Markup Language and Cascading Style Sheets', usedAt: [freelance, pf] },
+      ],
+    },
+    {
+      title: 'Mobile development',
+      icon: 'smartphone',
+      skills: [
+        { name: 'Android SDK', full: 'Android Software Development Kit', usedAt: [uni, cc, pf] },
+        { name: 'Android Studio', usedAt: [uni, cc, pf] },
+        { name: 'Flutter', usedAt: [pf] },
+        { name: 'iOS apps', full: 'Cross-platform release with Flutter', usedAt: [pf] },
+        { name: 'Responsive UI', full: 'User interfaces for many screen sizes and densities', usedAt: [cc, pf] },
+        { name: 'REST APIs', full: 'Representational State Transfer Application Programming Interfaces', usedAt: [cc, freelance] },
+        { name: 'Google Play releases', usedAt: [cc, pf] },
+      ],
+    },
+    {
+      title: 'Desktop and automation',
+      icon: 'workflow',
+      skills: [
+        { name: 'Java desktop apps', usedAt: [freelance] },
+        { name: 'NetBeans', usedAt: [freelance] },
+        { name: 'Selenium', full: 'Browser automation', usedAt: [freelance] },
+        { name: 'Excel data import', usedAt: [freelance] },
+      ],
+    },
+    {
+      title: 'Databases',
+      icon: 'database',
+      skills: [
+        { name: 'MySQL', usedAt: [uni, freelance, pf] },
+        { name: 'PostgreSQL', usedAt: [uni] },
         { name: 'SQLite', usedAt: [uni, freelance] },
-        { name: 'Selenium automation', usedAt: [freelance] },
+        { name: 'Firebase', full: 'Realtime Database and Authentication', usedAt: [uni, freelance] },
+      ],
+    },
+    {
+      title: 'Tools and practices',
+      icon: 'git',
+      skills: [
         { name: 'Git & GitHub', usedAt: [uni, cc, freelance] },
-        { name: 'Docker', usedAt: ['Projects'] },
-        { name: 'Requirements gathering', usedAt: [mtit] },
+        { name: 'Docker', usedAt: ['Personal projects'] },
+        { name: 'UI/UX design', full: 'User interface and user experience design', usedAt: [pf, 'Great Learning certificate'] },
+        { name: 'Requirements gathering', usedAt: [mtit, freelance] },
+        { name: 'Testing on real devices', usedAt: [cc, pf] },
       ],
     },
     {
-      id: 'android',
-      title: 'Android Development',
-      icon: 'android',
-      promise: 'Native apps, shipped to real users.',
-      body: 'Native Android apps in Java and XML for small businesses, connected to REST APIs and released on Google Play.',
+      title: 'Cloud and networking',
+      icon: 'cloud',
       skills: [
-        { name: 'Java', usedAt: [uni, cc] },
-        { name: 'XML layouts', full: 'Extensible Markup Language', usedAt: [uni, cc] },
-        { name: 'Android SDK', full: 'Software Development Kit', usedAt: [uni, cc] },
-        { name: 'Android Studio', usedAt: [uni, cc] },
-        { name: 'Responsive UI', full: 'User Interface design for multiple screen sizes and densities', usedAt: [cc] },
-        { name: 'Firebase', full: 'Realtime Database and Authentication', usedAt: [uni] },
-        { name: 'REST APIs', full: 'Representational State Transfer Application Programming Interfaces', usedAt: [cc] },
-        { name: 'Google Play releases', usedAt: [cc] },
+        { name: 'AWS · Azure · GCP', full: 'Amazon Web Services, Microsoft Azure and Google Cloud Platform (academic)', usedAt: [masters] },
+        { name: 'Linux command line', usedAt: [masters, 'Self-taught'] },
+        { name: 'TCP/IP, DNS, HTTP, SSH', full: 'Core networking protocols', usedAt: [masters] },
+        { name: 'Wireshark', full: 'Packet capture and analysis', usedAt: ['Ethical Hacking course', masters] },
+        { name: 'Nmap', full: 'Network Mapper: network and port scanning', usedAt: ['Ethical Hacking course', masters] },
+        { name: 'VMware · VirtualBox', usedAt: ['Coursework'] },
       ],
     },
     {
-      id: 'ai',
-      title: 'Learning AI',
+      title: 'Learning: AI',
       icon: 'brain',
+      tone: 'ember',
       tag: 'In progress',
-      promise: "Where I'm heading.",
-      body: 'I studied AI and Machine Learning fundamentals during my MSc, and I am now learning hands-on, one small project at a time.',
       skills: [
-        { name: 'AI & ML fundamentals', full: 'Artificial Intelligence and Machine Learning', usedAt: [masters] },
-        { name: 'MATLAB data analysis', full: 'Matrix Laboratory', usedAt: [masters] },
-        { name: 'Python', usedAt: [uni] },
         { name: 'Generative AI', usedAt: ['Learning now'] },
-        { name: 'Ethics of AI', full: 'Responsible and fair use of Artificial Intelligence', usedAt: ['Learning now'] },
+        { name: 'Ethics of AI', full: 'Fairness, transparency and responsible use of AI', usedAt: ['Learning now'] },
+        { name: 'AI & ML fundamentals', full: 'Artificial Intelligence and Machine Learning', usedAt: [masters] },
+        { name: 'MATLAB', full: 'Data analysis', usedAt: [masters] },
       ],
     },
-  ] as { id: string; title: string; icon: IconName; tag?: string; promise: string; body: string; skills: Skill[] }[],
-  alsoTitle: 'Also comfortable with',
-  also: [
-    { name: 'Linux command line', usedAt: ['Self-taught', masters] },
-    { name: 'Wireshark', full: 'Packet capture and analysis', usedAt: ['Ethical Hacking course', masters] },
-    { name: 'Nmap', full: 'Network Mapper: network and port scanning', usedAt: ['Ethical Hacking course', masters] },
-    { name: 'TCP/IP, DNS, HTTP/HTTPS, SSH', full: 'Core networking protocols', usedAt: [masters] },
-    { name: 'AWS · Azure · GCP', full: 'Amazon Web Services, Microsoft Azure, Google Cloud Platform (academic)', usedAt: [masters] },
-    { name: 'VMware · VirtualBox', usedAt: ['Coursework', 'Personal projects'] },
-    { name: 'Windows Server · Active Directory', usedAt: ['Coursework', 'Personal projects'] },
-  ] as Skill[],
+  ] as { title: string; icon: IconName; tone?: 'ember'; tag?: string; skills: Skill[] }[],
 }
 
 /* ----------------------------------------------------------------- Story */
 
 export const story = {
-  label: 'Story',
-  title: 'How I got here.',
+  label: 'Experience',
+  title: 'Experience and education.',
   chapters: [
     {
       year: '2017',
@@ -324,7 +359,7 @@ export const story = {
       year: '2019',
       title: 'Freelance Software Developer',
       place: 'Self-employed, India',
-      text: 'A WhatsApp automation tool for small retailers — around 90% of their manual messaging, gone.',
+      text: 'Built a WhatsApp automation tool for small retailers. It now sends more than 10,000 messages a day.',
     },
     {
       year: '2020',
@@ -336,7 +371,7 @@ export const story = {
       year: '2022',
       title: 'MSc Cloud Computing',
       place: 'University of East London · Sep 2022 – Sep 2023',
-      text: 'Cloud platforms, security, and the fundamentals of AI and Machine Learning.',
+      text: 'Cloud platforms, security, and the fundamentals of AI and machine learning.',
       badge: 'Distinction',
     },
     {
@@ -349,7 +384,7 @@ export const story = {
       year: 'Now',
       title: 'Learning AI',
       place: 'Ongoing',
-      text: 'Exploring AI and Machine Learning, one honest project at a time.',
+      text: 'Learning Generative AI and the ethics of AI, one practical project at a time.',
     },
   ] as Chapter[],
   certificatesTitle: 'Certificates',
@@ -401,92 +436,170 @@ export const story = {
   ] as Certificate[],
 }
 
-/* ------------------------------------------------------ Developer (film) */
+/* ------------------------------------------------------------ How I work */
 
-export const developer = {
-  label: 'The Developer',
-  title: 'How I work.',
-  text: 'Java and Android Studio, APIs and a terminal compiling — with a couple of screens for what I am learning next.',
-  /** Labels on the floating screens of the built-in animated scene */
+export const process = {
+  label: 'How I work',
+  title: 'From first conversation to release.',
+  text: 'Every project follows the same professional process, whether it is a small Android app or a business tool used every day.',
+  steps: [
+    {
+      title: 'Understand the problem',
+      text: 'I start by talking to the people who will use the software: what slows them down, what success looks like and what must never break. The result is a short, written list of requirements that everyone agrees on.',
+    },
+    {
+      title: 'Plan and design',
+      text: 'I sketch the screens and user journey, choose the architecture and database structure, and break the work into small tasks with clear priorities, so progress is visible from the first week.',
+    },
+    {
+      title: 'Build in small steps',
+      text: 'I write clean, readable code in small increments, using Git branches and meaningful commits. Each feature is shown to the client early, so feedback arrives while changes are still cheap.',
+    },
+    {
+      title: 'Test thoroughly',
+      text: 'I test every feature on real devices and different screen sizes, and check the difficult cases: invalid input, lost connections, large data sets and slow phones.',
+    },
+    {
+      title: 'Release with care',
+      text: 'I prepare signed release builds, publish to Google Play or deliver the desktop installer, and watch the first days of real use closely to catch anything unexpected.',
+    },
+    {
+      title: 'Hand over and support',
+      text: 'I document how the software works, show the team how to use it, and stay available for fixes and improvements after launch.',
+    },
+  ],
+  /** Labels on the floating screens of the animated scene */
   panels: {
     editor: 'MainActivity.java',
     studio: 'Android Studio',
-    terminal: 'terminal',
+    terminal: 'Terminal',
     api: 'GET /api/orders',
-    ai: ['learning / neural-networks', 'learning / loss-curve'],
+    ai: ['Learning: neural networks', 'Learning: loss curve'],
   },
 }
 
-/* --------------------------------------------------------- What I build */
+/* -------------------------------------------------------------- Projects */
 
-export const whatIBuild = {
+export interface CaseStudy {
+  id: string
+  kind: string
+  title: string
+  tagline: string
+  summary: string
+  meta: { label: string; value: string }[]
+  features: string[]
+  impact: { value: string; label: string }[]
+  result: string
+  tags: string[]
+  /** Which interface the animated illustration shows */
+  visual: 'phone' | 'desktop'
+}
+
+export const projects = {
   label: 'Projects',
-  title: 'What I build.',
-  showcaseCaption: 'Code in. App out.',
-  capabilities: [
-    { icon: 'workflow', title: 'Business automation software', text: 'Desktop tools that take repetitive work off people’s plates.' },
-    { icon: 'smartphone', title: 'Native Android apps', text: 'Responsive, API-connected and ready for Google Play.' },
-    { icon: 'terminal', title: 'Client software, end to end', text: 'Requirements, build, testing and a proper handover.' },
-  ] as { icon: IconName; title: string; text: string }[],
+  title: 'Selected work.',
+  intro: 'Two products I built that are used by real businesses, followed by other work and my public code.',
+  featuresLabel: 'Key features',
+  impactLabel: 'Results',
+  caseStudies: [
+    {
+      id: 'postfactory',
+      kind: 'Mobile application',
+      title: 'PostFactory',
+      tagline: 'Business card design app for Android and iOS',
+      summary:
+        'PostFactory lets entrepreneurs, freelancers and professionals design modern business cards in minutes, without complex design software. Users choose from hundreds of professionally crafted templates for different industries, then customise fonts, colours, icons, backgrounds and layouts with a few taps.',
+      meta: [
+        { label: 'Client', value: 'Mobile design platform for professionals' },
+        { label: 'Duration', value: '8 months' },
+        { label: 'Platforms', value: 'Android and iOS' },
+      ],
+      features: [
+        'Hundreds of professionally crafted templates',
+        'Industry-specific designs for many sectors',
+        'Full customisation of fonts, colours, icons and backgrounds',
+        'Intuitive drag-and-drop layout editor',
+        'Real-time preview while editing',
+        'Export as PNG, PDF or print-ready files',
+        'Cloud storage for designs and templates',
+        'Cross-platform support for Android and iOS',
+      ],
+      impact: [
+        { value: '4.8★', label: 'Average user rating' },
+        { value: '2', label: 'Platforms launched: Android and iOS' },
+        { value: 'Minutes', label: 'To design a card that used to take hours' },
+      ],
+      result:
+        'Launched successfully on Android and iOS. Users praise the intuitive interface and professional templates, and business card design time dropped from hours to minutes.',
+      tags: ['Java', 'Android', 'Android Studio', 'Flutter', 'iOS', 'PHP', 'MySQL', 'CSS', 'UI/UX'],
+      visual: 'phone',
+    },
+    {
+      id: 'whatsapp-automation',
+      kind: 'Desktop application',
+      title: 'WhatsApp Business Automation',
+      tagline: 'Bulk and one-to-one messaging for small businesses',
+      summary:
+        'A desktop application for bulk or one-to-one WhatsApp messaging. The left column manages recipients and attachments, the right column holds the message composer and sending history, and the toolbar gives quick access to import, group management, filtering and reports. One large Send button starts a campaign, and every result is saved automatically to the sending log.',
+      meta: [
+        { label: 'Client', value: 'Small retail businesses, such as jewellery shops' },
+        { label: 'Type', value: 'Private client project' },
+        { label: 'Platform', value: 'Windows desktop' },
+      ],
+      features: [
+        'Bulk messaging with recipient management',
+        'One-to-one messages, personalised with each customer’s name',
+        'File attachments for images and documents',
+        'Contact import from Excel and group management',
+        'Number filter that removes contacts not on WhatsApp',
+        'Message templates, birthday and anniversary offers',
+        'Advanced filtering and reports',
+        'Automatic sending log with detailed records',
+      ],
+      impact: [
+        { value: '10,000+', label: 'Messages sent a day' },
+        { value: '99.8%', label: 'Delivery rate' },
+        { value: '90%', label: 'Less time spent on manual messaging' },
+        { value: '400%', label: 'Improvement in communication efficiency' },
+      ],
+      result:
+        'Deployed for small retailers, the system handles more than 10,000 messages a day with a 99.8% delivery rate, and cut manual messaging time by 90%.',
+      tags: ['Java', 'NetBeans', 'Selenium', 'SQLite', 'MySQL', 'Firebase', 'REST APIs'],
+      visual: 'desktop',
+    },
+  ] as CaseStudy[],
+  moreTitle: 'More work',
   sourceLabel: 'Source code',
   liveLabel: 'Live site',
-  projects: [
+  more: [
     {
       id: 'android-business-apps',
-      title: 'Android Apps for Small Businesses',
+      title: 'Android apps for small businesses',
       summary:
-        'Native Android apps built in a team at CodeCreator Technologies: responsive layouts, REST API integration and Google Play releases. Client projects, so the code is private.',
+        'Native Android apps built in a team at CodeCreator Technologies, with responsive layouts, REST API integration and Google Play releases. These were client projects, so the code is private.',
       tags: ['Java', 'XML', 'Android Studio', 'Android SDK', 'REST APIs', 'Google Play'],
       github: '',
       live: '',
     },
     {
       id: 'portfolio',
-      title: 'This Portfolio',
-      summary: 'A cinematic, scroll-driven portfolio with live GitHub and Stack Overflow data, built to be fast and accessible.',
+      title: 'This portfolio',
+      summary: 'A scroll-driven portfolio with live GitHub and Stack Overflow data, built to be fast, accessible and easy to update.',
       tags: ['React', 'TypeScript', 'GSAP', 'Tailwind CSS'],
       github: 'https://github.com/Vatsal-Dholakiya/Portfolio',
       live: '',
     },
   ] as Project[],
-  /** The phone app assembled in the built-in showcase scene */
-  phoneApp: { title: 'Orders', items: ['Gold chain · 22K', 'Anniversary offer', 'Bulk message · 1,200'], button: 'Send campaign' },
-}
-
-/* --------------------------------------------------------- Featured work */
-
-export const featured = {
-  id: 'whatsapp-suite',
-  label: 'Featured work',
-  title: 'WhatsApp Business Automation Suite',
-  badge: 'Private client project',
-  summary: 'A desktop application that lets small businesses such as jewellery shops reach thousands of customers in a single campaign.',
-  impact: { value: 90, prefix: '~', suffix: '%', label: 'of manual messaging work automated' },
-  steps: [
-    {
-      title: 'Problem',
-      text: 'Shop staff were messaging customers one by one: slow, repetitive, and easy to get wrong.',
-    },
-    {
-      title: 'Build',
-      text: 'A Java desktop app that imports contacts, filters invalid numbers and sends personalised campaigns automatically.',
-    },
-    {
-      title: 'Result',
-      text: 'Around 90% of the manual messaging work automated, with birthday and anniversary offers running alongside campaigns.',
-    },
-  ],
-  featuresLabel: 'Key features',
-  features: [
-    'Bulk messaging to thousands of contacts in a single campaign.',
-    'Contact import directly from Excel files.',
-    'Group Grabber: extracts contacts from WhatsApp groups.',
-    'Number Filter: removes numbers not registered on WhatsApp before sending.',
-    'Personalised messages that address each customer by name.',
-    'Automated birthday and anniversary messages with occasion-based offers.',
-    'Local storage in SQLite, synchronised to MySQL through APIs, with Firebase integration.',
-  ],
-  tags: ['Java', 'NetBeans', 'Selenium', 'SQLite', 'MySQL', 'Firebase', 'XML', 'HTML'],
+  /** Labels shown inside the animated app illustrations */
+  phoneApp: { title: 'PostFactory', templates: ['Corporate', 'Tech', 'Creative', 'Personal'], button: 'Export PDF' },
+  desktopApp: {
+    title: 'WhatsApp Automation',
+    toolbar: ['Import', 'Groups', 'Filter', 'Reports'],
+    recipients: ['Priya Shah', 'Amit Patel', 'Neha Joshi', 'Ravi Mehta', 'Sneha Desai'],
+    message: 'Hello {name}, our anniversary offer is live: 15% off all gold jewellery this week.',
+    send: 'Send',
+    log: 'Sending log',
+  },
 }
 
 /* ---------------------------------------------------------------- GitHub */
@@ -570,13 +683,13 @@ export const nextChapter = {
   logTitle: 'Currently learning',
   /** What you are learning now. Each entry: topic, a short note, and a status. Empty list hides the log. */
   log: [
-    { topic: 'AI & Machine Learning fundamentals', note: 'Covered during my MSc.', status: 'Studied' },
+    { topic: 'AI and machine learning fundamentals', note: 'Covered during my MSc.', status: 'Studied' },
     { topic: 'Generative AI', note: 'How generative models work and how to build with them.', status: 'In progress' },
     { topic: 'Ethics of AI', note: 'Fairness, transparency and responsible use of AI.', status: 'In progress' },
   ],
   /** Screens in the built-in corridor scene */
-  behind: ['Android app', 'Desktop automation', 'BUILD SUCCESSFUL'],
-  ahead: ['neural networks', 'training data', 'next: build with AI'],
+  behind: ['Android app', 'Desktop automation', 'Build successful'],
+  ahead: ['Neural networks', 'Training data', 'Next: building with AI'],
 }
 
 /* ------------------------------------------------------------------ CTA */
@@ -590,7 +703,7 @@ export const contact = {
   copied: 'Copied!',
   copyAria: 'Copy email address',
   cta: 'Start a conversation',
-  compiling: ['compiling message…', 'tests passed', 'opening email'],
+  compiling: ['Compiling message…', 'Tests passed', 'Opening email'],
   mailSubject: 'Hello Vatsal',
   cvLabel: 'Download CV',
   preferencesTitle: 'Work preferences',

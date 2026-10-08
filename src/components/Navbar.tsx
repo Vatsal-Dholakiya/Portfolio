@@ -119,7 +119,7 @@ export function Navbar() {
   }, [open])
   useEffect(() => onOtherOverlay('menu', close), [close])
   useEffect(() => {
-    const mq = window.matchMedia('(min-width: 768px)')
+    const mq = window.matchMedia('(min-width: 1024px)')
     const onChange = () => mq.matches && setOpen(false)
     mq.addEventListener('change', onChange)
     return () => mq.removeEventListener('change', onChange)
@@ -129,72 +129,74 @@ export function Navbar() {
   const cv = asset(person.links.cv)
 
   return (
-    <header ref={header} className="fixed inset-x-0 top-0 z-50">
-      <div aria-hidden="true" className="absolute inset-0 border-b border-line bg-void/70 backdrop-blur-xl" />
-      <div className="container-x relative flex h-[var(--nav-h)] items-center justify-between gap-4">
-        <a
-          href="#home"
-          className="relative z-[60] flex shrink-0 items-center gap-3 rounded-xl"
-          aria-label={nav.homeLabel}
-          data-cursor="Top"
-        >
-          <Monogram className="h-8 w-8" />
-          <span className="label hidden text-bone lg:inline">
-            {person.firstName} {person.lastName}
-          </span>
-        </a>
-
-        <nav aria-label="Main" className="hidden md:block">
-          <ul ref={list} className="relative flex items-center gap-1">
-            {nav.links.map((item) => (
-              <li key={item.id}>
-                <a
-                  href={`#${item.id}`}
-                  aria-current={active === item.id ? 'location' : undefined}
-                  className={`block px-3 py-2 font-mono text-[0.75rem] tracking-[0.12em] uppercase transition-colors duration-300 hover:text-bone ${
-                    active === item.id ? 'text-bone' : 'text-ash'
-                  }`}
-                >
-                  {item.label}
-                </a>
-              </li>
-            ))}
-            <span
-              ref={underline}
-              aria-hidden="true"
-              className="pointer-events-none absolute bottom-0.5 left-0 h-px w-[100px] origin-left bg-emerald opacity-0"
-            />
-          </ul>
-        </nav>
-
-        <div className="relative z-[60] flex items-center gap-3 sm:gap-4">
-          <span className="label hidden items-center gap-3 text-mist sm:flex" aria-label={`Local time in ${person.location}`}>
-            <LocalTime />
-            <Battery />
-          </span>
+    <>
+      <header ref={header} className="fixed inset-x-0 top-0 z-50">
+        <div aria-hidden="true" className="absolute inset-0 border-b border-line bg-void/70 backdrop-blur-xl" />
+        <div className="container-x relative flex h-[var(--nav-h)] items-center justify-between gap-4">
           <a
-            href={cv}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hidden h-9 items-center gap-2 rounded-full border border-line-strong px-4 font-mono text-[0.72rem] tracking-[0.1em] text-bone uppercase transition-colors hover:border-emerald md:inline-flex"
+            href="#home"
+            className="relative z-[60] flex shrink-0 items-center gap-3 rounded-xl"
+            aria-label={nav.homeLabel}
+            data-cursor="Top"
           >
-            <FileText className="h-3.5 w-3.5" aria-hidden="true" />
-            {nav.resumeLabel}
+            <Monogram className="h-8 w-8" />
+            <span className="label hidden text-bone xl:inline">
+              {person.firstName} {person.lastName}
+            </span>
           </a>
-          <button
-            ref={toggleRef}
-            type="button"
-            className="icon-btn md:hidden"
-            aria-label={open ? nav.closeMenu : nav.openMenu}
-            aria-expanded={open}
-            aria-controls="mobile-menu"
-            onClick={() => setOpen((o) => !o)}
-          >
-            {open ? <X className="h-5 w-5" aria-hidden="true" /> : <Menu className="h-5 w-5" aria-hidden="true" />}
-          </button>
-        </div>
-      </div>
 
+          <nav aria-label="Main" className="hidden lg:block">
+            <ul ref={list} className="relative flex items-center gap-1">
+              {nav.links.map((item) => (
+                <li key={item.id}>
+                  <a
+                    href={`#${item.id}`}
+                    aria-current={active === item.id ? 'location' : undefined}
+                    className={`block px-2.5 py-2 font-mono xl:px-3 text-[0.75rem] tracking-[0.12em] uppercase transition-colors duration-300 hover:text-bone ${
+                      active === item.id ? 'text-bone' : 'text-ash'
+                    }`}
+                  >
+                    {item.label}
+                  </a>
+                </li>
+              ))}
+              <span
+                ref={underline}
+                aria-hidden="true"
+                className="pointer-events-none absolute bottom-0.5 left-0 h-px w-[100px] origin-left bg-emerald opacity-0"
+              />
+            </ul>
+          </nav>
+
+          <div className="relative z-[60] flex items-center gap-3 sm:gap-4">
+            <span className="label hidden items-center gap-3 text-mist sm:flex" aria-label={`Local time in ${person.location}`}>
+              <LocalTime />
+              <Battery />
+            </span>
+            <a
+              href={cv}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hidden h-9 items-center gap-2 rounded-full border border-line-strong px-4 font-mono text-[0.72rem] tracking-[0.1em] text-bone uppercase transition-colors hover:border-emerald lg:inline-flex"
+            >
+              <FileText className="h-3.5 w-3.5" aria-hidden="true" />
+              {nav.resumeLabel}
+            </a>
+            <button
+              ref={toggleRef}
+              type="button"
+              className="icon-btn lg:hidden"
+              aria-label={open ? nav.closeMenu : nav.openMenu}
+              aria-expanded={open}
+              aria-controls="mobile-menu"
+              onClick={() => setOpen((o) => !o)}
+            >
+              {open ? <X className="h-5 w-5" aria-hidden="true" /> : <Menu className="h-5 w-5" aria-hidden="true" />}
+            </button>
+          </div>
+        </div>
+      </header>
+      {/* Outside the header: the header moves (hide on scroll), which would trap a fixed child inside it */}
       <AnimatePresence>
         {open && (
           <m.div
@@ -203,7 +205,7 @@ export function Navbar() {
             role="dialog"
             aria-modal="true"
             aria-label={nav.menuLabel}
-            className="fixed inset-0 z-[55] flex flex-col bg-void/97 px-5 pt-24 pb-10 backdrop-blur-xl md:hidden"
+            className="fixed inset-0 z-[45] flex flex-col bg-void/97 px-5 pt-24 pb-10 backdrop-blur-xl lg:hidden"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0, transition: { duration: 0.25, ease: EASE } }}
@@ -242,6 +244,6 @@ export function Navbar() {
           </m.div>
         )}
       </AnimatePresence>
-    </header>
+    </>
   )
 }

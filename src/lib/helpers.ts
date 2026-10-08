@@ -3,8 +3,8 @@ export const externalLink = { target: '_blank', rel: 'noopener noreferrer' } as 
 
 export const isExternal = (href: string) => /^https?:\/\//.test(href)
 
-/** Props for any link: external links open in a new tab, others stay in place. */
-export const linkProps = (href: string) => (isExternal(href) ? externalLink : {})
+/** Props for any link: external and email links open in a new tab (this also works inside sandboxed previews). */
+export const linkProps = (href: string) => (isExternal(href) || href.startsWith('mailto:') ? externalLink : {})
 
 /** mailto: link with an optional pre-filled subject. */
 export const mailto = (email: string, subject?: string) => `mailto:${email}${subject ? `?subject=${encodeURIComponent(subject)}` : ''}`

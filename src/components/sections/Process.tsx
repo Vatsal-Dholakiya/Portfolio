@@ -1,5 +1,6 @@
-import { developer, films, hero } from '../../data/content'
+import { films, hero, process } from '../../data/content'
 import { FilmSection } from '../film/FilmSection'
+import { RevealItem, Stagger } from '../ui/Reveal'
 import { gsap } from '../../lib/gsap'
 
 const glass = 'absolute rounded-xl border bg-carbon/85 shadow-[0_30px_80px_rgba(0,0,0,0.6)] backdrop-blur-[2px]'
@@ -15,13 +16,13 @@ function Bar({ title, tone = 'emerald' }: { title: string; tone?: 'emerald' | 'e
 
 /** Code-built stand-in for "The Developer" film: holographic screens around a desk; the camera pushes into the main monitor. */
 function Scene() {
-  const p = developer.panels
+  const p = process.panels
   return (
     <div aria-hidden="true" className="absolute inset-0 [perspective:1400px]">
       <div className="studio-light absolute inset-0 opacity-70" />
       <div data-dev-scene className="absolute inset-0 [transform-style:preserve-3d]">
         {/* Main monitor */}
-        <div data-dev-main className={`${glass} top-[13%] left-1/2 w-[86vw] -translate-x-1/2 border-emerald/25 md:top-[14%] md:w-[38vw]`}>
+        <div data-dev-main className={`${glass} top-[6%] left-1/2 w-[86vw] -translate-x-1/2 border-emerald/25 md:top-[8%] md:w-[38vw]`}>
           <Bar title={p.editor} />
           <div className="p-3 font-mono text-[0.6rem] leading-[1.8] md:p-5 md:text-[0.8rem]">
             {hero.pieces.code.map((line, i) => (
@@ -37,7 +38,7 @@ function Scene() {
         </div>
 
         {/* Android Studio with a layout preview */}
-        <div data-dev-panel="-1" className={`${glass} top-[12%] left-[3%] hidden w-[22vw] border-line md:block`}>
+        <div data-dev-panel="-1" className={`${glass} top-[6%] left-[3%] hidden w-[22vw] border-line md:block`}>
           <Bar title={p.studio} />
           <div className="flex gap-3 p-3">
             <div className="flex-1 space-y-1.5">
@@ -54,7 +55,7 @@ function Scene() {
         </div>
 
         {/* Terminal */}
-        <div data-dev-panel="-1" className={`${glass} top-[42%] left-[3%] hidden w-[22vw] border-line md:block`}>
+        <div data-dev-panel="-1" className={`${glass} top-[52%] left-[5%] hidden w-[22vw] border-line md:block`}>
           <Bar title={p.terminal} />
           <div className="space-y-1 p-3 font-mono text-[0.58rem] text-mist md:text-[0.7rem]">
             <p>$ ./gradlew assembleRelease</p>
@@ -64,7 +65,7 @@ function Scene() {
         </div>
 
         {/* API flow */}
-        <div data-dev-panel="1" className={`${glass} top-[12%] right-[3%] hidden w-[22vw] border-line md:block`}>
+        <div data-dev-panel="1" className={`${glass} top-[6%] right-[3%] hidden w-[22vw] border-line md:block`}>
           <Bar title={p.api} />
           <div className="space-y-1 p-3 font-mono text-[0.68rem] text-mist">
             <p>
@@ -75,7 +76,7 @@ function Scene() {
         </div>
 
         {/* What he is learning (ember) */}
-        <div data-dev-panel="1" className={`${glass} top-[40%] right-[5%] w-[44vw] border-ember/30 md:top-[40%] md:right-[3%] md:w-[22vw]`}>
+        <div data-dev-panel="1" className={`${glass} top-[56%] right-[5%] w-[44vw] border-ember/30 md:top-[48%] md:right-[3%] md:w-[22vw]`}>
           <Bar title={p.ai[0] ?? ''} tone="ember" />
           <svg viewBox="0 0 160 70" className="w-full p-3">
             {[15, 35, 55].map((y1) =>
@@ -95,7 +96,7 @@ function Scene() {
             <circle cx="140" cy="35" r="4" fill="#FF8A3D" />
           </svg>
         </div>
-        <div data-dev-panel="1" className={`${glass} top-[50%] right-[28%] hidden w-[16vw] border-ember/30 md:block`}>
+        <div data-dev-panel="1" className={`${glass} top-[62%] right-[28%] hidden w-[16vw] border-ember/30 md:block`}>
           <Bar title={p.ai[1] ?? ''} tone="ember" />
           <svg viewBox="0 0 120 50" className="w-full p-3">
             <path d="M4 6 C 20 30, 40 38, 60 41 S 100 45, 116 46" fill="none" stroke="#FF8A3D" strokeWidth="1.5" />
@@ -107,19 +108,37 @@ function Scene() {
   )
 }
 
-export function DeveloperFilm() {
+function Steps() {
+  return (
+    <div className="container-x pt-12 pb-[var(--section-py)]">
+      <Stagger as="ol" className="grid gap-4 md:grid-cols-2 lg:grid-cols-3" stagger={0.08} amount={0.1}>
+        {process.steps.map((step, i) => (
+          <RevealItem as="li" key={step.title} className="card min-w-0 p-6">
+            <span className="font-mono text-sm text-emerald">{String(i + 1).padStart(2, '0')}</span>
+            <h3 className="mt-3 text-lg font-semibold">{step.title}</h3>
+            <p className="mt-2 text-[0.9375rem] leading-relaxed text-mist">{step.text}</p>
+          </RevealItem>
+        ))}
+      </Stagger>
+    </div>
+  )
+}
+
+/** How I work: a short animated scene of a developer's screens, then the six steps of the process. */
+export function Process() {
   return (
     <FilmSection
-      id="developer"
-      labelledBy="developer-title"
+      id="process"
+      labelledBy="process-title"
       film={films.developer}
       scene={<Scene />}
       length={2}
+      after={<Steps />}
       animate={(tl, root, desktop) => {
         const scene = root.querySelector('[data-dev-scene]')
         const panels = root.querySelectorAll<HTMLElement>('[data-dev-panel]')
         // Slow orbit, panels drifting in depth, then a push into the main monitor
-        gsap.set(scene, { transformOrigin: '50% 36%' })
+        gsap.set(scene, { transformOrigin: '50% 22%' })
         tl.fromTo(scene, { rotateY: desktop ? -16 : -8, rotateX: 6, scale: 0.92 }, { rotateY: 4, rotateX: 0, scale: 1, duration: 0.55 }, 0)
         panels.forEach((el, i) => {
           const side = Number(el.dataset.devPanel)
@@ -131,19 +150,19 @@ export function DeveloperFilm() {
           )
           tl.to(el, { x: side * (desktop ? 520 : 260), opacity: 0, duration: 0.3, ease: 'power2.in' }, 0.62)
         })
-        tl.to(scene, { scale: desktop ? 2.1 : 1.6, rotateY: 0, duration: 0.4, ease: 'power2.in' }, 0.6)
+        tl.to(scene, { scale: desktop ? 1.5 : 1.25, rotateY: 0, duration: 0.4, ease: 'power2.in' }, 0.6)
       }}
     >
-      <div data-film-copy className="container-x absolute inset-x-0 bottom-0 pb-[clamp(2rem,8vh,5rem)]">
-        <p className="label mb-5 flex items-center gap-3">
+      <div data-film-copy className="container-x">
+        <p className="label mb-4 flex items-center gap-3">
           <span className="text-emerald">04</span>
           <span className="h-px w-8 bg-line-strong" aria-hidden="true" />
-          {developer.label}
+          {process.label}
         </p>
-        <h2 id="developer-title" className="max-w-[18ch] text-[clamp(2rem,4.5vw,3.75rem)] leading-[1] font-extrabold tracking-[-0.04em]">
-          {developer.title}
+        <h2 id="process-title" className="max-w-[22ch] text-[clamp(2rem,4.2vw,3.5rem)] leading-[1.05] font-bold tracking-[-0.035em]">
+          {process.title}
         </h2>
-        <p className="mt-4 max-w-xl text-base text-mist md:text-lg">{developer.text}</p>
+        <p className="mt-3 max-w-2xl text-mist">{process.text}</p>
       </div>
     </FilmSection>
   )

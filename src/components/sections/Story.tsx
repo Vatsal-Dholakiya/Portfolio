@@ -78,9 +78,9 @@ export function Story() {
   const last = story.chapters.length - 1
 
   return (
-    <section ref={root} id="story" aria-labelledby="story-title" tabIndex={-1} className="group/story section-y relative outline-none">
+    <section ref={root} id="experience" aria-labelledby="story-title" tabIndex={-1} className="group/story section-y relative outline-none">
       <div className="container-x">
-        <SectionHead index={3} label={story.label} title={story.title} accent={['here.']} id="story-title" className="lg:mb-0" />
+        <SectionHead index={3} label={story.label} title={story.title} id="story-title" className="lg:mb-0" />
       </div>
 
       <div data-story-pin className="story-pin relative">

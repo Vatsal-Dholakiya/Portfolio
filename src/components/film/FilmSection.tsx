@@ -90,17 +90,20 @@ export function FilmSection({
 
   return (
     <section ref={root} id={id} aria-labelledby={labelledBy} tabIndex={-1} className={`relative outline-none ${className}`}>
-      <div ref={pin} className="relative h-[100svh] min-h-[34rem] overflow-hidden bg-void">
-        <div className="absolute inset-0">
-          {hasFilm ? <FilmVideo film={film} mode="scrub" trigger={pin} end={scrubEnd} className="h-full w-full object-cover" /> : scene}
+      <div ref={pin} className="relative flex h-[100svh] min-h-[36rem] flex-col overflow-hidden bg-void">
+        {/* Copy sits above the scene (never on top of it) */}
+        <div className="relative z-10 pt-[calc(var(--nav-h)+2rem)]">{children}</div>
+        <div className="relative min-h-0 flex-1 overflow-hidden">
+          <div className="absolute inset-0">
+            {hasFilm ? <FilmVideo film={film} mode="scrub" trigger={pin} end={scrubEnd} className="h-full w-full object-cover" /> : scene}
+          </div>
+          <div aria-hidden="true" className="vignette pointer-events-none absolute inset-0" />
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-b from-transparent to-void"
+          />
+          <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 h-16 bg-gradient-to-t from-transparent to-void" />
         </div>
-        <div aria-hidden="true" className="vignette pointer-events-none absolute inset-0" />
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-b from-transparent to-void"
-        />
-        <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 h-1/4 bg-gradient-to-t from-transparent to-void" />
-        {children}
       </div>
       {after}
     </section>

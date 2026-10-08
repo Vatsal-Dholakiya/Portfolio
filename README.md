@@ -29,26 +29,26 @@ Leave any optional field as `''` to hide it everywhere (no empty or dead links a
 | -------------------------------------------------- | --------------------------------------------------------------------- |
 | Domain for canonical URL, social previews, sitemap | `site.url`                                                            |
 | Page title, description, social image              | `site`                                                                |
-| Email, GitHub, Stack Overflow, LinkedIn, CV path   | `person.links` (`linkedin: ''` hides every LinkedIn link)             |
+| Email, GitHub, Stack Overflow, LinkedIn, CV path   | `person.links`                                                        |
 | Navbar links and labels                            | `nav`                                                                 |
-| Hero text and the pieces dragged onto the laptop   | `hero` (`hero.pieces`)                                                |
+| Hero text                                          | `hero`                                                                |
+| Build animation text (pieces on the screen)        | `build`                                                               |
 | Numbers strip                                      | `stats.items` (an item without `value` is hidden)                     |
-| Mission statement                                  | `mission`                                                             |
-| Three pillars, skills and tooltips ("used at")     | `pillars`                                                             |
-| Timeline chapters and certificates                 | `story.chapters`, `story.certificates` (**add one = add one object**) |
-| Film scene text                                    | `developer`, `nextChapter`, `whatIBuild.showcaseCaption`              |
-| Capabilities and project cards                     | `whatIBuild`                                                          |
-| WhatsApp case study                                | `featured`                                                            |
+| About text                                         | `about`                                                               |
+| Skills, groups and tooltips ("used at")            | `skills.groups`                                                       |
+| Experience timeline and certificates               | `story.chapters`, `story.certificates` (**add one = add one object**) |
+| How I work (process steps)                         | `process`                                                             |
+| Case studies, more work                            | `projects.caseStudies`, `projects.more`                               |
 | GitHub grid, Stack Overflow fallback figures       | `github`, `stackoverflow.fallback`                                    |
-| "Currently learning" log                           | `nextChapter.log` (an empty list hides it)                            |
-| Contact heading, compile log, work preferences     | `contact`                                                             |
+| Learning log                                       | `nextChapter.log` (an empty list hides it)                            |
+| Contact heading, work preferences                  | `contact`                                                             |
 | Footer, terminal commands, 404 text                | `footer`, `terminal`, `notFound`                                      |
 
 ### Adding the films
 
 Each film section shows a code-built animated scene until its video exists. To use a generated film, put the files in
 `public/media/` and fill in the matching entry in `films` (`src`, optional `webm` and `mobileSrc`, `poster`).
-Encode scroll-scrubbed films (`developer`, `nextChapter`, `showcase`) with every frame as a keyframe so seeking is instant, e.g.
+Encode scroll-scrubbed films (`developer`, `nextChapter`) with every frame as a keyframe so seeking is instant, e.g.
 `ffmpeg -i in.mp4 -c:v libx264 -g 1 -crf 22 -an -movflags +faststart out.mp4`.
 
 ### Files in `public/`
@@ -82,8 +82,8 @@ New site from Git → build command `npm run build`, publish directory `dist`. N
 
 ## How it works
 
-- **Hero "Built in front of you":** on the first visit in a session (motion allowed, no `#section` link), a class set before first paint (`html.js-build`) shows the build stage. A pinned, scroll-scrubbed GSAP timeline drags interface pieces onto a laptop (a phone below 768 px), then pushes the camera into the screen to reveal the final hero. "Skip intro" is always available; reloads, reduced motion and no-JavaScript visits show the final hero directly.
-- **Pinned scenes:** Story (sideways timeline on desktop), The Developer, Project Showcase and The Next Chapter pin and scrub with scroll. Lenis smooth scrolling runs on GSAP's ticker so they stay in sync.
+- **"Built in front of you":** below the hero, a pinned, scroll-scrubbed GSAP timeline drags interface pieces onto a laptop (a phone below 768 px) until the build succeeds. Reduced motion and no-JavaScript visits show the assembled screen.
+- **Pinned scenes:** the build animation, Experience (sideways timeline on desktop), How I work and Learning pin and scrub with scroll; headings sit above each scene so text never overlaps it. Lenis smooth scrolling runs on GSAP's ticker so they stay in sync.
 - **Pre-rendering:** `scripts/prerender.mjs` renders the full page (all code-split sections) to static HTML and inlines the CSS, so the first paint does not wait for JavaScript. React then hydrates it.
 - **SEO:** a small Vite plugin in `vite.config.ts` writes the title, description, canonical URL, Open Graph, Twitter and JSON-LD `Person` tags from `content.ts`.
 - **Motion:** only `transform`, `opacity` and video time are animated. With `prefers-reduced-motion`: no build sequence, no pinning or scrubbing, no smooth scrolling, no cursor, grain frozen, and all content visible immediately.
@@ -97,9 +97,9 @@ New site from Git → build command `npm run build`, publish directory `dist`. N
 src/
   data/content.ts          all content + TypeScript types
   components/              Navbar, Hero, Contact, Footer, GitHubRepos, StackOverflowCard, CertificateModal, Toast, NotFound, Icon
-    hero/                  BuildStage (laptop/phone assembly), FinalHero
-    sections/              StatsStrip, Mission, Pillars, Story, Certificates, DeveloperFilm, PhoneShowcase,
-                           WhatIBuild, FeaturedWork, NextChapter
+    hero/                  FinalHero
+    sections/              BuildSequence, StatsStrip, About, Skills, Story, Certificates, Process,
+                           Projects (+ ProjectMocks), NextChapter
     film/                  FilmSection (pinned shot), FilmVideo (looping or scroll-scrubbed video)
     extras/                Cursor, Grain, Terminal
     ui/                    SectionHead, SkillChips, TiltCard, Magnetic, Modal, Tooltip, Reveal, Counter, Monogram, BrandIcons

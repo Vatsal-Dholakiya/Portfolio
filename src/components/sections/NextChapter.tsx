@@ -67,7 +67,7 @@ function Scene() {
 export function NextChapter() {
   return (
     <FilmSection
-      id="next"
+      id="learning"
       labelledBy="next-title"
       film={films.nextChapter}
       scene={<Scene />}
@@ -113,16 +113,16 @@ export function NextChapter() {
         )
       }
     >
-      <div data-film-copy className="container-x absolute inset-x-0 bottom-0 pb-[clamp(2rem,8vh,5rem)]">
-        <p className="label mb-5 flex items-center gap-3">
-          <span className="text-ember">07</span>
+      <div data-film-copy className="container-x">
+        <p className="label mb-4 flex items-center gap-3">
+          <span className="text-ember">06</span>
           <span className="h-px w-8 bg-line-strong" aria-hidden="true" />
           {nextChapter.label}
         </p>
-        <h2 id="next-title" className="max-w-[16ch] text-[clamp(2rem,4.5vw,3.75rem)] leading-[1] font-extrabold tracking-[-0.04em]">
+        <h2 id="next-title" className="max-w-[22ch] text-[clamp(2rem,4.2vw,3.5rem)] leading-[1.05] font-bold tracking-[-0.035em]">
           <Accented text={nextChapter.title} words={['AI.']} className="text-ember" />
         </h2>
-        <p className="mt-5 max-w-xl text-lg text-mist">{nextChapter.text}</p>
+        <p className="mt-3 max-w-2xl text-mist">{nextChapter.text}</p>
       </div>
     </FilmSection>
   )

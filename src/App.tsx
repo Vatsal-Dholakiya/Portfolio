@@ -26,13 +26,12 @@ const named = <K extends string>(load: () => Promise<Record<K, React.ComponentTy
     chain = next
     return next.then((mod) => ({ default: mod[key] }))
   })
-const PhoneShowcase = named(() => import('./components/sections/PhoneShowcase'), 'PhoneShowcase')
-const Mission = named(() => import('./components/sections/Mission'), 'Mission')
-const Pillars = named(() => import('./components/sections/Pillars'), 'Pillars')
+const BuildSequence = named(() => import('./components/sections/BuildSequence'), 'BuildSequence')
+const About = named(() => import('./components/sections/About'), 'About')
+const Skills = named(() => import('./components/sections/Skills'), 'Skills')
 const Story = named(() => import('./components/sections/Story'), 'Story')
-const DeveloperFilm = named(() => import('./components/sections/DeveloperFilm'), 'DeveloperFilm')
-const WhatIBuild = named(() => import('./components/sections/WhatIBuild'), 'WhatIBuild')
-const FeaturedWork = named(() => import('./components/sections/FeaturedWork'), 'FeaturedWork')
+const Process = named(() => import('./components/sections/Process'), 'Process')
+const Projects = named(() => import('./components/sections/Projects'), 'Projects')
 const NextChapter = named(() => import('./components/sections/NextChapter'), 'NextChapter')
 const Contact = named(() => import('./components/Contact'), 'Contact')
 const Footer = named(() => import('./components/Footer'), 'Footer')
@@ -92,11 +91,11 @@ export default function App({ notFound = false }: { notFound?: boolean }) {
       <main id="main" tabIndex={-1} className="relative outline-none">
         <Hero />
         <Suspense fallback={null}>
-          <PhoneShowcase />
+          <BuildSequence />
         </Suspense>
         <StatsStrip />
         {/* One boundary per section: React hydrates them separately and yields to the browser in between */}
-        {[Mission, Pillars, Story, DeveloperFilm, WhatIBuild, FeaturedWork, NextChapter].map((Section, i) => (
+        {[About, Skills, Story, Process, Projects, NextChapter].map((Section, i) => (
           <Suspense key={i} fallback={null}>
             <Section />
           </Suspense>

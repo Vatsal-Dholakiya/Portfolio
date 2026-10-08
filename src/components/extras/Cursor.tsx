@@ -41,9 +41,11 @@ export function Cursor() {
       if (labelled) setLabel(next)
       const ease = 'expo.out'
       gsap.to(dot.current, { scale: next ? 0 : 1, duration: 0.3, ease })
+      // A plain ring never hides what is under it; only the labelled ring gets a backdrop so its label is readable
       gsap.to(ring.current, {
         scale: labelled ? 1 : next === 'link' ? 0.55 : 0.2,
         opacity: next && next !== 'text' ? 1 : 0,
+        backgroundColor: labelled ? 'rgba(5, 6, 7, 0.85)' : 'rgba(5, 6, 7, 0)',
         duration: 0.4,
         ease,
       })
@@ -66,7 +68,7 @@ export function Cursor() {
   return (
     <div ref={root} aria-hidden="true" className="cursor pointer-events-none fixed top-0 left-0 z-[100]">
       <span ref={dot} className="absolute -top-[5px] -left-[5px] h-[10px] w-[10px] rounded-full bg-emerald" />
-      <span ref={ring} className="absolute -top-9 -left-9 h-18 w-18 rounded-full border border-emerald bg-void/70 backdrop-blur-sm" />
+      <span ref={ring} className="absolute -top-9 -left-9 h-18 w-18 rounded-full border border-emerald" />
       <span
         ref={text}
         className="absolute top-0 left-0 -translate-x-1/2 -translate-y-1/2 font-mono text-[0.68rem] font-medium tracking-[0.1em] whitespace-nowrap text-bone uppercase"

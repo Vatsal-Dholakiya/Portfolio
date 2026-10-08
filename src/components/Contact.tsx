@@ -3,7 +3,7 @@ import { AnimatePresence, m } from 'framer-motion'
 import { Briefcase, Check, Copy, Download, Globe2, MapPin, Send } from 'lucide-react'
 import { asset, contact, films, person } from '../data/content'
 import { EASE } from '../lib/animations'
-import { mailto, prefersReducedMotion } from '../lib/helpers'
+import { externalLink, mailto, prefersReducedMotion } from '../lib/helpers'
 import { Toast } from './Toast'
 import { Magnetic } from './ui/Magnetic'
 import { Reveal } from './ui/Reveal'
@@ -52,15 +52,11 @@ export function Contact() {
   }
 
   const href = mailto(links.email, contact.mailSubject)
-  // A one-second fake build log, then the email opens. The link still works on its own (no JavaScript, modified clicks).
-  const compile = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0 || prefersReducedMotion() || compiled >= 0) return
-    e.preventDefault()
+  // The link opens the email app itself (also inside sandboxed previews); the click plays a one-second build log
+  const compile = () => {
+    if (prefersReducedMotion() || compiled >= 0) return
     contact.compiling.forEach((_, i) => later(() => setCompiled(i), i * 380))
-    later(() => {
-      window.location.href = href
-    }, contact.compiling.length * 380)
-    later(() => setCompiled(-1), contact.compiling.length * 380 + 2000)
+    later(() => setCompiled(-1), contact.compiling.length * 380 + 2500)
   }
 
   const [user, domain] = links.email.split('@')
@@ -80,14 +76,14 @@ export function Contact() {
 
       <div className="container-x section-y relative">
         <p className="label mb-8 flex items-center gap-3">
-          <span className="text-emerald">08</span>
+          <span className="text-emerald">07</span>
           <span className="h-px w-8 bg-line-strong" aria-hidden="true" />
           {contact.label}
         </p>
         <h2
           ref={heading}
           id="contact-title"
-          className="max-w-[14ch] text-[clamp(2.5rem,7vw,6rem)] leading-[0.95] font-extrabold tracking-[-0.05em]"
+          className="max-w-[16ch] text-[clamp(2.25rem,5vw,4.25rem)] leading-[1.02] font-bold tracking-[-0.04em]"
         >
           <Accented text={contact.heading} words={[contact.accentWord]} />
         </h2>
@@ -99,6 +95,7 @@ export function Contact() {
             <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center">
               <a
                 href={mailto(links.email)}
+                {...externalLink}
                 className="w-fit min-w-0 font-display text-[clamp(1.25rem,4.6vw,2.5rem)] leading-tight font-semibold tracking-[-0.03em] text-bone underline decoration-emerald/40 decoration-1 underline-offset-[0.2em] transition-colors hover:text-emerald"
                 data-cursor="Write"
               >
@@ -120,13 +117,13 @@ export function Contact() {
 
             <div className="mt-10 flex flex-wrap items-center gap-3">
               <Magnetic>
-                <a href={href} onClick={compile} className="btn btn-primary" data-cursor="Send">
+                <a href={href} {...externalLink} onClick={compile} className="btn btn-primary" data-cursor="Send">
                   <Send className="h-5 w-5" aria-hidden="true" />
                   {contact.cta}
                 </a>
               </Magnetic>
               <Magnetic>
-                <a href={asset(links.cv)} download className="btn btn-ghost" data-cursor="Save">
+                <a href={asset(links.cv)} {...externalLink} className="btn btn-ghost" data-cursor="Save">
                   <Download className="h-5 w-5" aria-hidden="true" />
                   {contact.cvLabel}
                 </a>

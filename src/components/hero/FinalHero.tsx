@@ -1,6 +1,6 @@
 import { ArrowDownRight, Download, Mail } from 'lucide-react'
 import { asset, films, hero, person } from '../../data/content'
-import { linkProps, mailto, present } from '../../lib/helpers'
+import { externalLink, linkProps, mailto, present } from '../../lib/helpers'
 import { FilmVideo } from '../film/FilmVideo'
 import { GitHubIcon, LinkedInIcon, StackOverflowIcon } from '../ui/BrandIcons'
 import { Magnetic } from '../ui/Magnetic'
@@ -31,12 +31,12 @@ export function FinalHero() {
         <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-b from-transparent to-void" />
       </div>
 
-      <div className="container-x relative flex min-h-[100svh] flex-col justify-end pt-[calc(var(--nav-h)+2rem)] pb-[clamp(2rem,7vh,4.5rem)]">
+      <div className="container-x relative flex min-h-[100svh] flex-col justify-center pt-[calc(var(--nav-h)+3rem)] pb-[clamp(2.5rem,7vh,4.5rem)]">
         <p data-hero-item className="label mb-5 flex items-center gap-3 text-mist">
           <span className="h-px w-8 bg-emerald" aria-hidden="true" />
           {hero.kicker}
         </p>
-        <h1 className="font-display text-[clamp(2.75rem,9.5vw,8.5rem)] leading-[0.86] font-extrabold tracking-[-0.055em] uppercase">
+        <h1 className="font-display text-[clamp(2.75rem,7vw,6.25rem)] leading-[0.98] font-semibold tracking-[-0.045em]">
           <span className="sr-only">{`${person.firstName} ${person.lastName}`}</span>
           <span aria-hidden="true" data-hero-name className="block">
             <span className="block overflow-hidden pb-[0.06em]">
@@ -45,24 +45,26 @@ export function FinalHero() {
               </span>
             </span>
             <span className="block overflow-hidden pb-[0.06em]">
-              <span data-hero-line className="text-outline block" data-text={person.lastName} />
+              <span data-hero-line className="block text-mist">
+                {person.lastName}
+              </span>
             </span>
           </span>
         </h1>
 
-        <div className="mt-8 grid gap-8 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)] lg:items-end">
-          <p data-hero-item className="max-w-[38rem] text-[clamp(1.0625rem,1.6vw,1.375rem)] leading-relaxed text-mist">
+        <div className="mt-10 grid gap-8 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)] lg:items-end">
+          <p data-hero-item className="max-w-[36rem] text-[clamp(1.0625rem,1.4vw,1.25rem)] leading-relaxed text-mist">
             {hero.line}
           </p>
           <div data-hero-item className="flex flex-wrap items-center gap-3 lg:justify-end">
             <Magnetic>
-              <a href="#work" className="btn btn-primary" data-cursor="View">
+              <a href="#projects" className="btn btn-primary" data-cursor="View">
                 {hero.primaryCta}
                 <ArrowDownRight className="h-5 w-5" aria-hidden="true" />
               </a>
             </Magnetic>
             <Magnetic>
-              <a href={asset(links.cv)} download className="btn btn-ghost" data-cursor="Save">
+              <a href={asset(links.cv)} {...externalLink} className="btn btn-ghost" data-cursor="Save">
                 <Download className="h-5 w-5" aria-hidden="true" />
                 {hero.secondaryCta}
               </a>
