@@ -217,7 +217,7 @@ test.describe('Projects and data', () => {
     await expect(page.locator('#terminal-input')).toBeFocused()
     await page.keyboard.type('whoami')
     await page.keyboard.press('Enter')
-    await expect(terminal).toContainText('Data & IT Analyst')
+    await expect(terminal).toContainText('Software Developer, Android Developer and Data & IT Analyst')
     await page.keyboard.type('nope')
     await page.keyboard.press('Enter')
     await expect(terminal).toContainText('Command not found')

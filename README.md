@@ -98,7 +98,7 @@ src/
   components/              Navbar, Hero, Contact, Footer, GitHubRepos, StackOverflowCard, CertificateModal, Toast, NotFound, Icon
     hero/                  FinalHero
     sections/              BuildSequence, StatsStrip, About, Skills, Story, Certificates, Process,
-                           Projects (+ ProjectMocks), NextChapter
+                           Projects (+ ProjectShowcase), NextChapter
     film/                  FilmSection (pinned shot), FilmVideo (looping or scroll-scrubbed video)
     extras/                Cursor, Grain, Terminal
     ui/                    SectionHead, SkillChips, TiltCard, Magnetic, Modal, Tooltip, Reveal, Counter, Monogram, BrandIcons

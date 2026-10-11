@@ -60,7 +60,7 @@ function Scene() {
           <div className="space-y-1 p-3 font-mono text-[0.58rem] text-mist md:text-[0.7rem]">
             <p>$ ./gradlew assembleRelease</p>
             <p className="text-ash">&gt; Task :app:compileReleaseJava</p>
-            <p className="text-emerald">BUILD SUCCESSFUL in 14s</p>
+            <p className="text-emerald">BUILD SUCCESSFUL</p>
           </div>
         </div>
 
@@ -69,9 +69,9 @@ function Scene() {
           <Bar title={p.api} />
           <div className="space-y-1 p-3 font-mono text-[0.68rem] text-mist">
             <p>
-              <span className="text-emerald">200</span> OK · 84 ms
+              <span className="text-emerald">200</span> OK
             </p>
-            <p className="text-ash">{'{ "orders": [ … ] }'}</p>
+            <p className="text-ash">{'{ "data": [ … ] }'}</p>
           </div>
         </div>
 

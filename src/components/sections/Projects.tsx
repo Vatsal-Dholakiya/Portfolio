@@ -7,7 +7,6 @@ import { GitHubIcon } from '../ui/BrandIcons'
 import { Reveal, RevealItem, Stagger } from '../ui/Reveal'
 import { SectionHead } from '../ui/SectionHead'
 import { TiltCard } from '../ui/TiltCard'
-import { DesktopMock, PhoneMock } from './ProjectMocks'
 import { DesktopShots, PhoneShots } from './ProjectShowcase'
 
 function CaseStudyBlock({ study, index }: { study: CaseStudy; index: number }) {
@@ -38,11 +37,7 @@ function CaseStudyBlock({ study, index }: { study: CaseStudy; index: number }) {
             ) : (
               <DesktopShots images={study.images} title={study.title} />
             )
-          ) : study.visual === 'phone' ? (
-            <PhoneMock />
-          ) : (
-            <DesktopMock />
-          )}
+          ) : null}
         </Reveal>
       </div>
 

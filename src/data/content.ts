@@ -112,11 +112,11 @@ export const site = {
   /** FILL IN: your live domain without a trailing slash, e.g. 'https://vatsaldholakiya.com'.
    *  Used for the canonical URL, social previews and sitemap.xml. Leave '' until you have one. */
   url: 'https://www.vatsaldholakiya.com',
-  title: 'Vatsal Dholakiya — Data & IT Analyst | Software Developer | Android Developer',
+  title: 'Vatsal Dholakiya — Software Developer | Android Developer | Data & IT Analyst',
   description:
-    'Vatsal Dholakiya is a London-based Data & IT Analyst, Software Developer and Android Developer working with Python, SQL, Java and machine learning, with an MSc in Cloud Computing (Distinction).',
+    'Vatsal Dholakiya is a London-based Software Developer, Android Developer and Data & IT Analyst working with Python, SQL, Java and machine learning, with an MSc in Cloud Computing (Distinction).',
   ogImage: '/og-image.png',
-  ogImageAlt: 'Vatsal Dholakiya, Data & IT Analyst, Software Developer and Android Developer',
+  ogImageAlt: 'Vatsal Dholakiya, Software Developer, Android Developer and Data & IT Analyst',
   locale: 'en_GB',
 }
 
@@ -126,8 +126,8 @@ export const person = {
   firstName: 'Vatsal',
   lastName: 'Dholakiya',
   initials: 'VD',
-  jobTitle: 'Data & IT Analyst, Software Developer and Android Developer',
-  roleLine: 'Data & IT Analyst · Software Developer · Android Developer',
+  jobTitle: 'Software Developer, Android Developer and Data & IT Analyst',
+  roleLine: 'Software Developer · Android Developer · Data & IT Analyst',
   location: 'London, United Kingdom',
   timeZone: 'Europe/London',
   links: {
@@ -190,7 +190,7 @@ export const films: Record<'orbit' | 'developer' | 'nextChapter', Film> = {
 /* ------------------------------------------------------------------ Hero */
 
 export const hero = {
-  kicker: 'Data & IT Analyst · Software Developer · Android Developer',
+  kicker: 'Software Developer · Android Developer · Data & IT Analyst',
   line: "I analyse data, build software and keep live systems healthy — and I'm learning AI to build what comes next.",
   primaryCta: 'See my work',
   availability: 'Open to opportunities',
@@ -214,8 +214,8 @@ export const build = {
     stat: { value: '500+', label: 'Messages a day' },
     skills: ['Java', 'Android', 'SQL', 'Git'],
     chat: { title: 'AI · Learning', question: 'What should I learn next?', answer: 'Generative AI, step by step.' },
-    appTitle: 'Orders',
-    secondApp: 'Customers',
+    appTitle: 'PostFactory',
+    secondApp: 'WhatsApp Tool',
   },
 }
 
@@ -228,8 +228,6 @@ export const stats = {
     { value: 500, suffix: '+', label: 'WhatsApp messages a day handled by my automation tool' },
     { value: 5, label: 'Professional certifications' },
     { value: 563, label: 'Stack Overflow reputation', live: 'stackoverflow-reputation' },
-    /** FILL IN: number of Android apps you shipped to Google Play — hidden while value is undefined */
-    { label: 'Android apps on Google Play' },
   ] as Stat[],
 }
 
@@ -516,7 +514,7 @@ export const process = {
     editor: 'MainActivity.java',
     studio: 'Android Studio',
     terminal: 'Terminal',
-    api: 'GET /api/orders',
+    api: 'REST API · JSON',
     ai: ['Learning: neural networks', 'Learning: loss curve'],
   },
 }
@@ -534,9 +532,9 @@ export interface CaseStudy {
   impact: { value: string; label: string }[]
   result: string
   tags: string[]
-  /** Which interface the animated illustration shows */
+  /** Screenshot layout: phone screens or desktop windows */
   visual: 'phone' | 'desktop'
-  /** Real screenshots (public/projects/...). When present they replace the drawn illustration. First one leads. */
+  /** Real screenshots (public/projects/...). First one leads. */
   images?: { src: string; alt: string; width: number; height: number }[]
 }
 
@@ -663,16 +661,6 @@ export const projects = {
       live: '',
     },
   ] as Project[],
-  /** Labels shown inside the animated app illustrations */
-  phoneApp: { title: 'PostFactory', templates: ['Corporate', 'Tech', 'Creative', 'Personal'], button: 'Export PDF' },
-  desktopApp: {
-    title: 'WhatsApp Automation',
-    toolbar: ['Import', 'Groups', 'Filter', 'Reports'],
-    recipients: ['Priya Shah', 'Amit Patel', 'Neha Joshi', 'Ravi Mehta', 'Sneha Desai'],
-    message: 'Hello {name}, our anniversary offer is live: 15% off all gold jewellery this week.',
-    send: 'Send',
-    log: 'Sending log',
-  },
 }
 
 /* ---------------------------------------------------------------- GitHub */
@@ -775,7 +763,7 @@ export const contact = {
   label: 'Contact',
   heading: "Let's build what's next.",
   accentWord: 'next.',
-  line: 'Open to data analyst, IT analyst, software developer and Android developer roles. Based in London, open to relocate anywhere.',
+  line: 'Open to software developer, Android developer, data analyst and IT analyst roles. Based in London, open to relocate anywhere.',
   copy: 'Copy',
   copied: 'Copied!',
   copyAria: 'Copy email address',
@@ -801,7 +789,7 @@ export const terminal = {
   welcome: 'Type help to see commands. Esc closes.',
   commands: {
     help: 'Commands: whoami, skills, learning, contact, clear',
-    whoami: 'Vatsal Dholakiya — Data & IT Analyst, Software Developer and Android Developer, London.',
+    whoami: 'Vatsal Dholakiya — Software Developer, Android Developer and Data & IT Analyst, London.',
     skills: 'Java · Python · SQL · Android SDK · REST APIs · Selenium · Git · Docker',
     learning: 'Learning now: Generative AI and Ethics of AI — hands-on, one project at a time.',
     contact: 'vatsal.dholakiya2000@gmail.com',
