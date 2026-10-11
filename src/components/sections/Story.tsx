@@ -104,7 +104,7 @@ export function Story() {
             {story.chapters.map((c, i) => {
               const now = i === last
               return (
-                <li key={`${c.year}-${c.title}`} className="relative min-w-0 pl-9 lg:pl-0">
+                <li key={c.title} className="relative min-w-0 pl-9 lg:pl-0">
                   <span
                     aria-hidden="true"
                     className={`absolute top-2 left-0 h-[11px] w-[11px] rounded-full border-2 lg:hidden ${now ? 'border-ember bg-ember' : 'border-emerald bg-void'}`}
@@ -122,7 +122,7 @@ export function Story() {
                     </p>
                     <div className="mt-auto pt-10">
                       <p className="label text-mist">
-                        <span className="sr-only">{c.year}: </span>
+                        {c.year && <span className="sr-only">{c.year}: </span>}
                         {c.place}
                       </p>
                       <h3 className="mt-3 text-[clamp(1.5rem,2.4vw,2rem)] leading-[1.1] font-bold">{c.title}</h3>
