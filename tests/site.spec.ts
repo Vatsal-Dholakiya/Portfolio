@@ -159,7 +159,7 @@ test.describe('Projects and data', () => {
   test('projects show the PostFactory and WhatsApp case studies with their features', async ({ page }) => {
     await page.goto('/#projects')
     await expect(page.locator('#postfactory-title')).toHaveText('PostFactory')
-    await expect(page.locator('#whatsapp-automation-title')).toHaveText('WhatsApp Business Automation')
+    await expect(page.locator('#whatsapp-automation-title')).toHaveText('WhatsApp Automation & Data Extraction Tool')
     await expect(page.locator('#projects li', { hasText: 'Number filter' })).toHaveCount(1)
   })
 
@@ -217,7 +217,7 @@ test.describe('Projects and data', () => {
     await expect(page.locator('#terminal-input')).toBeFocused()
     await page.keyboard.type('whoami')
     await page.keyboard.press('Enter')
-    await expect(terminal).toContainText('Software Developer & Android Developer')
+    await expect(terminal).toContainText('Software Developer & IT Analyst')
     await page.keyboard.type('nope')
     await page.keyboard.press('Enter')
     await expect(terminal).toContainText('Command not found')

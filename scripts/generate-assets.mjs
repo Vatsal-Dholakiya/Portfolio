@@ -33,7 +33,7 @@ await shot(
       <div>Vatsal</div>
       <div style="color:#050607;-webkit-text-stroke:3px rgba(237,238,233,.4);paint-order:stroke fill;letter-spacing:-1px">Dholakiya</div>
     </div>
-    <div style="position:absolute;left:72px;bottom:72px;font-size:30px;color:#B9C0BC">Software Developer · Android Developer · <span style="font-family:'Instrument Serif';font-style:italic;color:#FF8A3D;font-size:34px">exploring AI</span></div>
+    <div style="position:absolute;left:72px;bottom:72px;font-size:30px;color:#B9C0BC">Software Developer &amp; IT Analyst · <span style="font-family:'Instrument Serif';font-style:italic;color:#FF8A3D;font-size:34px">Data &amp; Systems</span></div>
   </div>`,
   1200,
   630,

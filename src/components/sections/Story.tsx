@@ -126,7 +126,17 @@ export function Story() {
                         {c.place}
                       </p>
                       <h3 className="mt-3 text-[clamp(1.5rem,2.4vw,2rem)] leading-[1.1] font-bold">{c.title}</h3>
-                      <p className="mt-3 text-mist">{c.text}</p>
+                      {c.text && <p className="mt-3 text-mist">{c.text}</p>}
+                      {c.points && (
+                        <ul className="mt-3 space-y-2 text-[0.9375rem] leading-snug text-mist">
+                          {c.points.map((point) => (
+                            <li key={point} className="flex gap-2.5">
+                              <span aria-hidden="true" className="mt-[0.55em] h-1 w-1 shrink-0 rounded-full bg-emerald" />
+                              {point}
+                            </li>
+                          ))}
+                        </ul>
+                      )}
                       {c.badge && (
                         <span className="mt-5 inline-flex rounded-full border border-emerald/30 bg-emerald/10 px-3 py-1 font-mono text-xs tracking-[0.08em] text-emerald uppercase">
                           {c.badge}

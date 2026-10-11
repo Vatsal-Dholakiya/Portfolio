@@ -42,7 +42,9 @@ export interface Chapter {
   year: string
   title: string
   place: string
-  text: string
+  text?: string
+  /** Bullet points, shown under the text */
+  points?: string[]
   /** Optional highlighted badge, e.g. 'Distinction' */
   badge?: string
 }
@@ -110,11 +112,11 @@ export const site = {
   /** FILL IN: your live domain without a trailing slash, e.g. 'https://vatsaldholakiya.com'.
    *  Used for the canonical URL, social previews and sitemap.xml. Leave '' until you have one. */
   url: 'https://www.vatsaldholakiya.com',
-  title: 'Vatsal Dholakiya — Software Developer & Android Developer',
+  title: 'Vatsal Dholakiya — Software Developer & IT Analyst | Data & Systems',
   description:
-    'Vatsal Dholakiya is a London-based Software Developer and Android Developer who builds software that does real work, and is currently exploring Artificial Intelligence.',
+    'Vatsal Dholakiya is a London-based Software Developer and IT Analyst working across data and systems, with an MSc in Cloud Computing (Distinction).',
   ogImage: '/og-image.png',
-  ogImageAlt: 'Vatsal Dholakiya, Software Developer and Android Developer',
+  ogImageAlt: 'Vatsal Dholakiya, Software Developer and IT Analyst',
   locale: 'en_GB',
 }
 
@@ -124,8 +126,8 @@ export const person = {
   firstName: 'Vatsal',
   lastName: 'Dholakiya',
   initials: 'VD',
-  jobTitle: 'Software Developer',
-  roleLine: 'Software Developer · Android Developer · Exploring AI',
+  jobTitle: 'Software Developer & IT Analyst',
+  roleLine: 'Software Developer · IT Analyst · Data & Systems',
   location: 'London, United Kingdom',
   timeZone: 'Europe/London',
   links: {
@@ -188,7 +190,7 @@ export const films: Record<'orbit' | 'developer' | 'nextChapter', Film> = {
 /* ------------------------------------------------------------------ Hero */
 
 export const hero = {
-  kicker: 'Software Developer · Android Developer · London',
+  kicker: 'Software Developer & IT Analyst · Data & Systems',
   line: "I build software and Android apps that do real work — and I'm learning AI to build what comes next.",
   primaryCta: 'See my work',
   availability: 'Open to opportunities',
@@ -209,7 +211,7 @@ export const build = {
   /** Text inside the pieces dragged onto the screen */
   pieces: {
     button: 'Ship it',
-    stat: { value: '10,000+', label: 'Messages a day' },
+    stat: { value: '500+', label: 'Messages a day' },
     skills: ['Java', 'Android', 'SQL', 'Git'],
     chat: { title: 'AI · Learning', question: 'What should I learn next?', answer: 'Generative AI, step by step.' },
     appTitle: 'Orders',
@@ -222,8 +224,8 @@ export const build = {
 export const stats = {
   label: 'In numbers',
   items: [
-    { value: 4, suffix: '+', label: 'Years building software' },
-    { value: 10000, suffix: '+', label: 'WhatsApp messages sent a day by my automation tool' },
+    { value: 5, suffix: '+', label: 'Years building software' },
+    { value: 500, suffix: '+', label: 'WhatsApp messages a day handled by my automation tool' },
     { value: 5, label: 'Professional certifications' },
     { value: 563, label: 'Stack Overflow reputation', live: 'stackoverflow-reputation' },
     /** FILL IN: number of Android apps you shipped to Google Play — hidden while value is undefined */
@@ -239,8 +241,8 @@ export const about = {
   /** Words rendered in the serif italic accent */
   accentWords: ['busywork'],
   paragraphs: [
-    "I'm a Software Developer and Android Developer based in London. I built a WhatsApp automation tool that now sends more than 10,000 messages a day, and at CodeCreator Technologies I built PostFactory, a business card design app for Android.",
-    'I hold an MSc in Cloud Computing with Distinction from the University of East London. I care about clean code, clear communication and software that keeps working long after handover. Right now I am learning Generative AI and the ethics of AI.',
+    'Software developer with an MSc in Cloud Computing (Distinction), including artificial intelligence and machine learning, and a BSc in Information Technology.',
+    'Experienced in taking software from requirements to production and keeping it healthy after launch through testing, debugging and monitoring. Hands-on with Python, SQL, PostgreSQL, Git, Docker and Linux.',
   ],
 }
 
@@ -350,39 +352,62 @@ export const story = {
     {
       year: '2017',
       title: 'BSc Information Technology',
-      place: 'Ganpat University, Gujarat, India · 2017 – 2020',
-      text: 'Where it started: Java, Android Studio and the fundamentals of building apps. Graduated with a CGPA of 8.15.',
+      place: 'Ganpat University, India · Completed 2020',
+      text: 'Modules included System Analysis and Design, Databases, Computer Networks, Web Design and Android Development. Graduated with a CGPA of 8.15.',
     },
     {
       year: '2019',
-      title: 'Freelance Software Developer',
-      place: 'Self-employed, India',
-      text: 'Built a WhatsApp automation tool for small retailers. It now sends more than 10,000 messages a day.',
+      title: 'WhatsApp Automation & Data Extraction Tool',
+      place: 'Freelance · Java, Selenium, SQLite',
+      points: [
+        'Built solo a Java desktop tool using Selenium to scrape business and contact data from websites.',
+        'Stored scraped data in SQLite to send personalised bulk WhatsApp messages and track sent and failed messages.',
+        'Automated message scheduling, handling 500+ messages a day and cutting around 90% of manual work.',
+      ],
     },
     {
       year: '2020',
       title: 'Android Developer',
       place: 'CodeCreator Technologies, India · Aug 2020 – Nov 2022',
-      text: 'Native Android apps for small businesses, built in a team, including PostFactory, a business card design app.',
+      points: [
+        'Built and maintained native Android and desktop apps in Java, from client requirements to release.',
+        'Integrated REST APIs (JSON), Firebase and Google Sign-In, and managed Google Play Store releases.',
+        'Monitored live apps after launch and debugged user-reported production issues at their root cause.',
+      ],
     },
     {
       year: '2022',
       title: 'MSc Cloud Computing',
-      place: 'University of East London · Sep 2022 – Sep 2023',
-      text: 'Cloud platforms, security, and the fundamentals of AI and machine learning.',
+      place: 'University of East London, United Kingdom · 2022 – 2023',
+      text: 'Cloud architecture and services (AWS, Microsoft Azure), artificial intelligence and machine learning, distributed systems and virtualisation, network security, database systems.',
       badge: 'Distinction',
     },
     {
-      year: '2024',
+      year: '2023',
       title: 'Software Developer',
-      place: 'Made Tech IT Ltd, London · Oct 2024 – present',
-      text: 'Client software in Java and Python with PostgreSQL, REST APIs, Git and Docker, from the business problem to delivery and handover.',
+      place: 'Made Tech IT Ltd, UK · Nov 2023 – Sep 2024',
+      points: [
+        'Built client software solutions in Java, from requirements through testing to delivery and handover.',
+        'Designed PostgreSQL database structures and integrated REST APIs and third-party services.',
+        'Wrote structured, tested code, using Git for version control and Docker for consistent development on Linux.',
+      ],
+    },
+    {
+      year: '2024',
+      title: 'IT Analyst',
+      place: 'Made Tech IT Ltd, UK · Oct 2024 – Sep 2026',
+      points: [
+        'Analysed client business processes and requirements, translating them into clear technical specifications.',
+        'Queried and analysed data in PostgreSQL and SQL to support client reporting and decision-making.',
+        'Used AI tools to speed up analysis and documentation, while carefully verifying outputs before use.',
+        'Explained trade-offs and limitations clearly to clients, and documented systems for long-term maintenance.',
+      ],
     },
     {
       year: 'Now',
       title: 'Learning AI',
       place: 'Ongoing',
-      text: 'Learning Generative AI and the ethics of AI, one practical project at a time.',
+      text: 'Generative AI and ethical AI (ongoing study), including Building and Implementing Ethical AI with the Certified Institute for Technology and AI.',
     },
   ] as Chapter[],
   certificatesTitle: 'Certificates',
@@ -572,16 +597,17 @@ export const projects = {
     {
       id: 'whatsapp-automation',
       kind: 'Desktop application',
-      title: 'WhatsApp Business Automation',
+      title: 'WhatsApp Automation & Data Extraction Tool',
       tagline: 'Bulk and one-to-one messaging for small businesses',
       summary:
         'A desktop application for bulk or one-to-one WhatsApp messaging. The left column manages recipients and attachments, the right column holds the message composer and sending history, and the toolbar gives quick access to import, group management, filtering and reports. One large Send button starts a campaign, and every result is saved automatically to the sending log.',
       meta: [
         { label: 'Client', value: 'Small retail businesses, such as jewellery shops' },
-        { label: 'Type', value: 'Private client project' },
+        { label: 'Type', value: 'Freelance, built solo' },
         { label: 'Platform', value: 'Windows desktop' },
       ],
       features: [
+        'Scrapes business and contact data from websites with Selenium',
         'Bulk messaging with recipient management',
         'One-to-one messages, personalised with each customer’s name',
         'File attachments for images and documents',
@@ -592,13 +618,11 @@ export const projects = {
         'Automatic sending log with detailed records',
       ],
       impact: [
-        { value: '10,000+', label: 'Messages sent a day' },
-        { value: '99.8%', label: 'Delivery rate' },
-        { value: '90%', label: 'Less time spent on manual messaging' },
-        { value: '400%', label: 'Improvement in communication efficiency' },
+        { value: '500+', label: 'Messages a day' },
+        { value: '~90%', label: 'Manual work cut' },
       ],
       result:
-        'Deployed for small retailers, the system handles more than 10,000 messages a day with a 99.8% delivery rate, and cut manual messaging time by 90%.',
+        'Scraped data is stored in SQLite to send personalised bulk WhatsApp messages and track sent and failed messages. Automated scheduling handles 500+ messages a day and cuts around 90% of manual work.',
       tags: ['Java', 'NetBeans', 'Selenium', 'SQLite', 'MySQL', 'Firebase', 'REST APIs'],
       visual: 'desktop',
       images: [
@@ -751,7 +775,7 @@ export const contact = {
   label: 'Contact',
   heading: "Let's build what's next.",
   accentWord: 'next.',
-  line: 'Open to software development, Android and AI-focused roles. Based in London, open to relocation.',
+  line: 'Open to software development, IT analyst and data roles. Based in London, open to relocate anywhere.',
   copy: 'Copy',
   copied: 'Copied!',
   copyAria: 'Copy email address',
@@ -777,7 +801,7 @@ export const terminal = {
   welcome: 'Type help to see commands. Esc closes.',
   commands: {
     help: 'Commands: whoami, skills, learning, contact, clear',
-    whoami: 'Vatsal Dholakiya — Software Developer & Android Developer, London. Currently exploring AI.',
+    whoami: 'Vatsal Dholakiya — Software Developer & IT Analyst | Data & Systems, London.',
     skills: 'Java · Python · SQL · Android SDK · REST APIs · Selenium · Git · Docker',
     learning: 'Learning now: Generative AI and Ethics of AI — hands-on, one project at a time.',
     contact: 'vatsal.dholakiya2000@gmail.com',
