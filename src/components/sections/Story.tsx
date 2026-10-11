@@ -113,7 +113,9 @@ export function Story() {
                     <p
                       data-year
                       aria-hidden="true"
-                      className={`pointer-events-none font-display text-[clamp(3.25rem,7vw,6.5rem)] leading-[0.8] font-extrabold tracking-[-0.06em] ${
+                      className={`pointer-events-none font-display leading-[0.8] font-extrabold tracking-[-0.06em] ${
+                        c.year.length > 4 ? 'text-[clamp(2.5rem,4.6vw,4.25rem)]' : 'text-[clamp(3.25rem,7vw,6.5rem)]'
+                      } ${
                         now ? 'text-ember/90' : 'text-outline'
                       }`}
                       data-text={now ? undefined : c.year}
@@ -122,7 +124,7 @@ export function Story() {
                     </p>
                     <div className="mt-auto pt-10">
                       <p className="label text-mist">
-                        {c.year && <span className="sr-only">{c.year}: </span>}
+                        <span className="sr-only">{c.year}: </span>
                         {c.place}
                       </p>
                       <h3 className="mt-3 text-[clamp(1.5rem,2.4vw,2rem)] leading-[1.1] font-bold">{c.title}</h3>

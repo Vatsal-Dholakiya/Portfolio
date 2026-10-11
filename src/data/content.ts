@@ -112,11 +112,11 @@ export const site = {
   /** FILL IN: your live domain without a trailing slash, e.g. 'https://vatsaldholakiya.com'.
    *  Used for the canonical URL, social previews and sitemap.xml. Leave '' until you have one. */
   url: 'https://www.vatsaldholakiya.com',
-  title: 'Vatsal Dholakiya — Data & IT Analyst | Python, SQL & Machine Learning',
+  title: 'Vatsal Dholakiya — Data & IT Analyst | Software Developer | Android Developer',
   description:
-    'Vatsal Dholakiya is a London-based Data & IT Analyst working with Python, SQL and machine learning, with an MSc in Cloud Computing (Distinction).',
+    'Vatsal Dholakiya is a London-based Data & IT Analyst, Software Developer and Android Developer working with Python, SQL, Java and machine learning, with an MSc in Cloud Computing (Distinction).',
   ogImage: '/og-image.png',
-  ogImageAlt: 'Vatsal Dholakiya, Data & IT Analyst',
+  ogImageAlt: 'Vatsal Dholakiya, Data & IT Analyst, Software Developer and Android Developer',
   locale: 'en_GB',
 }
 
@@ -126,8 +126,8 @@ export const person = {
   firstName: 'Vatsal',
   lastName: 'Dholakiya',
   initials: 'VD',
-  jobTitle: 'Data & IT Analyst',
-  roleLine: 'Data & IT Analyst · Python, SQL & Machine Learning',
+  jobTitle: 'Data & IT Analyst, Software Developer and Android Developer',
+  roleLine: 'Data & IT Analyst · Software Developer · Android Developer',
   location: 'London, United Kingdom',
   timeZone: 'Europe/London',
   links: {
@@ -190,7 +190,7 @@ export const films: Record<'orbit' | 'developer' | 'nextChapter', Film> = {
 /* ------------------------------------------------------------------ Hero */
 
 export const hero = {
-  kicker: 'Data & IT Analyst · Python, SQL & Machine Learning',
+  kicker: 'Data & IT Analyst · Software Developer · Android Developer',
   line: "I analyse data, build software and keep live systems healthy — and I'm learning AI to build what comes next.",
   primaryCta: 'See my work',
   availability: 'Open to opportunities',
@@ -356,9 +356,9 @@ export const story = {
       text: 'Modules included System Analysis and Design, Databases, Computer Networks, Web Design and Android Development. Graduated with a CGPA of 8.15.',
     },
     {
-      year: '',
+      year: 'Freelance',
       title: 'WhatsApp Automation & Data Extraction Tool',
-      place: 'Freelance · Java, Selenium, SQLite',
+      place: 'Java, Selenium, SQLite',
       points: [
         'Built solo a Java desktop tool using Selenium to scrape business and contact data from websites.',
         'Stored scraped data in SQLite to send personalised bulk WhatsApp messages and track sent and failed messages.',
@@ -775,7 +775,7 @@ export const contact = {
   label: 'Contact',
   heading: "Let's build what's next.",
   accentWord: 'next.',
-  line: 'Open to data analyst, IT analyst and software development roles. Based in London, open to relocate anywhere.',
+  line: 'Open to data analyst, IT analyst, software developer and Android developer roles. Based in London, open to relocate anywhere.',
   copy: 'Copy',
   copied: 'Copied!',
   copyAria: 'Copy email address',
@@ -801,7 +801,7 @@ export const terminal = {
   welcome: 'Type help to see commands. Esc closes.',
   commands: {
     help: 'Commands: whoami, skills, learning, contact, clear',
-    whoami: 'Vatsal Dholakiya — Data & IT Analyst | Python, SQL & Machine Learning, London.',
+    whoami: 'Vatsal Dholakiya — Data & IT Analyst, Software Developer and Android Developer, London.',
     skills: 'Java · Python · SQL · Android SDK · REST APIs · Selenium · Git · Docker',
     learning: 'Learning now: Generative AI and Ethics of AI — hands-on, one project at a time.',
     contact: 'vatsal.dholakiya2000@gmail.com',
