@@ -557,7 +557,6 @@ export const projects = {
       meta: [
         { label: 'Built at', value: 'CodeCreator Technologies' },
         { label: 'Client', value: 'Businesses of any size and industry' },
-        { label: 'Duration', value: '8 months' },
       ],
       features: [
         'Business selector, so posts match the chosen business',
@@ -571,7 +570,6 @@ export const projects = {
       impact: [
         { value: 'Minutes', label: 'To create a post that used to need a designer' },
         { value: '100s', label: 'Ready-made post templates' },
-        { value: '8 months', label: 'From first design to finished app' },
       ],
       result:
         'Built and delivered to the client as a complete Android app, so any business can publish professional social media posts in minutes.',
